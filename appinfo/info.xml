@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>ncdownloader</id>
+    <name>Nc Downloader</name>
+    <summary>Aria2 and youtube-dl web gui for nextcloud</summary>
+    <description><![CDATA[Nexcloud Frontend for Aria2 and Youtube-dl]]></description>
+    <version>0.0.1</version>
+    <licence>agpl</licence>
+    <author mail="freefallbenson@gmail.com" homepage="https://github.com/shiningw">jiaxinhuang</author>
+    <namespace>NcDownloader</namespace>
+    <category>tools</category>
+    <bugs>https://github.com/shiningw</bugs>
+    <dependencies>
+        <nextcloud min-version="18" max-version="22"/>
+    </dependencies>
+    <navigations>
+        <navigation>
+            <name>ncdownloader</name>
+            <route>ncdownloader.Main.Index</route>
+        </navigation>
+    </navigations>
+    <settings>
+        <admin>OCA\NcDownloader\Settings\Admin</admin>
+        <personal>OCA\NcDownloader\Settings\Personal</personal>
+        <admin-section>OCA\NcDownloader\Settings\AdminSection</admin-section>
+        <personal-section>OCA\NcDownloader\Settings\PersonalSection</personal-section>
+    </settings>
+    <commands>
+        <command>OCA\NcDownloader\Command\Aria2Command</command>
+    </commands>
+
+</info>
