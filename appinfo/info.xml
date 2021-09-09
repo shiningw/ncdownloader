@@ -9,7 +9,10 @@
     <author mail="freefallbenson@gmail.com" homepage="https://github.com/shiningw">jiaxinhuang</author>
     <namespace>NcDownloader</namespace>
     <category>tools</category>
-    <bugs>https://github.com/shiningw</bugs>
+    <website>https://github.com/shiningw/ncdownloader</website>
+	<bugs>https://github.com/shiningw/ncdownloader/issues</bugs>
+	<screenshot>https://user-images.githubusercontent.com/3911975/132008248-dbb6036e-e3c2-4e5c-9274-d2b1ae091373.png</screenshot>
+	<repository>https://github.com/shiningw/ncdownloader</repository>
     <dependencies>
         <nextcloud min-version="18" max-version="22"/>
     </dependencies>
