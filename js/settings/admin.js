@@ -1,13 +1,3 @@
-/**
- * ownCloud - ocDownloader
- *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the LICENSE file.
- *
- * @author Xavier Beurois <www.sgc-univ.net>
- * @copyright Xavier Beurois 2015
- */
-
 window.addEventListener('DOMContentLoaded', function () {
 	$('.ncdownloader-admin-settings').on('click', 'input[type="button"]', function (event) {
 		OC.msg.startSaving('#ncdownloader-message');

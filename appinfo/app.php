@@ -1,13 +1,4 @@
 <?php
-/**
- * ownCloud - ncdownloader
- *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the LICENSE file.
- *
- * @author Xavier Beurois <www.sgc-univ.net>
- * @copyright Xavier Beurois 2015
- */
 
 namespace OCA\NCDownloader\AppInfo;
 
@@ -19,5 +10,3 @@ namespace OCA\NCDownloader\AppInfo;
     'name' => 'ncdownloader'
 ]);
 
-//\OCP\App::registerAdmin('ncdownloader', 'settings/admin');
-//\OCP\App::registerPersonal('ncdownloader', 'settings/personal');

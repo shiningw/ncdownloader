@@ -24,7 +24,6 @@ class Aria2
     private $filterResponse = true;
     //absolute download path
     private $downloadDir;
-    //the path to where hook scripts is stored
     public function __construct($options = array())
     {
         $options += array(
