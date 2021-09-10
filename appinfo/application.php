@@ -1,11 +1,11 @@
 <?php
 
-namespace OCA\NcDownloader\AppInfo;
+namespace OCA\NCDownloader\AppInfo;
 
-use OCA\NcDownloader\Controller\MainController;
-use OCA\NcDownloader\Controller\Aria2Controller;
-use OCA\NcDownloader\Tools\Aria2;
-use OCA\NcDownloader\Tools\Settings;
+use OCA\NCDownloader\Controller\MainController;
+use OCA\NCDownloader\Controller\Aria2Controller;
+use OCA\NCDownloader\Tools\Aria2;
+use OCA\NCDownloader\Tools\Settings;
 use OCP\AppFramework\App;
 use OCP\IContainer;
 use \OC\Files\Filesystem;

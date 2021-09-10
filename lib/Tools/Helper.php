@@ -1,8 +1,8 @@
 <?php
 
-namespace OCA\NcDownloader\Tools;
+namespace OCA\NCDownloader\Tools;
 
-use OCA\NcDownloader\Tools\aria2Options;
+use OCA\NCDownloader\Tools\aria2Options;
 
 class Helper
 {

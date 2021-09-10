@@ -1,7 +1,7 @@
 <?php
-namespace OCA\NcDownloader\Tools;
+namespace OCA\NCDownloader\Tools;
 
-use OCA\NcDownloader\Tools\Helper;
+use OCA\NCDownloader\Tools\Helper;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 

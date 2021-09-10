@@ -1,12 +1,12 @@
 <?php
 
-namespace OCA\NcDownloader\Controller;
+namespace OCA\NCDownloader\Controller;
 
-use OCA\NcDownloader\Search\torrentSearch;
-use OCA\NcDownloader\Tools\Aria2;
-use OCA\NcDownloader\Tools\DBConn;
-use OCA\NcDownloader\Tools\Helper;
-use OCA\NcDownloader\Tools\YouTube;
+use OCA\NCDownloader\Search\torrentSearch;
+use OCA\NCDownloader\Tools\Aria2;
+use OCA\NCDownloader\Tools\DBConn;
+use OCA\NCDownloader\Tools\Helper;
+use OCA\NCDownloader\Tools\YouTube;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;

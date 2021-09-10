@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OCA\NcDownloader\Settings;
+namespace OCA\NCDownloader\Settings;
 
 use OCP\IL10N;
 use OCP\IURLGenerator;

@@ -1,13 +1,13 @@
 <?php
 
-namespace OCA\NcDownloader\Settings;
+namespace OCA\NCDownloader\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Settings\ISettings;
-use OCA\NcDownloader\Tools\Settings;
+use OCA\NCDownloader\Tools\Settings;
 
 class Admin implements ISettings {
 

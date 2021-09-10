@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace OCA\NcDownloader\Tools;
+namespace OCA\NCDownloader\Tools;
 
 /**
  * Generic executable finder.

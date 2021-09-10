@@ -1,9 +1,9 @@
 <?php
 
-namespace OCA\NcDownloader\Controller;
+namespace OCA\NCDownloader\Controller;
 
-use OCA\NcDownloader\Tools\Helper;
-use OCA\NcDownloader\Tools\Settings;
+use OCA\NCDownloader\Tools\Helper;
+use OCA\NCDownloader\Tools\Settings;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;

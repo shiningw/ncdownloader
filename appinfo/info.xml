@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>ncdownloader</id>
-    <name>Nc Downloader</name>
+    <name>NCDownloader</name>
     <summary>Aria2 and youtube-dl web gui for nextcloud</summary>
     <description><![CDATA[Nexcloud Frontend for Aria2 and Youtube-dl]]></description>
     <version>0.0.1</version>
     <licence>agpl</licence>
     <author mail="freefallbenson@gmail.com" homepage="https://github.com/shiningw">jiaxinhuang</author>
-    <namespace>NcDownloader</namespace>
+    <namespace>NCDownloader</namespace>
     <category>tools</category>
     <website>https://github.com/shiningw/ncdownloader</website>
 	<bugs>https://github.com/shiningw/ncdownloader/issues</bugs>
@@ -23,13 +23,13 @@
         </navigation>
     </navigations>
     <settings>
-        <admin>OCA\NcDownloader\Settings\Admin</admin>
-        <personal>OCA\NcDownloader\Settings\Personal</personal>
-        <admin-section>OCA\NcDownloader\Settings\AdminSection</admin-section>
-        <personal-section>OCA\NcDownloader\Settings\PersonalSection</personal-section>
+        <admin>OCA\NCDownloader\Settings\Admin</admin>
+        <personal>OCA\NCDownloader\Settings\Personal</personal>
+        <admin-section>OCA\NCDownloader\Settings\AdminSection</admin-section>
+        <personal-section>OCA\NCDownloader\Settings\PersonalSection</personal-section>
     </settings>
     <commands>
-        <command>OCA\NcDownloader\Command\Aria2Command</command>
+        <command>OCA\NCDownloader\Command\Aria2Command</command>
     </commands>
 
 </info>

@@ -1,5 +1,5 @@
 <?php
-namespace OCA\NcDownloader\Tools;
+namespace OCA\NCDownloader\Tools;
 
 class aria2Options
 {

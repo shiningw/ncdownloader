@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\NcDownloader\Search\Sites;
+namespace OCA\NCDownloader\Search\Sites;
 
 //The Piratebay
 class TPB

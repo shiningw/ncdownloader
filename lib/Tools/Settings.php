@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\NcDownloader\Tools;
+namespace OCA\NCDownloader\Tools;
 
 use OC\AllConfig;
 

@@ -2,7 +2,7 @@
 
 declare (strict_types = 1);
 
-namespace OCA\NcDownloader\Migration;
+namespace OCA\NCDownloader\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;

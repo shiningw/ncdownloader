@@ -20,12 +20,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  *
  */
-namespace OCA\NcDownloader\Command;
+namespace OCA\NCDownloader\Command;
 
-use OCA\NcDownloader\Tools\Aria2;
-use OCA\NcDownloader\Tools\DBConn;
-use OCA\NcDownloader\Tools\File;
-use OCA\NcDownloader\Tools\Helper;
+use OCA\NCDownloader\Tools\Aria2;
+use OCA\NCDownloader\Tools\DBConn;
+use OCA\NCDownloader\Tools\File;
+use OCA\NCDownloader\Tools\Helper;
 use OC\Core\Command\Base;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

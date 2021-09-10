@@ -1,9 +1,9 @@
 <?php
 
-namespace OCA\NcDownloader\Search;
+namespace OCA\NCDownloader\Search;
 
 require __DIR__ . "/../../vendor/autoload.php";
-use OCA\NcDownloader\Search\Sites\TPB;
+use OCA\NCDownloader\Search\Sites\TPB;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 

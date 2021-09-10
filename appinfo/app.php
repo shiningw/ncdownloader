@@ -9,7 +9,7 @@
  * @copyright Xavier Beurois 2015
  */
 
-namespace OCA\NcDownloader\AppInfo;
+namespace OCA\NCDownloader\AppInfo;
 
 \OC::$server->getNavigationManager()->add([
     'id' => 'ncdownloader',
