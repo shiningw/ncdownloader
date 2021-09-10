@@ -3,23 +3,26 @@
     <id>ncdownloader</id>
     <name>NCDownloader</name>
     <summary>Aria2 and youtube-dl web gui for nextcloud</summary>
-    <description><![CDATA[Nexcloud Frontend for Aria2 and Youtube-dl]]></description>
-    <version>0.0.1</version>
+    <description>built-in torrent search;Start and stop Aria2 process, manage Aria2 from the web;
+Download videos from youtube, twitter and other sites;</description>
+    <version>0.0.2</version>
     <licence>agpl</licence>
     <author mail="freefallbenson@gmail.com" homepage="https://github.com/shiningw">jiaxinhuang</author>
     <namespace>NCDownloader</namespace>
     <category>tools</category>
     <website>https://github.com/shiningw/ncdownloader</website>
-	<bugs>https://github.com/shiningw/ncdownloader/issues</bugs>
-	<screenshot>https://user-images.githubusercontent.com/3911975/132008248-dbb6036e-e3c2-4e5c-9274-d2b1ae091373.png</screenshot>
-	<repository>https://github.com/shiningw/ncdownloader</repository>
+    <bugs>https://github.com/shiningw/ncdownloader/issues</bugs>
+    <screenshot>https://user-images.githubusercontent.com/3911975/132008248-dbb6036e-e3c2-4e5c-9274-d2b1ae091373.png</screenshot>
+    <screenshot>https://user-images.githubusercontent.com/3911975/132008308-dec2a7ba-4387-441e-9ded-538d61fbccf0.png</screenshot>
+    <repository>https://github.com/shiningw/ncdownloader</repository>
     <dependencies>
         <nextcloud min-version="18" max-version="22"/>
     </dependencies>
     <navigations>
         <navigation>
-            <name>ncdownloader</name>
+            <name>NCDownloader</name>
             <route>ncdownloader.Main.Index</route>
+            <icon>ncdownloader.svg</icon>
         </navigation>
     </navigations>
     <settings>
