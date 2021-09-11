@@ -70,6 +70,8 @@ const inputHandler = (event) => {
         helper.message(t("ncdownloader", "YTDL Download initiated"));
     }
     if (inputData.type === 'search') {
+        //there is a scheduled 60s-interval update running in the background, this is to prevent it from running when searching
+        helper.enabledPolling = 0;
         nctable.getInstance().loading();
     }
     const successCallback = (data, element) => {
@@ -79,7 +81,6 @@ const inputHandler = (event) => {
         }
         toggleButton(element);
         if (data && data.title) {
-            helper.enabledPolling = 0;
             const tableInst = nctable.getInstance(data.title, data.row);
             tableInst.actionLink = false;
             tableInst.rowClass = "table-row-search";
