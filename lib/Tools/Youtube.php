@@ -5,15 +5,18 @@ use OCA\NCDownloader\Tools\Helper;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-class YouTube
+class Youtube
 {
     private $ipv4Only;
     private $audioOnly = 0;
     private $audioFormat, $videoFormat = 'mp4';
     private $options = [];
-    public function __construct()
+    private $downloadDir;
+    public function __construct($config)
     {
+        $config += ['downloadDir' => '/tmp/downloads'];
         $this->bin = Helper::findBinaryPath('youtube-dl');
+        $this->setDownloadDir($config['downloadDir']);
     }
 
     public function GetUrlOnly()
@@ -33,6 +36,11 @@ class YouTube
         $this->downloadDir = rtrim($dir, '/');
     }
 
+    public function getDownloadDir()
+    {
+        return $this->getDownloadDir;
+    }
+
     public function prependOption($option)
     {
         array_unshift($this->options, $option);
@@ -47,6 +55,8 @@ class YouTube
         $this->prependOption($this->bin);
         // $this->buildCMD();
         $process = new Process($this->options);
+        //the maximum time required to download the file
+        $process->setTimeout(60*60*15);
         try {
             $process->mustRun();
             $output = $process->getOutput();
@@ -101,7 +111,7 @@ class YouTube
 
     private function buildCMD()
     {
-        $this->cmd = $this->bin;//. " 2>&1";
+        $this->cmd = $this->bin; //. " 2>&1";
 
         foreach ($this->options as $option) {
             $this->cmd .= " " . $option;

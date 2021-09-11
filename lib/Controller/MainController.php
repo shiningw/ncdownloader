@@ -5,12 +5,13 @@ namespace OCA\NCDownloader\Controller;
 use OCA\NCDownloader\Search\torrentSearch;
 use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\DBConn;
+use OCA\NCDownloader\Tools\File;
 use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\YouTube;
+use OCA\NCDownloader\Tools\Youtube;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\Files\IRootFolder;
+//use OCP\Files\IRootFolder;
 use OCP\IL10N;
 use OCP\IRequest;
 use OC_Util;
@@ -25,18 +26,19 @@ class MainController extends Controller
     private $aria2Opts;
     private $l10n;
 
-    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, IRootFolder $rootFolder, Aria2 $aria2)
+    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Youtube $youtube, Aria2 $aria2)
     {
         parent::__construct($appName, $request);
         $this->appName = $appName;
         $this->uid = $UserId;
         $this->l10n = $IL10N;
-        $this->rootFolder = $rootFolder;
+        $this->dataDir = \OC::$server->getSystemConfig()->getValue('datadirectory');
+        //$this->rootFolder = $rootFolder;
         OC_Util::setupFS();
         $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->aria2 = $aria2;
         $this->aria2->init();
-        $this->youtube = new Youtube();
+        $this->youtube = $youtube;
         $this->dbconn = new DBConn();
     }
 
@@ -86,17 +88,10 @@ class MainController extends Controller
 
                 return new JSONResponse(['error' => $this->l10n->t("Youtube-dl NOT installed!")]);
             }
-            if (Helper::isGetUrlSite($inputValue)) {
-                if ($data = $yt->forceIPV4()->getDownloadUrl($inputValue)) {
-                    $this->Save($data['url'], $data['filename']);
-                    return new JSONResponse(['yt' => $data]);
-                } else {
-                    return new JSONResponse(['error' => $this->l10n->t("failed to get any url!")]);
-                }
-            } else {
-                $yt->setDownloadDir($this->realDownloadDir);
-                return new JSONResponse(['yt' => $yt->download($inputValue)]);
-            }
+            $resp = $yt->forceIPV4()->download($inputValue);
+            File::syncFolder();
+            return new JSONResponse(['yt' => $resp]);
+
         } else if ($type === 'search') {
             $data = torrentSearch::go($inputValue);
             $resp['title'] = ['title', 'seeders', 'info', 'actions'];
