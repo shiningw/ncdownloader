@@ -3,6 +3,7 @@
 namespace OCA\NCDownloader\Tools;
 
 use OCA\NCDownloader\Tools\aria2Options;
+use OC\Files\Filesystem;
 
 class Helper
 {
@@ -242,7 +243,7 @@ class Helper
     public static function getTableTitles($type = null)
     {
         $general = ['filename', 'status', 'actions'];
-        if(!isset($type)){
+        if (!isset($type)) {
             return $general;
         }
         $titles = [
@@ -252,6 +253,39 @@ class Helper
             'complete' => $general,
         ];
         return $titles[$type];
+    }
+    // the relative home folder of a nextcloud user
+    public static function getUserFolder($uid = null)
+    {
+        if (!empty($rootFolder = Filesystem::getRoot())) {
+            return $rootFolder;
+        } else if (isset($uid)) {
+            return "/" . strtolower($uid) . "/files";
+
+        }
+        return '';
+    }
+
+    public static function folderUpdated($dir)
+    {
+        if (!file_exists($dir)) {
+            return false;
+        }
+        $checkFile = $dir . "/.lastmodified";
+        if (!file_exists($checkFile)) {
+            $time = \filemtime($dir);
+            file_put_contents($checkFile, $time);
+            return false;
+        }
+        $lastModified = (int) file_get_contents($checkFile);
+
+        $time = \filemtime($dir);
+
+        if ($time > $lastModified) {
+            file_put_contents($checkFile, $time);
+            return true;
+        }
+        return false;
     }
 
 }

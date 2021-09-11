@@ -35,9 +35,7 @@ class Aria2Controller extends Controller
         $this->downloadDir = $this->settings->get('ncd_downloader_dir') ?? "/Downloads";
         OC_Util::setupFS();
         //$this->config = \OC::$server->getAppConfig();
-
         $this->aria2 = $aria2;
-
         $this->aria2->init();
         $this->dbconn = new DBConn();
     }
@@ -84,8 +82,8 @@ class Aria2Controller extends Controller
     }
     public function Update()
     {
-        File::syncFolder($this->downloadDir);
-        return new JSONResponse([]);
+        $resp = File::syncFolder();
+        //return new JSONResponse($resp);
     }
 
     private function createActionItem($name, $path)
@@ -99,6 +97,7 @@ class Aria2Controller extends Controller
     {
         //$path = $this->request->getRequestUri();
         $counter = $this->aria2->getCounters();
+        $this->Update();
         switch (strtolower($path)) {
             case "active":
                 $resp = $this->aria2->tellActive();
