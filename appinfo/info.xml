@@ -5,7 +5,7 @@
     <summary>Aria2 and youtube-dl web gui for nextcloud</summary>
     <description>built-in torrent search;Start and stop Aria2 process, manage Aria2 from the web;
 Download videos from youtube, twitter and other sites;</description>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <licence>agpl</licence>
     <author mail="freefallbenson@gmail.com" homepage="https://github.com/shiningw">jiaxinhuang</author>
     <namespace>NCDownloader</namespace>

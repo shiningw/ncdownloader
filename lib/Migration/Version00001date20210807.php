@@ -79,7 +79,7 @@ class Version00001date20210807 extends SimpleMigrationStep
                 'notnull' => false,
                 'default' => null,
             ]);
-            $table->setPrimaryKey(['id','gid']);
+            $table->setPrimaryKey(['id']);
         }
         return $schema;
     }
