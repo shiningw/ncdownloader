@@ -7,6 +7,8 @@ use OC\Files\Filesystem;
 
 class Helper
 {
+    public const DOWNLOADTYPE = ['ARIA2' => 1, 'YOUTUBE-DL' => 2, 'OTHERS' => 3];
+    public const STATUS = ['ACTIVE' => 1, 'ERROR' => 2, 'COMPLETE' => 3];
     public static function isUrl($URL)
     {
         $URLPattern = '%^(?:(?:https?|ftp)://)(?:\S+(?::\S*)?@|\d{1,3}(?:\.\d{1,3}){3}|(?:(?:[a-z\d\x{00a1}-\x{ffff}'
@@ -38,7 +40,7 @@ class Helper
     public static function isGetUrlSite($url)
     {
         $host = parse_url($url, PHP_URL_HOST);
-        $sites = ['twitter.com', 'youtube.com'];
+        $sites = ['twitter.com', 'www.twitter.com'];
         return (bool) (in_array($host, $sites));
     }
     public static function parseUrl($url)
@@ -50,7 +52,15 @@ class Helper
     public static function getUrlPath($url)
     {
         $path = parse_url($url, PHP_URL_PATH);
-        return self::cleanString(basename($path));
+        $filename = self::cleanString(basename($path));
+        return self::clipFilename($filename);
+    }
+    public static function clipFilename($filename)
+    {
+        if (($len = strlen($filename)) > 64) {
+            return substr($filename, $len - 64);
+        }
+        return $filename;
     }
     public static function getFilename($url)
     {
@@ -126,7 +136,7 @@ class Helper
 
     public static function log($msg, $file = "/tmp/nc.log")
     {
-        file_put_contents($file, print_r($msg, true));
+        file_put_contents($file, print_r($msg, true), FILE_APPEND);
     }
     public static function filterData($data, $filter = null)
     {
@@ -266,26 +276,12 @@ class Helper
         return '';
     }
 
-    public static function folderUpdated($dir)
+    public static function generateGID($str = null)
     {
-        if (!file_exists($dir)) {
-            return false;
+        if (isset($str)) {
+            return md5($str);
         }
-        $checkFile = $dir . "/.lastmodified";
-        if (!file_exists($checkFile)) {
-            $time = \filemtime($dir);
-            file_put_contents($checkFile, $time);
-            return false;
-        }
-        $lastModified = (int) file_get_contents($checkFile);
-
-        $time = \filemtime($dir);
-
-        if ($time > $lastModified) {
-            file_put_contents($checkFile, $time);
-            return true;
-        }
-        return false;
+        return sprintf('%04x%04x%04x%04x%04x%04x%04x%04x', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479));
     }
 
 }
