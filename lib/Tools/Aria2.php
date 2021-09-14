@@ -162,8 +162,11 @@ class Aria2
     {
         $this->filterResponse = false;
         $resp = $this->tellStopped($range);
+        if (!isset($resp['result'])) {
+            return [];
+        }
         $result = $this->sortDownloadsResult($resp['result'], ['complete', 'removed']);
-        $this->filterResponse = true;;
+        $this->filterResponse = true;
         return $result;
     }
     public function getCounters()
@@ -266,6 +269,21 @@ class Aria2
     {
         $this->stop();
         $this->start();
+    }
+
+    public function download(String $url)
+    {
+        $resp = $this->addUri([$url]);
+
+        if (isset($resp['error'])) {
+            return $resp;
+        }
+
+        if (isset($resp['result']) && is_string($gid = $resp['result'])) {
+            return $gid;
+        }
+
+        return false;
     }
 
     public function getDefaults()

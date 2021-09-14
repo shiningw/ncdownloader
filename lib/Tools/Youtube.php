@@ -2,6 +2,7 @@
 namespace OCA\NCDownloader\Tools;
 
 use OCA\NCDownloader\Tools\Helper;
+use OCA\NCDownloader\Tools\YoutubeHelper;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -12,11 +13,22 @@ class Youtube
     private $audioFormat, $videoFormat = 'mp4';
     private $options = [];
     private $downloadDir;
+    private $timeout = 60 * 60 * 15;
+    private $outTpl = "/%(id)s-%(title)s.%(ext)s";
+    private $defaultDir = "/tmp/downloads";
+
     public function __construct($config)
     {
         $config += ['downloadDir' => '/tmp/downloads'];
         $this->bin = Helper::findBinaryPath('youtube-dl');
+        $this->init();
         $this->setDownloadDir($config['downloadDir']);
+        $this->helper = YoutubeHelper::create();
+    }
+
+    public function init()
+    {
+        $this->addOption("--no-mtime");
     }
 
     public function GetUrlOnly()
@@ -46,38 +58,80 @@ class Youtube
         array_unshift($this->options, $option);
     }
 
-    public function download($url)
+    public function downloadSync($url)
     {
-        $this->downloadDir = $this->downloadDir ?? "/tmp/downloads";
-        $this->prependOption($this->downloadDir . "/%(id)s-%(title)s.%(ext)s");
+        $this->downloadDir = $this->downloadDir ?? $this->defaultDir;
+        $this->prependOption($this->downloadDir . $this->outTpl);
         $this->prependOption("-o");
         $this->setUrl($url);
         $this->prependOption($this->bin);
         // $this->buildCMD();
         $process = new Process($this->options);
         //the maximum time required to download the file
-        $process->setTimeout(60*60*15);
+        $process->setTimeout($this->timeout);
         try {
             $process->mustRun();
             $output = $process->getOutput();
         } catch (ProcessFailedException $exception) {
             $output = $exception->getMessage();
         }
+
         return $output;
     }
 
+    public function download($url)
+    {
+        $this->downloadDir = $this->downloadDir ?? $this->defaultDir;
+        $this->prependOption($this->downloadDir . $this->outTpl);
+        $this->prependOption("-o");
+        $this->setUrl($url);
+        $this->prependOption($this->bin);
+        $process = new Process($this->options);
+        $process->setTimeout($this->timeout);
+        $process->run(function ($type, $buffer) use ($url) {
+            if (Process::ERR === $type) {
+                $this->onError($buffer);
+            } else {
+                $this->onOutput($buffer, $url);
+            }
+        });
+        if ($process->isSuccessful()) {
+            $this->helper->updateStatus(Helper::STATUS['COMPLETE']);
+            return ['message' => $this->helper->file ?? $process->getErrorOutput()];
+        }
+        return $process->getErrorOutput();
+
+    }
+    public function getFilePath($output)
+    {
+        $rules = '#\[download\]\s+Destination:\s+(?<filename>.*\.(?<ext>(mp4|mp3|aac)))$#i';
+
+        preg_match($rules, $output, $matches);
+
+        return $matches['filename'] ?? null;
+    }
+
+    private function onError($buffer)
+    {
+        $this->helper->log($buffer);
+    }
+
+    public function onOutput($buffer, $url)
+    {
+        $this->helper->run($buffer, $url);
+    }
     public function getDownloadUrl($url)
     {
         $this->setUrl($url);
         $this->GetUrlOnly();
-        //$process = new Process($this->options);
         $this->buildCMD();
         exec($this->cmd, $output, $returnCode);
         if (count($output) === 1) {
             return ['url' => reset($output)];
         }
         list($url, $filename) = $output;
-        return ['url' => $url, 'filename' => Helper::cleanString($filename)];
+        $filename = Helper::cleanString($filename);
+        return ['url' => $url, 'filename' => Helper::clipFilename($filename)];
     }
 
     public function setUrl($url)

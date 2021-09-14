@@ -89,6 +89,9 @@ class ncTable {
                     let container = document.createElement("div");
                     container.classList.add("button-container");
                     element[key].forEach(value => {
+                        if (!value.name) {
+                            return;
+                        }
                         container.appendChild(this.createActionButton(value.name, value.path));
                     })
                     rowItem.appendChild(container);

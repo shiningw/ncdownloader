@@ -25,7 +25,10 @@ const buttonHandler = (event, type) => {
             return;
         }
         if (data.hasOwnProperty('result')) {
-            helper.message("Success for " + data['result']);
+            helper.message("Success " + data['result']);
+        }
+        if (data.hasOwnProperty('message')) {
+            helper.message(data.message);
         }
         if (row && removeRow)
             row.remove();

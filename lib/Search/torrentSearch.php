@@ -4,6 +4,7 @@ namespace OCA\NCDownloader\Search;
 
 require __DIR__ . "/../../vendor/autoload.php";
 use OCA\NCDownloader\Search\Sites\TPB;
+use OCA\NCDownloader\Tools\Helper;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 

@@ -8,7 +8,7 @@ use OC\Files\Filesystem;
 class Helper
 {
     public const DOWNLOADTYPE = ['ARIA2' => 1, 'YOUTUBE-DL' => 2, 'OTHERS' => 3];
-    public const STATUS = ['ACTIVE' => 1, 'ERROR' => 2, 'COMPLETE' => 3];
+    public const STATUS = ['ACTIVE' => 1, 'PAUSED' => 2, 'COMPLETE' => 3, 'ERROR' => 4];
     public static function isUrl($URL)
     {
         $URLPattern = '%^(?:(?:https?|ftp)://)(?:\S+(?::\S*)?@|\d{1,3}(?:\.\d{1,3}){3}|(?:(?:[a-z\d\x{00a1}-\x{ffff}'

@@ -3,9 +3,8 @@
 namespace OCA\NCDownloader\Command;
 
 use OCA\NCDownloader\Tools\Aria2;
+use OCA\NCDownloader\Tools\Youtube;
 use OCA\NCDownloader\Tools\DBConn;
-use OCA\NCDownloader\Tools\File;
-use OCA\NCDownloader\Tools\Helper;
 use OC\Core\Command\Base;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,8 +21,7 @@ class Aria2Command extends base
     }
     protected function configure()
     {
-        $this
-            ->setName('aria2')
+        $this->setName('aria2')
             ->setDescription('Aria2 hooks')
             ->addArgument(
                 'action',
@@ -38,7 +36,7 @@ class Aria2Command extends base
             'path',
             'p',
             InputOption::VALUE_OPTIONAL,
-            'Downloaded file path',
+            'Downloaded file path'
         )->addOption(
             'number',
             'N',
@@ -64,7 +62,7 @@ class Aria2Command extends base
         if ($parent_gid) {
             $tablename = $this->conn->queryBuilder->getTableName("ncdownloader_info");
             $sql = sprintf("UPDATE %s set followedby = ? WHERE gid = ?", $tablename);
-           // $data = serialize(['followedby' => "82140bd962946ae0"]);
+            // $data = serialize(['followedby' => "82140bd962946ae0"]);
             $this->conn->execute($sql, [$gid, $parent_gid]);
         }
 
@@ -73,4 +71,5 @@ class Aria2Command extends base
         $output->writeln(print_r($result, true));
         return 0;
     }
+
 }

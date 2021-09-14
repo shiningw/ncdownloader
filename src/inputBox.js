@@ -3,23 +3,35 @@ import helper from './helper'
 
 
 class inputBox {
-    constructor(name, id) {
+    path;
+    constructor(name, id, path = null) {
         this.name = name;
-        this.container = this._createForm();
-        this.textInput = this._createTextInput(id);
-        this.controlsContainer = this._createControlsContainer();
+        this.id = id;
+        this.path = path;
     }
-    static getInstance(name, id) {
-        return new inputBox(name, id);
+    static getInstance(name, id, path = null) {
+        return new inputBox(name, id, path);
     }
     create() {
+        this.container = this._createForm();
+        this.textInput = this._createTextInput(this.id);
+        this.controlsContainer = this._createControlsContainer();
         this.container.appendChild(this.textInput);
         this.controlsContainer.appendChild(this._createControls());
         this.container.appendChild(this.controlsContainer);
+        return this;
+    }
+
+    getContainer() {
         return this.container;
+    }
+    setPath(path) {
+        this.path = path;
+        return this;
     }
     _createControlsContainer() {
         let div = document.createElement("div");
+
         div.classList.add("controls-container");
         return div;
     }
@@ -36,6 +48,9 @@ class inputBox {
         textInput.setAttribute('id', "form_input_text");
         textInput.setAttribute('data-type', id);
         textInput.setAttribute('value', '');
+        if (this.path) {
+            textInput.setAttribute('data-path', this.path);
+        }
         textInput.classList.add('form-input-text');
         return textInput;
     }
@@ -55,7 +70,7 @@ class inputBox {
         let element = doc.querySelector(".bs-spinner");
         element.style.display = 'none';
         this.controlsContainer.appendChild(element);
-        return this;
+        return this.container;
     }
 
 }

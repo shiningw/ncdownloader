@@ -4,6 +4,7 @@ namespace OCA\NCDownloader\AppInfo;
 
 use OCA\NCDownloader\Controller\Aria2Controller;
 use OCA\NCDownloader\Controller\MainController;
+use OCA\NCDownloader\Controller\YoutubeController;
 use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Tools\Settings;
@@ -58,6 +59,16 @@ class Application extends App
                 \OC::$server->getL10N('ncdownloader'),
                 \OC::$server->getRootFolder(),
                 $container->query('Aria2')
+            );
+        });
+        $container->registerService('YoutubeController', function (IContainer $container) {
+            return new YoutubeController(
+                $container->query('AppName'),
+                $container->query('Request'),
+                $container->query('UserId'),
+                \OC::$server->getL10N('ncdownloader'),
+                $container->query('Aria2'),
+                $container->query('Youtube')
             );
         });
     }

@@ -18,7 +18,7 @@ class DBConn
         //$this->conn = $this->connAdapter->getInner();
     }
 
-    public function create($insert)
+    public function insert($insert)
     {
         $inserted = (bool) $this->conn->insertIfNotExist('*PREFIX*' . $this->table, $insert, [
             'gid',
@@ -46,6 +46,19 @@ class DBConn
         return $queryBuilder->fetchAll();
     }
 
+    public function getYoutubeByUid($uid)
+    {
+        $queryBuilder = $this->queryBuilder
+            ->select('*')
+            ->from($this->table)
+            ->where('uid = :uid')
+            ->where('type = :type')
+            ->setParameter('uid', $uid)
+            ->setParameter('type', 2)
+            ->execute();
+        return $queryBuilder->fetchAll();
+    }
+
     public function getByGid($gid)
     {
         $queryBuilder = $this->queryBuilder
@@ -57,9 +70,9 @@ class DBConn
         return $queryBuilder->fetch();
     }
 
-    public function save(array $keys, $values = array())
+    public function save(array $keys, $values = array(),$conditions = array())
     {
-        return $this->conn->setValues($this->table, $keys, $values);
+        return $this->conn->setValues($this->table, $keys, $values,$conditions);
     }
 
     public function deleteByGid($gid)
@@ -74,14 +87,14 @@ class DBConn
     }
     public function execute($sql, $values)
     {
-        return $this->conn->executeStatement($sql, $values);
+        return $this->conn->executeUpdate($sql, $values);
 
         // for some reason this doesn't work
         $query = $this->queryBuilder;
         $query->update('ncdownloader_info')
             ->set("data", $query->createNamedParameter($value))
             ->where($query->expr()->eq('gid', $query->createNamedParameter($gid)));
-           // ->setParameter('gid', $gid);
+        // ->setParameter('gid', $gid);
         // return $query->execute();
         //return $query->getSQL();
         return $this->queryBuilder->getSQL();

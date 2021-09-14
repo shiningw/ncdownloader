@@ -20,46 +20,49 @@ const createInputBox = (event, type) => {
     let height = $(window).scrollTop();
     if (height > 50)
         $("html, body").animate({ scrollTop: 0 }, "fast");
-    let name;
+    let name, path;
     switch (type) {
         case "ytdl":
             name = t("ncdownloader", 'YTDL Download');
+            path = basePath + "/youtube/new";
             break;
         case "search":
             name = t("ncdownloader", 'Search');
+            path = basePath + "/search";
             break;
         default:
             name = t("ncdownloader", 'New Download');
+            path = basePath + "/new";
     }
     let container;
     if (type === 'search') {
-        container = inputBox.getInstance(name, type).addSpinner().create();
+        container = inputBox.getInstance(name, type, path).create().addSpinner();
         //container.appendChild(inputBox.createLoading());
     } else {
-        container = inputBox.getInstance(name, type).create();
+        container = inputBox.getInstance(name, type, path).create().getContainer();
     }
     $("#ncdownloader-form-wrapper").append(container);
 }
 
-const toggleButton = element => {
-    if (!element.previousSibling) {
+const toggleSpinner = element => {
+    let spinner = element.previousSibling || element.nextSibling
+
+    if (!spinner) {
         return;
     }
     if (element.style.display === 'none') {
         element.style.display = 'block'
-        element.previousSibling.style.display = 'none';
+        spinner.style.display = 'none';
     } else {
         element.style.display = 'none'
-        element.previousSibling.style.display = 'block';
+        spinner.style.display = 'block';
     }
 }
 
 const inputHandler = (event) => {
     event.preventDefault();
     let element = event.target;
-    // element.textContent = '';
-    //$(element).append(inputBox.createLoading());
-    toggleButton(element);
+    toggleSpinner(element);
     let inputData = helper.getData('form-input-wrapper');
     let inputValue = inputData.form_input_text;
     if (inputData.type !== 'search' && !helper.isURL(inputValue) && !helper.isMagnetURI(inputValue)) {
@@ -67,10 +70,10 @@ const inputHandler = (event) => {
         return;
     }
     if (inputData.type === 'ytdl') {
-        helper.message(t("ncdownloader", "YTDL Download initiated"));
+        helper.message(t("ncdownloader", "Please check your download folder for progress"), 5000);
     }
     if (inputData.type === 'search') {
-        //there is a scheduled 60s-interval update running in the background, this is to prevent it from running when searching
+        //a scheduled 60s-interval update is running in the background, this is to prevent it from interfering when searching
         helper.enabledPolling = 0;
         nctable.getInstance().loading();
     }
@@ -79,7 +82,7 @@ const inputHandler = (event) => {
         if (data !== null && data.hasOwnProperty("file")) {
             helper.message(t("ncdownloader", "Downloading" + " " + data.file));
         }
-        toggleButton(element);
+       toggleSpinner(element);
         if (data && data.title) {
             const tableInst = nctable.getInstance(data.title, data.row);
             tableInst.actionLink = false;

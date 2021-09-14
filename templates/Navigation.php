@@ -91,5 +91,18 @@ $aria2_installed = $_['aria2_installed'];
                 </ul>
             </div>
         </li>
+        <li class="youtube-dl-downloads">
+            <div class="app-navigation-entry-bullet"></div>
+            <a href="/apps/ncdownloader/youtube/get">
+                <?php print($l->t('Youtube-dl Downloads'));?>
+            </a>
+            <div class="app-navigation-entry-utils">
+                <ul>
+                    <li class="app-navigation-entry-utils-counter" id="youtube-dl-downloads-counter">
+                        <div class="number">0</div>
+                    </li>
+                </ul>
+            </div>
+        </li>
     </ul>
 </div>

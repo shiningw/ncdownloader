@@ -47,10 +47,10 @@ const helper = {
 
         return magnetURI.test(url.trim());
     },
-    message: function (message) {
+    message: function (message,duration = 5000) {
         Toastify({
             text: message,
-            duration: 3000,
+            duration:duration,
             newWindow: true,
             close: true,
             gravity: "top", // `top` or `bottom`

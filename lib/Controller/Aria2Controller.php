@@ -3,7 +3,7 @@ namespace OCA\NCDownloader\Controller;
 
 use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\DBConn;
-use OCA\NCDownloader\Tools\File;
+use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Tools\Settings;
 use OCP\AppFramework\Controller;
@@ -16,11 +16,10 @@ use \OC\Files\Filesystem;
 
 class Aria2Controller extends Controller
 {
-    private $userId;
+    private $uid;
     private $settings = null;
     //@config OC\AppConfig
     private $config;
-    private $aria2Opts;
     private $l10n;
 
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, IRootFolder $rootFolder, Aria2 $aria2)
@@ -43,6 +42,7 @@ class Aria2Controller extends Controller
     public function Action($path)
     {
         $path = strtolower(trim($path));
+        $resp = [];
 
         if (!in_array($path, ['start', 'check']) && !($gid = $this->request->getParam('gid'))) {
             return new JSONResponse(['error' => "no gid value is received!"]);
@@ -55,21 +55,42 @@ class Aria2Controller extends Controller
                 $resp = $this->Start();
                 break;
             case "pause":
-                $resp = $this->aria2->pause($gid);
+                $resp = $this->doAction('pause', $gid);
                 break;
             case "remove":
-                $resp = $this->aria2->remove($gid);
+                $resp = $this->doAction('remove', $gid);
                 break;
             case "unpause":
-                $resp = $this->aria2->unpause($gid);
+                $resp = $this->doAction('unpause', $gid);
                 break;
             case "get":
-                $resp = $this->aria2->tellStatus($gid);
+                $resp = $this->doAction('tellStatus', $gid);
                 break;
             case 'purge':
-                $resp = $this->aria2->removeDownloadResult($gid);
+                $resp = $this->doAction('removeDownloadResult', $gid);
+                if (isset($resp['status']) && $resp['status']) {
+                    $this->dbconn->deleteByGid($gid);
+                }
         }
         return new JSONResponse($resp);
+    }
+
+    private function doAction($action, $gid)
+    {
+        if (!$action || !$gid) {
+            return [];
+        }
+        $resp = $this->aria2->{$action}($gid);
+
+        if (in_array($action, ['removeDownloadResult', 'remove'])) {
+            if (isset($resp['result']) && strtolower($resp['result']) === 'ok') {
+                return ['message' => $this->l10n->t("DONE!"), 'status' => 1];
+            } else {
+                return ['error' => $this->l10n->t("FAILED!"), 'status' => 0];
+            }
+        }
+        return $resp;
+
     }
     private function Start()
     {
@@ -82,8 +103,8 @@ class Aria2Controller extends Controller
     }
     public function Update()
     {
-        $resp = File::syncFolder();
-        //return new JSONResponse($resp);
+        $resp = folderScan::create()->scan();
+        return new JSONResponse($resp);
     }
 
     private function createActionItem($name, $path)
@@ -97,7 +118,7 @@ class Aria2Controller extends Controller
     {
         //$path = $this->request->getRequestUri();
         $counter = $this->aria2->getCounters();
-        $this->Update();
+        folderScan::sync();
         switch (strtolower($path)) {
             case "active":
                 $resp = $this->aria2->tellActive();
@@ -179,11 +200,12 @@ class Aria2Controller extends Controller
             $value['progress'] = array(sprintf("%s(%.2f%%)", $completed, $percentage), $extraInfo);
             $timestamp = $timestamp ?? 0;
             //$prefix = $value['files'][0]['path'];
-            $filename = sprintf('<a class="download-file-folder" href="%s">%s</a>', $folderLink, $filename);
-            $fileInfo = sprintf("%s | %s", $total, date("Y-m-d H:i:s", $timestamp));
-
             $tmp = [];
             $actions = [];
+            $filename = sprintf('<a class="download-file-folder" href="%s">%s</a>', $folderLink, $filename);
+            $fileInfo = sprintf("%s | %s", $total, date("Y-m-d H:i:s", $timestamp));
+            $tmp['filename'] = array($filename, $fileInfo);
+
             if ($this->aria2->methodName === "tellStopped") {
                 $actions[] = $this->createActionItem('purge', 'purge');
             } else {
@@ -192,7 +214,6 @@ class Aria2Controller extends Controller
             if ($this->aria2->methodName === "tellWaiting") {
                 $actions[] = $this->createActionItem('unpause', 'unpause');
             }
-            $tmp['filename'] = array($filename, $fileInfo);
             if ($this->aria2->methodName === "tellActive") {
                 $speed = [Helper::formatBytes($value['downloadSpeed']), $left . " left"];
                 $tmp['speed'] = $speed;
