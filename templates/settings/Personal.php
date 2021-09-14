@@ -10,12 +10,8 @@ $time_map = array('i' => 'minutes', 'h' => 'hours', 'w' => 'weeks', 'd' => 'days
 <div class="ncdownloader-personal-settings">
     <div id="ncdownloader-settings-form" class="section">
         <div class="ncdownloader-common-settings">
-            <h2>NCdownloader Settings</h2>
+            <h2><?php print($l->t('NCDownloader Settings'));?></h2>
             <div id="ncdownloader-message-banner"></div>
-            <div><span class="info">
-                    <?php print($l->t('Leave empty to reset a setting value'));?>
-                </span>
-            </div>
             <div id="ncd_downloader_dir_settings" path="<?php print $path;?>">
                 <label for="ncd_downloader_dir">
                     <?php print($l->t('Downloads Folder'));?>

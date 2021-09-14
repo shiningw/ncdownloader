@@ -3,12 +3,7 @@ script("ncdownloader", 'appSettings');
 ?>
 <div class="ncdownloader-admin-settings">
     <form id="ncdownloader" class="section">
-        <h2>ncDownloader admin Settings</h2>
-        <div><span class="info">
-                <?php print($l->t('Leave empty to reset a setting value'));?>
-            </span>
-            <span id="ncdownloader-message"></span>
-        </div>
+        <h2><?php print($l->t('NCDownloader Admin Settings'));?></h2>
         <div id="ncd_rpctoken_settings" path="<?php print $path;?>">
             <label for="ncd_rpctoken">
                 <?php print($l->t('Aria2 RPC Token'));?>
