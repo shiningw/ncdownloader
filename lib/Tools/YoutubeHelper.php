@@ -29,7 +29,7 @@ class YoutubeHelper
     }
     public function getFilePath($output)
     {
-        $rules = '#\[download\]\s+Destination:\s+(?<filename>.*\.(?<ext>(mp4|mp3|aac)))$#i';
+        $rules = '#\[download\]\s+Destination:\s+(?<filename>.*\.(?<ext>(mp4|mp3|aac|webm|m4a|ogg)))$#i';
 
         preg_match($rules, $output, $matches);
 

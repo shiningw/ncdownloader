@@ -54,14 +54,10 @@ class Aria2Controller extends Controller
             case "start":
                 $resp = $this->Start();
                 break;
-            case "pause":
-                $resp = $this->doAction('pause', $gid);
-                break;
-            case "remove":
-                $resp = $this->doAction('remove', $gid);
-                break;
             case "unpause":
-                $resp = $this->doAction('unpause', $gid);
+            case "remove":
+            case "pause":
+                $resp = $this->doAction($path, $gid);
                 break;
             case "get":
                 $resp = $this->doAction('tellStatus', $gid);

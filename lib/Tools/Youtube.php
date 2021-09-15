@@ -16,6 +16,7 @@ class Youtube
     private $timeout = 60 * 60 * 15;
     private $outTpl = "/%(id)s-%(title)s.%(ext)s";
     private $defaultDir = "/tmp/downloads";
+    private $env = [];
 
     public function __construct($config)
     {
@@ -23,12 +24,19 @@ class Youtube
         $this->bin = Helper::findBinaryPath('youtube-dl');
         $this->init();
         $this->setDownloadDir($config['downloadDir']);
-        $this->helper = YoutubeHelper::create();
     }
-
     public function init()
     {
+        if (empty($lang = getenv('LANG')) || strpos(strtolower($lang), 'utf-8') === false) {
+            $lang = 'C.UTF-8';
+        }
+        $this->setEnv('LANG', $lang);
         $this->addOption("--no-mtime");
+    }
+
+    public function setEnv($key, $val)
+    {
+        $this->env[$key] = $val;
     }
 
     public function GetUrlOnly()
@@ -66,7 +74,7 @@ class Youtube
         $this->setUrl($url);
         $this->prependOption($this->bin);
         // $this->buildCMD();
-        $process = new Process($this->options);
+        $process = new Process($this->options, null, $this->env);
         //the maximum time required to download the file
         $process->setTimeout($this->timeout);
         try {
@@ -81,12 +89,13 @@ class Youtube
 
     public function download($url)
     {
+        $this->helper = YoutubeHelper::create();
         $this->downloadDir = $this->downloadDir ?? $this->defaultDir;
         $this->prependOption($this->downloadDir . $this->outTpl);
         $this->prependOption("-o");
         $this->setUrl($url);
         $this->prependOption($this->bin);
-        $process = new Process($this->options);
+        $process = new Process($this->options, null, $this->env);
         $process->setTimeout($this->timeout);
         $process->run(function ($type, $buffer) use ($url) {
             if (Process::ERR === $type) {
