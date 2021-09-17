@@ -2,8 +2,8 @@
 
 namespace OCA\NCDownloader\Command;
 
+use OCA\NCDownloader\Search\torrentSearch;
 use OCA\NCDownloader\Tools\Aria2;
-use OCA\NCDownloader\Tools\Youtube;
 use OCA\NCDownloader\Tools\DBConn;
 use OC\Core\Command\Base;
 use Symfony\Component\Console\Input\InputArgument;
@@ -52,6 +52,9 @@ class Aria2Command extends base
         if (!$action = $input->getArgument('action')) {
             $action = 'start';
         }
+        $search = new torrentSearch();
+        $search->setSite('bitSearch');
+        $data = $search->go('test');
         $gid = $input->getOption('gid');
         $path = $input->getOption('path');
         $numFile = $input->getOption('number');

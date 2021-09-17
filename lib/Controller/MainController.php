@@ -13,7 +13,6 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IL10N;
 use OCP\IRequest;
 use OC_Util;
-use \OCP\AppFramework\Http\StrictContentSecurityPolicy;
 
 class MainController extends Controller
 {
@@ -57,12 +56,6 @@ class MainController extends Controller
         $params['youtube_installed'] = $this->youtube->isInstalled();
 
         $response = new TemplateResponse($this->appName, 'Index', $params);
-
-        $csp = new StrictContentSecurityPolicy();
-        $csp->allowEvalScript();
-        $csp->allowInlineStyle();
-
-        $response->setContentSecurityPolicy($csp);
 
         return $response;
     }
