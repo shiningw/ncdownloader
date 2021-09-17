@@ -5,12 +5,16 @@ namespace OCA\NCDownloader\AppInfo;
 use OCA\NCDownloader\Controller\Aria2Controller;
 use OCA\NCDownloader\Controller\MainController;
 use OCA\NCDownloader\Controller\YoutubeController;
+use OCA\NCDownloader\Search\Sites\bitSearch;
+use OCA\NCDownloader\Search\Sites\TPB;
 use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Tools\Settings;
 use OCA\NCDownloader\Tools\Youtube;
 use OCP\AppFramework\App;
 use OCP\IContainer;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpClient\HttpClient;
 
 class Application extends App
 {
@@ -70,6 +74,22 @@ class Application extends App
                 $container->query('Aria2'),
                 $container->query('Youtube')
             );
+        });
+        $container->registerService('crawler', function () {
+            return new Crawler();
+        });
+        $container->registerService('httpClient', function () {
+            return HttpClient::create();
+        });
+        $container->registerService(TPB::class, function (IContainer $container) {
+            $crawler = $container->query('crawler');
+            $client = $container->query('httpClient');
+            return new TPB($crawler, $client);
+        });
+        $container->registerService(bitSearch::class, function (IContainer $container) {
+            $crawler = $container->query('crawler');
+            $client = $container->query('httpClient');
+            return new bitSearch($crawler, $client);
         });
     }
 

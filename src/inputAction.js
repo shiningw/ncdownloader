@@ -36,7 +36,10 @@ const createInputBox = (event, type) => {
     }
     let container;
     if (type === 'search') {
-        container = inputBox.getInstance(name, type, path).create().addSpinner();
+        let selectOptions = [];
+        selectOptions.push({name:'bitSearch',label:'BITSEARCH',default:0});
+        selectOptions.push({name:'TPB',label:'THEPIRATEBAY',selected:1});
+        container = inputBox.getInstance(name, type, path).createOptions(selectOptions).create().addSpinner();
         //container.appendChild(inputBox.createLoading());
     } else {
         container = inputBox.getInstance(name, type, path).create().getContainer();
@@ -63,6 +66,8 @@ const inputHandler = (event) => {
     event.preventDefault();
     let element = event.target;
     toggleSpinner(element);
+    let formWrapper = element.closest('form');
+
     let inputData = helper.getData('form-input-wrapper');
     let inputValue = inputData.form_input_text;
     if (inputData.type !== 'search' && !helper.isURL(inputValue) && !helper.isMagnetURI(inputValue)) {
@@ -82,7 +87,7 @@ const inputHandler = (event) => {
         if (data !== null && data.hasOwnProperty("file")) {
             helper.message(t("ncdownloader", "Downloading" + " " + data.file));
         }
-       toggleSpinner(element);
+        toggleSpinner(element);
         if (data && data.title) {
             const tableInst = nctable.getInstance(data.title, data.row);
             tableInst.actionLink = false;
@@ -90,7 +95,7 @@ const inputHandler = (event) => {
             tableInst.create();
         }
     }
-    const path = inputData.path || basePath + "/new";
+    const path = formWrapper.dataset.path || basePath + "/new";
     let url = helper.generateUrl(path);
     Http.getInstance(url).setData(inputData).setHandler(function (data) {
         successCallback(data, element);

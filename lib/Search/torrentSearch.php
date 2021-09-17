@@ -3,25 +3,35 @@
 namespace OCA\NCDownloader\Search;
 
 require __DIR__ . "/../../vendor/autoload.php";
-use OCA\NCDownloader\Search\Sites\TPB;
-use OCA\NCDownloader\Tools\Helper;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpClient\HttpClient;
+use OCP\IServerContainer;
 
 class torrentSearch
 {
-
-    public static function go($keyword)
+    public $container;
+    private $site = null;
+    public function __construct()
     {
-        $client = HttpClient::create();
-        $crawler = new Crawler();
-        $tpb = new TPB($crawler, $client);
-        $data = $tpb->search($keyword);
-        self::addAction($data);
+        $this->container = \OC::$server->query(IServerContainer::class);
+        $this->site = __NAMESPACE__ . '\Sites\TPB';
+    }
+    public function go($keyword)
+    {
+        $siteInst = $this->container->query($this->site);
+        $data = $siteInst->search($keyword);
+        $this->addAction($data);
         return $data;
     }
 
-    private static function addAction(&$data)
+    public function setSite($site)
+    {
+        if (strpos($site, '\\') !== false) {
+            $this->site = $site;
+        } else {
+            $this->site = __NAMESPACE__ . '\Sites\\' . $site;
+        }
+    }
+
+    private function addAction(&$data)
     {
         foreach ($data as $key => &$value) {
             if (!$value) {

@@ -19,12 +19,15 @@ class SearchController extends Controller
         $this->appName = $appName;
         $this->uid = $UserId;
         $this->urlGenerator = \OC::$server->getURLGenerator();
+        $this->search = new torrentSearch();
     }
 
     public function execute()
     {
         $keyword = trim($this->request->getParam('form_input_text'));
-        $data = torrentSearch::go($keyword);
+        $site = trim($this->request->getParam('select-value-search'));
+        $this->search->setSite($site);
+        $data = $this->search->go($keyword);
         $resp['title'] = ['title', 'seeders', 'info', 'actions'];
         $resp['row'] = $data;
         return new JSONResponse($resp);

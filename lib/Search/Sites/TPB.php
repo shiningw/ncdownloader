@@ -3,7 +3,7 @@
 namespace OCA\NCDownloader\Search\Sites;
 
 //The Piratebay
-class TPB
+class TPB implements searchBase
 {
     //html content
     private $content = null;

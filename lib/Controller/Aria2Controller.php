@@ -134,11 +134,11 @@ class Aria2Controller extends Controller
         if (isset($resp['error'])) {
             return new JSONResponse($resp);
         }
-        $data = $this->prepareResp($resp);
+        $data = $this->transformResp($resp);
         $data['counter'] = $counter;
         return new JSONResponse($data);
     }
-    private function prepareResp($resp)
+    private function transformResp($resp)
     {
 
         $data = [];
@@ -191,7 +191,9 @@ class Aria2Controller extends Controller
             $left = Helper::formatInterval($remaining);
 
             $numSeeders = $value['numSeeders'] ?? 0;
-            $extraInfo = "Seeders: $numSeeders";
+            $upload = $value['uploadLength'] ?? 0;
+            $upload = Helper::formatBytes($upload);
+            $extraInfo = "Seeders: $numSeeders|Up:$upload";
             // $numPeers = isset($peers['result']) ? count($peers['result']) : 0;
             $value['progress'] = array(sprintf("%s(%.2f%%)", $completed, $percentage), $extraInfo);
             $timestamp = $timestamp ?? 0;
