@@ -5,7 +5,6 @@ namespace OCA\NCDownloader\Controller;
 use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\DBConn;
 use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\Youtube;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -23,21 +22,17 @@ class MainController extends Controller
     private $aria2Opts;
     private $l10n;
 
-    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Youtube $youtube, Aria2 $aria2)
+    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2)
     {
         parent::__construct($appName, $request);
         $this->appName = $appName;
         $this->uid = $UserId;
         $this->l10n = $IL10N;
-        $this->dataDir = \OC::$server->getSystemConfig()->getValue('datadirectory');
         //$this->rootFolder = $rootFolder;
         OC_Util::setupFS();
-        $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->aria2 = $aria2;
         $this->aria2->init();
-        $this->youtube = $youtube;
         $this->dbconn = new DBConn();
-        $this->tablename = $this->dbconn->queryBuilder->getTableName("ncdownloader_info");
     }
     /**
      * @NoAdminRequired
@@ -53,7 +48,7 @@ class MainController extends Controller
         $params = array();
         $params['aria2_running'] = $this->aria2->isRunning();
         $params['aria2_installed'] = $this->aria2->isInstalled();
-        $params['youtube_installed'] = $this->youtube->isInstalled();
+        $params['youtube_installed'] = (bool) Helper::findBinaryPath('youtube-dl');
 
         $response = new TemplateResponse($this->appName, 'Index', $params);
 

@@ -50,7 +50,6 @@ class Application extends App
                 $container->query('UserId'),
                 \OC::$server->getL10N('ncdownloader'),
                 //\OC::$server->getRootFolder(),
-                $container->query("Youtube"),
                 $container->query('Aria2')
             );
         });
