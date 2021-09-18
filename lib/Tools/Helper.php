@@ -270,7 +270,7 @@ class Helper
         if (!empty($rootFolder = Filesystem::getRoot())) {
             return $rootFolder;
         } else if (isset($uid)) {
-            return "/" . strtolower($uid) . "/files";
+            return "/" . $uid . "/files";
 
         }
         return '';
