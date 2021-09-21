@@ -18,13 +18,6 @@ $(document).on('ajaxSend', function (elm, xhr, settings) {
 })
 window.addEventListener('DOMContentLoaded', function () {
 
-    document.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            return false;
-        }
-    }
-    );
     inputAction.run();
     updatePage.run();
     buttonActions.run();

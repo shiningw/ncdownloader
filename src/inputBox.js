@@ -88,7 +88,7 @@ class inputBox {
     }
     _createButton() {
         let button = document.createElement('button');
-        button.setAttribute('type', this.btnName);
+        button.setAttribute('type', 'submit');
         button.setAttribute('id', 'form-input-button');
         //buttonInput.setAttribute('value', t('ncdownloader', helper.ucfirst(btnName)));
         let text = document.createTextNode(t('ncdownloader', helper.ucfirst(this.btnName)));

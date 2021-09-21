@@ -8,8 +8,10 @@ import autoComplete from './autoComplete';
 import eventHandler from './eventHandler';
 import aria2Options from './aria2Options';
 import helper from './helper';
+
 'use strict';
 window.addEventListener('DOMContentLoaded', function () {
+
     eventHandler.add('click', '.ncdownloader-admin-settings', 'input[type="button"]', function (event) {
         e.stopPropagation();
         OC_msg.startSaving('#ncdownloader-message-banner');
@@ -98,7 +100,8 @@ window.addEventListener('DOMContentLoaded', function () {
         }
         let input = [];
         for (let key in data) {
-            input.push({ name: key, value: data[key], id: key });
+            if (aria2Options.includes(key))
+                input.push({ name: key, value: data[key], id: key });
         }
         settingsForm.getInstance().render(input);
     }).send();

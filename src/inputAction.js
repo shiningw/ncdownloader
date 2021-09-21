@@ -1,7 +1,6 @@
 import helper from './helper'
 import $ from 'jquery'
 import Http from './http'
-import 'tippy.js/dist/tippy.css';
 import { translate as t, translatePlural as n } from '@nextcloud/l10n'
 import inputBox from './inputBox'
 import nctable from './ncTable'
@@ -37,8 +36,8 @@ const createInputBox = (event, type) => {
     let container;
     if (type === 'search') {
         let selectOptions = [];
-        selectOptions.push({name:'bitSearch',label:'BITSEARCH',default:0});
-        selectOptions.push({name:'TPB',label:'THEPIRATEBAY',selected:1});
+        selectOptions.push({ name: 'bitSearch', label: 'BITSEARCH', selected: 0 });
+        selectOptions.push({ name: 'TPB', label: 'THEPIRATEBAY', selected: 1 });
         container = inputBox.getInstance(name, type, path).createOptions(selectOptions).create().addSpinner();
         //container.appendChild(inputBox.createLoading());
     } else {
@@ -75,7 +74,7 @@ const inputHandler = (event) => {
         return;
     }
     if (inputData.type === 'ytdl') {
-        helper.message(t("ncdownloader", "Please check your download folder for progress"), 5000);
+        helper.message(t("ncdownloader", "Your download has started!"), 5000);
     }
     if (inputData.type === 'search') {
         //a scheduled 60s-interval update is running in the background, this is to prevent it from interfering when searching
@@ -83,12 +82,19 @@ const inputHandler = (event) => {
         nctable.getInstance().loading();
     }
     const successCallback = (data, element) => {
-        //data = JSON.parse(data.target.response)
-        if (data !== null && data.hasOwnProperty("file")) {
+        if (!data) {
+            helper.message(t("ncdownloader", "Something must have gone wrong!"));
+            return;
+        }
+        if (data.hasOwnProperty("error")) {
+            helper.message(t("ncdownloader", data.error));
+        } else if (data.hasOwnProperty("message")) {
+            helper.message(t("ncdownloader", data.message));
+        } else if (data.hasOwnProperty("file")) {
             helper.message(t("ncdownloader", "Downloading" + " " + data.file));
         }
-        toggleSpinner(element);
         if (data && data.title) {
+            toggleSpinner(element);
             const tableInst = nctable.getInstance(data.title, data.row);
             tableInst.actionLink = false;
             tableInst.rowClass = "table-row-search";
@@ -107,7 +113,6 @@ export default {
         $("#app-navigation").on("click", "#new-download-ytdl", (event) => createInputBox(event, 'ytdl'));
         $("#app-navigation").on("click", "#new-download", (event) => createInputBox(event, ''));
         $("#app-navigation").on("click", "#torrent-search-button", (event) => createInputBox(event, 'search'));
-
-        $("#ncdownloader-form-wrapper").on("click", "#form-input-button", (event) => inputHandler(event))
+        $("#ncdownloader-form-wrapper").on("click", "#form-input-button", (event) => inputHandler(event));
     }
 }
