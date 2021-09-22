@@ -48,7 +48,7 @@ class SettingsController extends Controller
 
     public function admin()
     {
-        $this->settings->setType($this->settings::SYSTEM);
+        $this->settings->setType($this->settings::TYPE['SYSTEM']);
         $params = $this->request->getParams();
         foreach ($params as $key => $value) {
             if (substr($key, 0, 1) == '_') {

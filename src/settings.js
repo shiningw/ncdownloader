@@ -13,9 +13,10 @@ import helper from './helper';
 window.addEventListener('DOMContentLoaded', function () {
 
     eventHandler.add('click', '.ncdownloader-admin-settings', 'input[type="button"]', function (event) {
-        e.stopPropagation();
+        event.stopPropagation();
         OC_msg.startSaving('#ncdownloader-message-banner');
         const target = this.getAttribute("data-rel");
+        let inputData = helper.getData(target);
         const path = inputData.url || "/apps/ncdownloader/admin/save";
         let url = generateUrl(path);
         Http.getInstance(url).setData(helper.getData(target)).setHandler(function () {

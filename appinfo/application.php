@@ -36,7 +36,11 @@ class Application extends App
         });
 
         $container->registerService('Youtube', function (IContainer $container) {
-            return new Youtube(['downloadDir' => $this->getRealDownloadDir()]);
+            $config = [
+                'binary' => $this->settings->setType(Settings::TYPE['SYSTEM'])->get("ncd_yt_binary"),
+                'downloadDir' => $this->getRealDownloadDir(),
+            ];
+            return new Youtube($config);
         });
 
         $container->registerService('Settings', function (IContainer $container) {
@@ -112,8 +116,14 @@ class Application extends App
         if (is_array($customSettings = $this->settings->getAria2())) {
             $settings = array_merge($customSettings, $settings);
         }
-        $token = $this->settings->setType(1)->get('ncd_rpctoken');
-        $config = ['dir' => $realDownloadDir, 'conf_dir' => $aria2_dir, 'token' => $token, 'settings' => $settings];
+        $token = $this->settings->setType(Settings::TYPE['SYSTEM'])->get('ncd_rpctoken');
+        $config = [
+            'dir' => $realDownloadDir,
+            'conf_dir' => $aria2_dir,
+            'token' => $token,
+            'settings' => $settings,
+            'binary' => $this->settings->setType(Settings::TYPE['SYSTEM'])->get('ncd_aria2_binary'),
+        ];
         return $config;
     }
 

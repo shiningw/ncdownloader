@@ -17,15 +17,13 @@ class Settings extends AllConfig
 
     //type of settings (system = 1 or app =2)
     private $type;
-    const SYSTEM = 0x001;
-    const USER = 0x010;
-    const APP = 0x100;
+    public const TYPE = ['SYSTEM' => 0x001, 'USER' => 0x010, 'APP' => 0x100];
     public function __construct($user = null)
     {
         $this->appConfig = \OC::$server->getAppConfig();
         $this->sysConfig = \OC::$server->getSystemConfig();
         $this->appName = 'ncdownloader';
-        $this->type = self::USER;
+        $this->type = self::TYPE['USER'];
         $this->user = $user;
         $this->allConfig = new AllConfig($this->sysConfig);
         //$this->connAdapter = \OC::$server->getDatabaseConnection();
@@ -38,9 +36,9 @@ class Settings extends AllConfig
     }
     public function get($key, $default = null)
     {
-        if ($this->type == self::USER && isset($this->user)) {
+        if ($this->type == self::TYPE['USER'] && isset($this->user)) {
             return $this->allConfig->getUserValue($this->user, $this->appName, $key, $default);
-        } else if ($this->type == self::SYSTEM) {
+        } else if ($this->type == self::TYPE['SYSTEM']) {
             return $this->allConfig->getSystemValue($key, $default);
         } else {
             return $this->allConfig->getAppValue($this->appName, $key, $default);
@@ -53,7 +51,7 @@ class Settings extends AllConfig
     }
     public function getAll()
     {
-        if ($this->type === self::APP) {
+        if ($this->type === self::TYPE['APP']) {
             return $this->getAllAppValues();
         } else {
             $data = $this->getAllUserSettings();
@@ -63,9 +61,9 @@ class Settings extends AllConfig
     }
     public function save($key, $value)
     {
-        if ($this->type == self::USER && isset($this->user)) {
+        if ($this->type == self::TYPE['USER'] && isset($this->user)) {
             return $this->allConfig->setUserValue($this->user, $this->appName, $key, $value);
-        } else if ($this->type == self::SYSTEM) {
+        } else if ($this->type == self::TYPE['SYSTEM']) {
             return $this->allConfig->setSystemValue($key, $value);
         } else {
             return $this->allConfig->setAppValue($this->appName, $key, $value);

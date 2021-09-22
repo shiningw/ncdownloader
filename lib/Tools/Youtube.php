@@ -21,7 +21,7 @@ class Youtube
     public function __construct($config)
     {
         $config += ['downloadDir' => '/tmp/downloads'];
-        $this->bin = Helper::findBinaryPath('youtube-dl');
+        $this->bin = $config['binary'] ?? Helper::findBinaryPath('youtube-dl');
         $this->init();
         $this->setDownloadDir($config['downloadDir']);
     }
@@ -183,7 +183,7 @@ class Youtube
     }
     public function isInstalled()
     {
-        return (bool) isset($this->bin);
+        return (bool) (isset($this->bin) && @is_executable($this->bin));
     }
     public static function install()
     {

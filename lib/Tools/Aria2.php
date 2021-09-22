@@ -340,7 +340,7 @@ class Aria2
     }
     public function isInstalled()
     {
-        return (bool) isset($this->bin);
+        return (bool) (isset($this->bin) && @is_executable($this->bin));
     }
     public function isRunning()
     {

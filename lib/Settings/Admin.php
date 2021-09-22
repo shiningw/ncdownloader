@@ -32,7 +32,7 @@ class Admin implements ISettings {
 	 * @return TemplateResponse
 	 */
 	public function getForm() {
-		$this->settings->setType($this->settings::SYSTEM);
+		$this->settings->setType($this->settings::TYPE['SYSTEM']);
 		$parameters = [
 			"path" => "/apps/ncdownloader/admin/save",
 			"ncd_yt_binary" => $this->settings->get("ncd_yt_binary"),
