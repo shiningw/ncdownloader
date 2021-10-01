@@ -179,6 +179,10 @@ div .number {
 	vertical-align: middle;
   }
 
+  #ncdownloader-content > #app-navigation:not(.vue) > ul > li > a {
+    padding: 0 12px 0 44px;
+}
+
 @media only screen and (min-width: 800px) {}
 
 @media only screen and (max-width: 1024px) {
