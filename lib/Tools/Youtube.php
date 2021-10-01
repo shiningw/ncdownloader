@@ -66,7 +66,7 @@ class Youtube
 
     public function setAudioQuality($value = 0)
     {
-        $this->addOption('--audio-quality', $value);
+        $this->setOption('--audio-quality', $value);
     }
 
     public function GetUrlOnly()

@@ -202,11 +202,9 @@ class Helper
         $dataPath = \OC::$server->getSystemConfig()->getValue('datadirectory');
         $paths = ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/opt/bin', $dataPath . "/bin"];
         $result = null;
-        if (self::is_function_enabled('exec')) {
-            $exeSniffer = new ExecutableFinder();
-            // Returns null if nothing is found
-            $result = $exeSniffer->find($program, null, $paths);
-        }
+        $exeSniffer = new ExecutableFinder();
+        // Returns null if nothing is found
+        $result = $exeSniffer->find($program, null, $paths);
         // store the value for 5 minutes
         $memcache->set($program, $result, 300);
         return $result;
