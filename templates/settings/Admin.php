@@ -4,7 +4,7 @@ extract($_);
 ?>
 <div class="ncdownloader-admin-settings">
     <form id="ncdownloader" class="section">
-        <h2>ncDownloader admin Settings</h2>
+        <h2>NCDownloader admin Settings</h2>
         <div>
             <span id="ncdownloader-message-banner"></span>
         </div>

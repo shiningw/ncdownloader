@@ -40,6 +40,10 @@ class SettingsController extends Controller
             $this->save($key, $value);
         }
     }
+       /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
     public function aria2Get()
     {
         $data = json_decode($this->settings->get("custom_aria2_settings"));
@@ -58,12 +62,20 @@ class SettingsController extends Controller
         }
 
     }
+       /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
     public function aria2Save()
     {
         $params = $this->request->getParams();
         $data = Helper::filterData($params, Helper::aria2Options());
         $this->settings->save("custom_aria2_settings", json_encode($data));
     }
+       /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
     public function aria2Delete()
     {
         $saved = json_decode($this->settings->get("custom_aria2_settings"),1);

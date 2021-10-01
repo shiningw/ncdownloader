@@ -54,7 +54,10 @@ class MainController extends Controller
 
         return $response;
     }
-
+   /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
     public function Download()
     {
         $url = trim($this->request->getParam('form_input_text'));

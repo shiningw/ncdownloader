@@ -69,6 +69,10 @@ class YoutubeController extends Controller
         $resp['counter'] = ['youtube-dl' => count($data)];
         return new JSONResponse($resp);
     }
+       /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
     public function Download()
     {
         $params = array();
@@ -96,7 +100,10 @@ class YoutubeController extends Controller
             return ['error' => $this->l10n->t("failed to get any url!")];
         }
     }
-
+   /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
     public function Delete()
     {
         $gid = $this->request->getParam('gid');

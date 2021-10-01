@@ -38,7 +38,10 @@ class Aria2Controller extends Controller
         $this->aria2->init();
         $this->dbconn = new DBConn();
     }
-
+   /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
     public function Action($path)
     {
         $path = strtolower(trim($path));
@@ -97,6 +100,10 @@ class Aria2Controller extends Controller
         $data = $this->aria2->start();
         return $data;
     }
+       /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
     public function Update()
     {
         $resp = folderScan::create()->scan();
@@ -110,6 +117,10 @@ class Aria2Controller extends Controller
             'path' => $this->urlGenerator->linkToRoute('ncdownloader.Aria2.Action', ['path' => $path]),
         );
     }
+       /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
     public function getStatus($path)
     {
         //$path = $this->request->getRequestUri();

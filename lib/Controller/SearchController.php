@@ -21,7 +21,10 @@ class SearchController extends Controller
         $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->search = new torrentSearch();
     }
-
+   /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
     public function execute()
     {
         $keyword = trim($this->request->getParam('form_input_text'));
