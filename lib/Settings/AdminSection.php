@@ -30,7 +30,7 @@ class AdminSection implements IIconSection {
 	}
 
 	public function getName(): string {
-		return $this->l->t('Downloader Settings');
+		return $this->l->t('NCDownloader Settings');
 	}
 
 	public function getPriority(): int {
