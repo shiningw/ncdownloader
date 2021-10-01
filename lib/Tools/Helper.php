@@ -284,5 +284,9 @@ class Helper
         }
         return sprintf('%04x%04x%04x%04x%04x%04x%04x%04x', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479));
     }
+    public static function ffmpegInstalled()
+    {
+        return (bool) self::findBinaryPath('ffmpeg');
+    }
 
 }

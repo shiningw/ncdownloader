@@ -38,6 +38,7 @@
 		"bootstrap": "^5.1.0",
 		"html-webpack-plugin": "^5.3.2",
 		"jquery": "^3.6.0",
+		"popper.js": "^1.16.1",
 		"sass": "^1.38.0",
 		"sass-loader": "^10.2.0",
 		"svg-url-loader": "^7.1.1",

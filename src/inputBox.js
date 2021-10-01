@@ -5,6 +5,7 @@ import helper from './helper'
 class inputBox {
     path;
     selectOptions = [];
+    checkbox = [];
     constructor(btnName, id, path = null) {
         this.btnName = btnName;
         this.id = id;
@@ -18,6 +19,9 @@ class inputBox {
         this.textInput = this._createTextInput(this.id);
         this.buttonContainer = this._createButtonContainer();
         this.formContainer.appendChild(this.textInput);
+        if (this.checkbox.length !== 0) {
+            this.formContainer.appendChild(this._createCheckbox());
+        }
         if (this.selectOptions.length !== 0) {
             this.formContainer.appendChild(this._createSelect());
         }
@@ -58,6 +62,42 @@ class inputBox {
             select.appendChild(element);
         });
         return select;
+    }
+
+    _createCheckbox() {
+        let div = document.createElement("div");
+        div.classList.add("checkboxes");
+        this.checkbox.forEach(element => {
+            div.appendChild(element);
+        })
+        return div;
+    }
+
+    createCheckbox(data) {
+        if (!data) {
+            return;
+        }
+        data.forEach(element => {
+            let div = document.createElement('div');
+            let label = document.createElement('label');
+            let text = document.createTextNode(element.label);
+            let span = document.createElement('span');
+            span.appendChild(text);
+        
+            let input = document.createElement('input');
+            input.setAttribute('type', 'checkbox');
+            input.setAttribute('id', element.id);
+            input.setAttribute('value', 'off');
+            input.setAttribute('name', element.name || element.id);
+
+            label.setAttribute('for',element.id);
+            label.classList.add("checkbox-label");
+            label.appendChild(input);
+            label.appendChild(span);
+            div.appendChild(label);
+            this.checkbox.push(div);
+        });
+        return this;
     }
 
     createOptions(data) {

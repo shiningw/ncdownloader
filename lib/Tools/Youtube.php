@@ -9,8 +9,9 @@ use Symfony\Component\Process\Process;
 class Youtube
 {
     private $ipv4Only;
-    private $audioOnly = 0;
-    private $audioFormat, $videoFormat = 'mp4';
+    public $audioOnly = 0;
+    private $audioFormat = 'm4a', $videoFormat;
+    private $format = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best';
     private $options = [];
     private $downloadDir;
     private $timeout = 60 * 60 * 15;
@@ -18,15 +19,25 @@ class Youtube
     private $defaultDir = "/tmp/downloads";
     private $env = [];
 
-    public function __construct($config)
+    public function __construct(array $options)
     {
-        $config += ['downloadDir' => '/tmp/downloads'];
-        $this->bin = $config['binary'] ?? Helper::findBinaryPath('youtube-dl');
-        $this->init();
-        $this->setDownloadDir($config['downloadDir']);
+        $options += ['downloadDir' => '/tmp/downloads', 'settings' => []];
+        $this->init($options);
     }
-    public function init()
+    public function init(array $options)
     {
+        $this->bin = Helper::findBinaryPath('youtube-dl');
+        extract($options);
+        $this->setDownloadDir($downloadDir);
+        if (!empty($settings)) {
+            foreach ($settings as $key => $value) {
+                if (empty($value)) {
+                    $this->addOption($key);
+                } else {
+                    $this->setOption($key, $value);
+                }
+            }
+        }
         if (empty($lang = getenv('LANG')) || strpos(strtolower($lang), 'utf-8') === false) {
             $lang = 'C.UTF-8';
         }
@@ -37,6 +48,25 @@ class Youtube
     public function setEnv($key, $val)
     {
         $this->env[$key] = $val;
+    }
+
+    public function audioMode()
+    {
+        if (Helper::ffmpegInstalled()) {
+            $this->addOption('--prefer-ffmpeg');
+            $this->addOption('--add-metadata');
+            $this->addOption('--metadata-from-title');
+            $this->addOption("%(artist)s - %(title)s");
+            $this->addOption('--audio-format');
+            $this->addOption($this->audioFormat);
+        }
+        $this->addOption('--extract-audio');
+        return $this;
+    }
+
+    public function setAudioQuality($value = 0)
+    {
+        $this->addOption('--audio-quality', $value);
     }
 
     public function GetUrlOnly()
@@ -61,7 +91,7 @@ class Youtube
         return $this->getDownloadDir;
     }
 
-    public function prependOption($option)
+    public function prependOption(string $option)
     {
         array_unshift($this->options, $option);
     }
@@ -89,6 +119,13 @@ class Youtube
 
     public function download($url)
     {
+        if ($this->audioOnly) {
+            $this->audioMode();
+            $this->outTpl = "/%(id)s-%(title)s." . $this->audioFormat;
+        } else {
+            $this->addOption('--format');
+            $this->addOption($this->format);
+        }
         $this->helper = YoutubeHelper::create();
         $this->downloadDir = $this->downloadDir ?? $this->defaultDir;
         $this->prependOption($this->downloadDir . $this->outTpl);
@@ -96,6 +133,7 @@ class Youtube
         $this->setUrl($url);
         $this->prependOption($this->bin);
         $process = new Process($this->options, null, $this->env);
+        //\OC::$server->getLogger()->error($process->getCommandLine(), ['app' => 'PHP']);
         $process->setTimeout($this->timeout);
         $process->run(function ($type, $buffer) use ($url) {
             if (Process::ERR === $type) {
@@ -108,16 +146,7 @@ class Youtube
             $this->helper->updateStatus(Helper::STATUS['COMPLETE']);
             return ['message' => $this->helper->file ?? $process->getErrorOutput()];
         }
-        return $process->getErrorOutput();
-
-    }
-    public function getFilePath($output)
-    {
-        $rules = '#\[download\]\s+Destination:\s+(?<filename>.*\.(?<ext>(mp4|mp3|aac)))$#i';
-
-        preg_match($rules, $output, $matches);
-
-        return $matches['filename'] ?? null;
+        return ['error' => $process->getErrorOutput()];
     }
 
     private function onError($buffer)
@@ -150,7 +179,12 @@ class Youtube
         //$index = array_search('-i', $this->options);
         //array_splice($this->options, $index + 1, 0, $url);
     }
-
+    public function setOption($key, $value)
+    {
+        $this->addOption($key);
+        $this->addOption($value);
+        return $this;
+    }
     public function addOption($option)
     {
         array_push($this->options, $option);

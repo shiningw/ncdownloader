@@ -34,7 +34,10 @@ class YoutubeController extends Controller
         $this->aria2->init();
         $this->tablename = $this->dbconn->queryBuilder->getTableName("ncdownloader_info");
     }
-
+    /**
+     * @NoAdminRequired
+     *
+     */
     public function Index()
     {
         $data = $this->dbconn->getYoutubeByUid($this->uid);
@@ -66,12 +69,12 @@ class YoutubeController extends Controller
         $resp['counter'] = ['youtube-dl' => count($data)];
         return new JSONResponse($resp);
     }
-
     public function Download()
     {
         $params = array();
         $url = trim($this->request->getParam('form_input_text'));
         $yt = $this->youtube;
+        $yt->audioOnly = (bool) $this->request->getParam('audioOnly');
         if (!$yt->isInstalled()) {
             return new JSONResponse($this->installYTD());
         }
@@ -102,7 +105,7 @@ class YoutubeController extends Controller
         }
 
         if ($this->dbconn->deleteByGid($gid)) {
-            return new JSONResponse(['message' => $gid . " deleted!"]);
+            return new JSONResponse(['message' => $gid . " Deleted!"]);
 
         }
     }
@@ -131,7 +134,7 @@ class YoutubeController extends Controller
             'data' => serialize(['link' => $url]),
         ];
         $this->dbconn->save($data);
-        $resp = ['gid' => $result, 'file' => $filename, 'result' => $result];
+        $resp = ['message' => $filename, 'result' => $result];
         return $resp;
     }
 

@@ -40,6 +40,9 @@ const createInputBox = (event, type) => {
         selectOptions.push({ name: 'TPB', label: 'THEPIRATEBAY', selected: 1 });
         container = inputBox.getInstance(name, type, path).createOptions(selectOptions).create().addSpinner();
         //container.appendChild(inputBox.createLoading());
+    } else if (type === 'ytdl') {
+        let checkbox = [{id:'audio-only',label:'Audio Only'}];
+        container = inputBox.getInstance(name, type, path).createCheckbox(checkbox).create().getContainer();
     } else {
         container = inputBox.getInstance(name, type, path).create().getContainer();
     }
@@ -69,11 +72,13 @@ const inputHandler = (event) => {
 
     let inputData = helper.getData('form-input-wrapper');
     let inputValue = inputData.form_input_text;
+   
     if (inputData.type !== 'search' && !helper.isURL(inputValue) && !helper.isMagnetURI(inputValue)) {
         helper.message(t("ncdownloader", "Invalid url"));
         return;
     }
     if (inputData.type === 'ytdl') {
+        inputData.audioOnly = document.getElementById('audio-only').checked;
         helper.message(t("ncdownloader", "Your download has started!"), 5000);
     }
     if (inputData.type === 'search') {

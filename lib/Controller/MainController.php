@@ -86,7 +86,7 @@ class MainController extends Controller
             'data' => serialize(['link' => $url]),
         ];
         $this->dbconn->save($data);
-        $resp = ['gid' => $result, 'file' => $filename, 'result' => $result];
+        $resp = ['message' => $filename, 'result' => $result,'file' => $filename];
         return $resp;
     }
 
