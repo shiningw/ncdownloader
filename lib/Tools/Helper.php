@@ -8,7 +8,7 @@ use OC\Files\Filesystem;
 class Helper
 {
     public const DOWNLOADTYPE = ['ARIA2' => 1, 'YOUTUBE-DL' => 2, 'OTHERS' => 3];
-    public const STATUS = ['ACTIVE' => 1, 'PAUSED' => 2, 'COMPLETE' => 3, 'ERROR' => 4];
+    public const STATUS = ['ACTIVE' => 1, 'PAUSED' => 2, 'COMPLETE' => 3, 'WAITING' => 4,'ERROR' => 5];
 
     public static function isUrl($URL)
     {
@@ -193,7 +193,7 @@ class Helper
         return true;
     }
 
-    public static function findBinaryPath($program)
+    public static function findBinaryPath($program,$default = null)
     {
         $memcache = \OC::$server->getMemCacheFactory()->createDistributed('findBinaryPath');
         if ($memcache->hasKey($program)) {
@@ -204,7 +204,7 @@ class Helper
         $result = null;
         $exeSniffer = new ExecutableFinder();
         // Returns null if nothing is found
-        $result = $exeSniffer->find($program, null, $paths);
+        $result = $exeSniffer->find($program, $default, $paths);
         // store the value for 5 minutes
         $memcache->set($program, $result, 300);
         return $result;

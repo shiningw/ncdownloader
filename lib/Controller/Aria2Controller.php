@@ -21,6 +21,7 @@ class Aria2Controller extends Controller
     //@config OC\AppConfig
     private $config;
     private $l10n;
+    private $minmax = [0, 999];
 
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, IRootFolder $rootFolder, Aria2 $aria2)
     {
@@ -38,7 +39,7 @@ class Aria2Controller extends Controller
         $this->aria2->init();
         $this->dbconn = new DBConn();
     }
-   /**
+    /**
      * @NoAdminRequired
      * @NoCSRFRequired
      */
@@ -80,7 +81,16 @@ class Aria2Controller extends Controller
             return [];
         }
         $resp = $this->aria2->{$action}($gid);
-
+        if (isset($resp['result'])) {
+            switch ($action) {
+                case "pause":
+                    $this->dbconn->updateStatus($gid, Helper::STATUS['PAUSED']);
+                    break;
+                case "unpause":
+                    $this->dbconn->updateStatus($gid);
+                    break;
+            }
+        }
         if (in_array($action, ['removeDownloadResult', 'remove'])) {
             if (isset($resp['result']) && strtolower($resp['result']) === 'ok') {
                 return ['message' => $this->l10n->t("DONE!"), 'status' => 1];
@@ -100,7 +110,7 @@ class Aria2Controller extends Controller
         $data = $this->aria2->start();
         return $data;
     }
-       /**
+    /**
      * @NoAdminRequired
      * @NoCSRFRequired
      */
@@ -117,27 +127,27 @@ class Aria2Controller extends Controller
             'path' => $this->urlGenerator->linkToRoute('ncdownloader.Aria2.Action', ['path' => $path]),
         );
     }
-       /**
+    /**
      * @NoAdminRequired
      * @NoCSRFRequired
      */
     public function getStatus($path)
     {
         //$path = $this->request->getRequestUri();
-        $counter = $this->aria2->getCounters();
+        $counter = $this->getCounters();
         folderScan::sync();
         switch (strtolower($path)) {
             case "active":
                 $resp = $this->aria2->tellActive();
                 break;
             case "waiting":
-                $resp = $this->aria2->tellWaiting([0, 999]);
+                $resp = $this->aria2->tellWaiting($this->minmax);
                 break;
             case "complete":
-                $resp = $this->aria2->tellStopped([0, 999]);
+                $resp = $this->aria2->tellStopped($this->minmax);
                 break;
             case "fail":
-                $resp = $this->aria2->tellFail([0, 999]);
+                $resp = $this->aria2->tellFail($this->minmax);
                 break;
             default:
                 $resp = $this->aria2->tellActive();
@@ -157,7 +167,7 @@ class Aria2Controller extends Controller
             return $data;
         }
         $data['row'] = [];
-
+        $resp = $this->filterData($resp);
         foreach ($resp as $value) {
 
             $gid = $value['following'] ?? $value['gid'];
@@ -245,5 +255,42 @@ class Aria2Controller extends Controller
             $data['title'] = Helper::getTableTitles();
         }
         return $data;
+    }
+    private function filterData($resp)
+    {
+
+        $data = [];
+        if (empty($resp)) {
+            return $data;
+        }
+
+        $data = array_filter($resp, function ($value) {
+            $gid = $value['gid'];
+            return (bool) ($this->dbconn->getUidByGid($gid) === $this->uid);
+        });
+
+        return $data;
+    }
+    private function getCounters()
+    {
+        return [
+            'active' => $this->getCounter(),
+            'waiting' => $this->getCounter('tellWaiting'),
+            'complete' => $this->getCounter('tellStopped'),
+            'fail' => $this->getCounter('tellFail'),
+        ];
+    }
+    private function getCounter($action = 'tellActive')
+    {
+        if ($action === 'tellActive') {
+            $data = $this->aria2->{$action}([]);
+        } else {
+            $data = $this->aria2->{$action}($this->minmax);
+        }
+
+        if (!is_array($data)) {
+            return 0;
+        }
+        return count($this->filterData($data));
     }
 }

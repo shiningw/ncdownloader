@@ -25,6 +25,7 @@ class Application extends App
         $this->uid = ($user) ? $user->getUID() : '';
         $this->settings = new Settings($this->uid);
         $this->dataDir = \OC::$server->getSystemConfig()->getValue('datadirectory');
+        $this->appPath = \OC::$server->getAppManager()->getAppPath('ncdownloader');
         $this->userFolder = Helper::getUserFolder($this->uid);
         $container = $this->getContainer();
         $container->registerService('UserId', function (IContainer $container) {
@@ -110,7 +111,6 @@ class Application extends App
         $realDownloadDir = $this->getRealDownloadDir();
         $this->torrentsDir = $this->settings->get('torrents_dir');
         $aria2_dir = $this->dataDir . "/aria2";
-        //$this->appPath = \OC::$server->getAppManager()->getAppPath('ncdownloader');
         $settings['seed_time'] = $this->settings->get("ncd_seed_time");
         $settings['seed_ratio'] = $this->settings->get("ncd_seed_ratio");
         if (is_array($customSettings = $this->settings->getAria2())) {
@@ -123,6 +123,8 @@ class Application extends App
             'token' => $token,
             'settings' => $settings,
             'binary' => $this->settings->setType(Settings::TYPE['SYSTEM'])->get('ncd_aria2_binary'),
+            'startHook' => $this->appPath . "/hooks/startHook.sh",
+            'completeHook' => $this->appPath . "/hooks/completeHook.sh",
         ];
         return $config;
     }

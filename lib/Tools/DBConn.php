@@ -11,6 +11,7 @@ class DBConn
     {
         $this->conn = \OC::$server->getDatabaseConnection();
         $this->queryBuilder = $this->conn->getQueryBuilder();
+        $this->prefixedTable = $this->queryBuilder->getTableName($this->table);
         //$container = \OC::$server->query(\OCP\IServerContainer::class);
         //Helper::debug(get_class($container->query(\OCP\RichObjectStrings\IValidator::class)));
         //$this->conn = \OC::$server->query(Connection::class);//working only with 22
@@ -46,17 +47,28 @@ class DBConn
         return $queryBuilder->fetchAll();
     }
 
-    public function getYoutubeByUid($uid)
+    public function getUidByGid($gid)
     {
         $queryBuilder = $this->queryBuilder
+            ->select('uid')
+            ->from($this->table)
+            ->where('gid = :gid')
+            ->setParameter('gid', $gid)
+            ->execute();
+        return $queryBuilder->fetchColumn();
+    }
+
+    public function getYoutubeByUid($uid)
+    {
+        $qb = $this->queryBuilder
             ->select('*')
             ->from($this->table)
             ->where('uid = :uid')
-            ->where('type = :type')
+            ->andWhere('type = :type')
             ->setParameter('uid', $uid)
-            ->setParameter('type', 2)
+            ->setParameter('type', Helper::DOWNLOADTYPE['YOUTUBE-DL'])
             ->execute();
-        return $queryBuilder->fetchAll();
+        return $qb->fetchAll();
     }
 
     public function getByGid($gid)
@@ -70,34 +82,34 @@ class DBConn
         return $queryBuilder->fetch();
     }
 
-    public function save(array $keys, $values = array(),$conditions = array())
+    public function save(array $keys, $values = array(), $conditions = array())
     {
-        return $this->conn->setValues($this->table, $keys, $values,$conditions);
+        return $this->conn->setValues($this->table, $keys, $values, $conditions);
     }
 
     public function deleteByGid($gid)
     {
-        // $sql = sprintf("DELETE FROM %s WHERE gid = ?",'*PREFIX*'.$this->table);
-        // return $this->conn->executeStatement($sql,array($gid));
         $qb = $this->queryBuilder
             ->delete($this->table)
             ->where('gid = :gid')
             ->setParameter('gid', $gid);
         return $qb->execute();
     }
-    public function execute($sql, $values)
+    public function executeUpdate($sql, $values)
     {
         return $this->conn->executeUpdate($sql, $values);
+    }
 
-        // for some reason this doesn't work
+    public function updateStatus($gid, $status = 1)
+    {
         $query = $this->queryBuilder;
         $query->update('ncdownloader_info')
-            ->set("data", $query->createNamedParameter($value))
-            ->where($query->expr()->eq('gid', $query->createNamedParameter($gid)));
-        // ->setParameter('gid', $gid);
-        // return $query->execute();
-        //return $query->getSQL();
-        return $this->queryBuilder->getSQL();
+            ->set("status", $query->createNamedParameter($status))
+            ->where('gid = :gid')
+            ->setParameter('gid', $gid);
+        return $query->execute();
+        //$sql = sprintf("UPDATE %s set status = ? WHERE gid = ?", $this->prefixedTable);
+        //$this->execute($sql, [$status, $gid]);
     }
 
 }

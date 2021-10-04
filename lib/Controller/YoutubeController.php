@@ -88,8 +88,7 @@ class YoutubeController extends Controller
 
         $resp = $yt->forceIPV4()->download($url);
         folderScan::sync();
-        return new JSONResponse(['data' => $resp]);
-
+        return new JSONResponse($resp);
     }
     private function downloadUrlSite($url)
     {

@@ -32,6 +32,7 @@ class Aria2
             'dir' => '/tmp/Downloads',
             'token' => null,
             'conf_dir' => '/tmp/aria2',
+            'completeHook' => $_SERVER['DOCUMENT_ROOT'] . "/apps/ncdownloader/hooks/completeHook.sh",
             'settings' => [],
         );
         //turn keys in $options into variables
@@ -43,6 +44,8 @@ class Aria2
             }
         }
         $this->bin = Helper::findBinaryPath('aria2c');
+        $this->php = Helper::findBinaryPath('php');
+        $this->completeHook = $completeHook;
         $this->rpcUrl = sprintf("http://%s:%s/jsonrpc", $host, $port);
         $this->tokenString = $token ?? 'ncdownloader123';
         $this->setToken($this->tokenString);
@@ -168,14 +171,6 @@ class Aria2
         $result = $this->sortDownloadsResult($resp['result'], ['complete', 'removed']);
         $this->filterResponse = true;
         return $result;
-    }
-    public function getCounters()
-    {
-        $active = is_array($data = $this->tellActive([])) ? count($data) : 0;
-        $waiting = is_array($data = $this->tellWaiting([0, 999])) ? count($data) : 0;
-        $stopped = is_array($data = $this->tellStopped([0, 999])) ? count($data) : 0;
-        $fail = is_array($data = $this->tellFail([0, 999])) ? count($data) : 0;
-        return ['active' => $active, 'waiting' => $waiting, 'complete' => $stopped, 'fail' => $fail];
     }
     public function tellAll()
     {
@@ -303,13 +298,15 @@ class Aria2
             '--enable-peer-exchange=true',
             '--peer-id-prefix=-TR2770-',
             '--user-agent=Transmission/2.77',
-            '--log-level=info',
+            '--log-level=notice',
             '--seed-ratio=1.0',
             '--bt-seed-unverified=true',
             '--max-overall-upload-limit=1M',
             '--max-overall-download-limit=0',
             '--max-connection-per-server=4',
-            '--max-concurrent-downloads=5',
+            '--max-concurrent-downloads=10',
+            '--check-certificate=false',
+            '--on-download-complete=' . $this->completeHook,
         ];
     }
     public function start($bin = null)

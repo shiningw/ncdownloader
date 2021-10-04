@@ -44,8 +44,8 @@ class YoutubeHelper
         if (isset($status)) {
             $this->status = trim($status);
         }
-        $sql = sprintf("UPDATE %s set status = ? WHERE gid = ?", $this->tablename);
-        $this->dbconn->execute($sql, [$this->status, $this->gid]);
+        //$sql = sprintf("UPDATE %s set status = ? WHERE gid = ?", $this->tablename);
+        $this->dbconn->updateStatus($this->gid, $this->status);
     }
     public function run($buffer, $url)
     {
@@ -78,7 +78,7 @@ class YoutubeHelper
                 $percentage = $match['percentage'];
                 $speed = $match['speed'] . "|" . $match['eta'];
                 $sql = sprintf("UPDATE %s set filesize = ?,speed = ?,progress = ? WHERE gid = ?", $this->tablename);
-                $this->dbconn->execute($sql, [$this->filesize, $speed, $percentage, $this->gid]);
+                $this->dbconn->executeUpdate($sql, [$this->filesize, $speed, $percentage, $this->gid]);
                 /* $data = [
             'filesize' => $size,
             'speed' => $speed,

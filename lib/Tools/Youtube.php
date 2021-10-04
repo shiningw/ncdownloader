@@ -14,7 +14,7 @@ class Youtube
     private $format = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best';
     private $options = [];
     private $downloadDir;
-    private $timeout = 60 * 60 * 15;
+    private $timeout = 60 * 60 * 3;//3 hours
     private $outTpl = "/%(id)s-%(title)s.%(ext)s";
     private $defaultDir = "/tmp/downloads";
     private $env = [];
