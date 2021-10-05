@@ -37,13 +37,17 @@ class Aria2
         );
         //turn keys in $options into variables
         extract($options);
+        if (isset($binary) && @is_executable($binary)) {
+            $this->bin = $binary;
+        } else {
+            $this->bin = Helper::findBinaryPath('aria2c');
+        }
         $this->setDownloadDir($dir);
         if (!empty($settings)) {
             foreach ($settings as $key => $value) {
                 $this->setOption($key, $value);
             }
         }
-        $this->bin = Helper::findBinaryPath('aria2c');
         $this->php = Helper::findBinaryPath('php');
         $this->completeHook = $completeHook;
         $this->rpcUrl = sprintf("http://%s:%s/jsonrpc", $host, $port);

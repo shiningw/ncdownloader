@@ -14,7 +14,7 @@ class Youtube
     private $format = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best';
     private $options = [];
     private $downloadDir;
-    private $timeout = 60 * 60 * 3;//3 hours
+    private $timeout = 60 * 60 * 3; //3 hours
     private $outTpl = "/%(id)s-%(title)s.%(ext)s";
     private $defaultDir = "/tmp/downloads";
     private $env = [];
@@ -26,8 +26,13 @@ class Youtube
     }
     public function init(array $options)
     {
-        $this->bin = Helper::findBinaryPath('youtube-dl');
         extract($options);
+        if (isset($binary) && @is_executable($binary)) {
+            $this->bin = $binary;
+        } else {
+            $this->bin = Helper::findBinaryPath('youtube-dl');
+        }
+
         $this->setDownloadDir($downloadDir);
         if (!empty($settings)) {
             foreach ($settings as $key => $value) {
