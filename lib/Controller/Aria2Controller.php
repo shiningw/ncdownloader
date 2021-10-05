@@ -265,7 +265,7 @@ class Aria2Controller extends Controller
         }
 
         $data = array_filter($resp, function ($value) {
-            $gid = $value['gid'];
+            $gid = $value['following'] ?? $value['gid'];
             return (bool) ($this->dbconn->getUidByGid($gid) === $this->uid);
         });
 
