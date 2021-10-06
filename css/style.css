@@ -65,6 +65,9 @@ div .number {
 .icon-unpause {
 	background-image: url('../img/play.svg');
 }
+.icon-refresh {
+	background-image: url('../img/refresh.svg');
+}
 
 #ncdownloader-action-links-container {
 	position: relative;

@@ -59,7 +59,8 @@ class YoutubeController extends Controller
                 $path = $this->urlGenerator->linkToRoute('ncdownloader.Youtube.Delete');
                 $tmp['actions'][] = ['name' => 'delete', 'path' => $path];
             } else {
-                $tmp['actions'][] = ['name' => 'disabled', 'path' => '#'];
+                $path = $this->urlGenerator->linkToRoute('ncdownloader.Youtube.Redownload');
+                $tmp['actions'][] = ['name' => 'refresh', 'path' => $path];
             }
             $tmp['data_gid'] = $value['gid'] ?? 0;
             array_push($resp['row'], $tmp);
@@ -69,7 +70,7 @@ class YoutubeController extends Controller
         $resp['counter'] = ['youtube-dl' => count($data)];
         return new JSONResponse($resp);
     }
-       /**
+    /**
      * @NoAdminRequired
      * @NoCSRFRequired
      */
@@ -99,7 +100,7 @@ class YoutubeController extends Controller
             return ['error' => $this->l10n->t("failed to get any url!")];
         }
     }
-   /**
+    /**
      * @NoAdminRequired
      * @NoCSRFRequired
      */
@@ -114,6 +115,25 @@ class YoutubeController extends Controller
             return new JSONResponse(['message' => $gid . " Deleted!"]);
 
         }
+    }
+    /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function Redownload()
+    {
+        $gid = $this->request->getParam('gid');
+        if (!$gid) {
+            return new JSONResponse(['error' => "no gid value is received!"]);
+        }
+        $row = $this->dbconn->getByGid($gid);
+        $data = unserialize($row['data']);
+        if (!empty($data['link'])) {
+            $resp = $this->youtube->forceIPV4()->download($data['link']);
+            folderScan::sync();
+            return new JSONResponse($resp);
+        }
+        return new JSONResponse(['error' => "no link"]);
     }
 
     private function _download($url, $filename = null)

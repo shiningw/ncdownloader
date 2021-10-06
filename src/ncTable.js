@@ -92,7 +92,8 @@ class ncTable {
                         if (!value.name) {
                             return;
                         }
-                        container.appendChild(this.createActionButton(value.name, value.path));
+                        let data = value.data || '';
+                        container.appendChild(this.createActionButton(value.name, value.path,data));
                     })
                     rowItem.appendChild(container);
                     row.appendChild(rowItem);
@@ -126,10 +127,11 @@ class ncTable {
 
     }
 
-    createActionButton(name, path) {
+    createActionButton(name, path, data) {
         let button = document.createElement("button");
         button.classList.add("icon-" + name);
         button.setAttribute("path", path);
+        button.setAttribute("data", data);
         return button;
     }
 

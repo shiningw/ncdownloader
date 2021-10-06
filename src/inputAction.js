@@ -72,7 +72,6 @@ const inputHandler = (event) => {
 
     let inputData = helper.getData('form-input-wrapper');
     let inputValue = inputData.form_input_text;
-   
     if (inputData.type !== 'search' && !helper.isURL(inputValue) && !helper.isMagnetURI(inputValue)) {
         helper.message(t("ncdownloader", "Invalid url"));
         return;

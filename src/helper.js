@@ -47,7 +47,7 @@ const helper = {
 
         return magnetURI.test(url.trim());
     },
-    message: function (message,duration = 5000) {
+    message: function (message,duration = 3000) {
         Toastify({
             text: message,
             duration:duration,

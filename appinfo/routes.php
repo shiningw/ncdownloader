@@ -10,6 +10,7 @@ return [
         ['name' => 'Youtube#Index', 'url' => '/youtube/get', 'verb' => 'POST'],
         ['name' => 'Youtube#Download', 'url' => '/youtube/new', 'verb' => 'POST'],
         ['name' => 'Youtube#Delete', 'url' => '/youtube/delete', 'verb' => 'POST'],
+        ['name' => 'Youtube#Redownload', 'url' => '/youtube/redownload', 'verb' => 'POST'],
         ['name' => 'Search#Execute', 'url' => '/search', 'verb' => 'POST'],
         // AdminSettings
         ['name' => 'Settings#Admin', 'url' => '/admin/save', 'verb' => 'POST'],
