@@ -234,7 +234,7 @@ class Aria2Controller extends Controller
                 $actions[] = $this->createActionItem('unpause', 'unpause');
             }
             if ($this->aria2->methodName === "tellActive") {
-                $speed = [Helper::formatBytes($value['downloadSpeed']), $left . " left"];
+                $speed = [Helper::formatBytes($value['downloadSpeed']), $left];
                 $tmp['speed'] = $speed;
                 $tmp['progress'] = $value['progress'];
                 $actions[] = $this->createActionItem('pause', 'pause');

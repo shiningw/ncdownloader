@@ -43,8 +43,8 @@ class MainController extends Controller
         // $str = \OC::$server->getDatabaseConnection()->getInner()->getPrefix();
         //$config = \OC::$server->getAppConfig();
         OC_Util::addScript($this->appName, 'app');
-        OC_Util::addStyle($this->appName, 'style');
-        OC_Util::addStyle($this->appName, 'table');
+       // OC_Util::addStyle($this->appName, 'style');
+       // OC_Util::addStyle($this->appName, 'table');
         $params = array();
         $params['aria2_running'] = $this->aria2->isRunning();
         $params['aria2_installed'] = $this->aria2->isInstalled();

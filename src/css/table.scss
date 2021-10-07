@@ -1,23 +1,13 @@
 #ncdownloader-table-wrapper {
-  display         : flex;
-  flex-flow       : column nowrap;
-  background-color: white;
-  width           : 100%;
-  margin          : 0 auto;
-  border-radius   : 4px;
+  display           : flex;
+  flex-flow         : column nowrap;
+  width             : 100%;
+  margin            : 0 auto;
+  border-radius     : 4px;
   /*border          : 1px solid #DADADA;*/
-  box-shadow      : 0px 1px 4px rgba(0, 0, 0, .08);
-  justify-content : center;
-  align-items     : center;
-  background-color: #fafafa;
-
-  .table-row,
-  .table-row-search {
-    display      : flex;
-    flex-flow    : row nowrap;
-    width        : 100%;
-    border-bottom: 1px solid #dadada;
-  }
+  box-shadow        : 0px 1px 4px rgba(0, 0, 0, .08);
+  justify-content   : center;
+  align-items       : center;
 
   section.table-body,
   section.table-heading {
@@ -38,9 +28,8 @@
 
     .table-row,
     .table-row-search {
-      background-color: #ececec;
-      color           : #3e3e3e;
-      font-weight     : bold;
+      color      : #3e3e3e;
+      font-weight: bold;
     }
 
     .table-cell:hover {
@@ -55,46 +44,26 @@
     flex-flow      : column wrap;
     flex           : 1;
     font-size      : 14px;
-    padding        : 8px 3px;
+    padding        : 8px 7px;
     justify-content: left;
-    align-items    : left;
+    align-items    : start;
     transition     : all 0.15s ease-in-out;
   }
 
   .table-cell:first-child {
-    flex: 1 1 30%;
-  }
-
-  .table-cell:last-child {
-    flex: 0 1 7%;
-  }
-
-  #table-cell-status,
-  .table-heading-status {
-    flex         : 0 1 15%;
+    flex         : 1 1 auto;
+    width        : 30%;
     overflow     : hidden;
     text-overflow: ellipsis;
+    white-space  : nowrap;
   }
-
   .table-cell:hover {
     cursor          : pointer;
     background-color: #F0F0F0;
     /*   box-shadow : 0px 1px 4px rgba(0, 0, 0, .08); */
   }
 
-  .row-sub-container {
-    display  : flex;
-    flex-flow: column nowrap;
-    flex     : 1;
-  }
-
-  .row-sub-container .table-cell {
-    padding      : 8px 0;
-    border-bottom: 1px solid #dadada;
-  }
-
-  .table-row:last-child,
-  .row-sub-container .table-cell:last-child {
+  .table-row:last-child {
     border-bottom: 0;
   }
 
@@ -108,16 +77,27 @@
     }
 
     .table-cell:first-child {
-      flex         : 1 0 250px;
-      overflow     : hidden;
-      text-overflow: ellipsis;
+      flex   : 1 0 auto;
+      display: flex;
+      width  : 150px;
+    }
+
+    .table-cell:first-child>div {
+      flex-flow: column nowrap;
     }
 
     .table-cell:last-child {
-      flex: 1 1 7%;
+      flex: 1 1 0;
     }
+  }
+  #ncdownloader-table-wrapper.youtube-dl-downloads {
 
+    #table-cell-speed,
+    .table-heading-speed {
+      flex         : 0 1 auto;
+      overflow     : hidden;
+      text-overflow: ellipsis;
+      width        : 58px;
+    }
   }
 }
-
-

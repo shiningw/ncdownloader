@@ -8,6 +8,7 @@ import autoComplete from './autoComplete';
 import eventHandler from './eventHandler';
 import aria2Options from './aria2Options';
 import helper from './helper';
+import './css/autoComplete.css'
 
 'use strict';
 window.addEventListener('DOMContentLoaded', function () {

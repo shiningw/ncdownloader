@@ -1,0 +1,279 @@
+.action-item {
+    position: relative;
+}
+
+a {
+    color          : #337ab7;
+    text-decoration: none;
+}
+
+#ncdownloader-form-wrapper .form-input-wrapper {
+    display  : flex;
+    flex-flow: row nowrap;
+}
+
+#ncdownloader-form-wrapper .form-input-wrapper select,
+#ncdownloader-form-wrapper .form-input-wrapper input {
+    justify-content: left;
+}
+
+a:hover,
+a:focus {
+    color          : #23527c;
+    text-decoration: underline;
+}
+
+a:focus {
+    outline       : 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+div .number {
+    background   : none repeat scroll 0 0 #5f5853;
+    border-radius: 999px;
+    color        : #FFFFFF;
+    display      : inline-block;
+    font-size    : 15px;
+    font-style   : italic;
+    height       : 20px;
+    line-height  : 20px;
+    margin-right : 10px;
+    padding      : 0 8px;
+}
+
+#ncdownloader-settings-form input[type=text] {
+    width: 160px;
+}
+
+#ncdownloader-form-wrapper input[type=text] {
+    padding: 0px 5px;
+    flex   : auto;
+}
+
+#ncdownloader-table-data .table-cell {
+    padding-left: 4px;
+}
+
+.icon-power {
+    background-image: url('../../img/power.svg');
+}
+
+.icon-purge {
+    background-image: url('../../img/trash.svg');
+}
+
+.icon-unpause {
+    background-image: url('../../img/play.svg');
+}
+
+.icon-refresh {
+    background-image: url('../../img/refresh.svg');
+}
+
+#ncdownloader-action-links-container {
+    position: relative;
+
+    .action-link-item a:hover {
+        background-color: #c2afaf;
+    }
+
+    ul {
+        background-color: #ededed;
+    }
+}
+
+#ncdownloader-message-banner.success,
+.message-banner.success {
+    color           : #3c763d;
+    background-color: #dff0d8;
+    border-color    : #d6e9c6;
+    width           : fit-content;
+}
+
+#ncdownloader-message-banner.error,
+.message-banner.error {
+    color           : #a94442;
+    background-color: #f2dede;
+    border-color    : #ebccd1;
+    width           : fit-content;
+}
+
+
+
+.action-links {
+    /*visibility: hidden;*/
+    display         : none;
+    position        : absolute;
+    background-color: #f1f1f1;
+    min-width       : 60px;
+    box-shadow      : 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index         : 9999;
+}
+
+.action-link-item a {
+    color          : black;
+    padding        : 6px 6px;
+    text-decoration: none;
+    display        : block;
+}
+
+.app-ncdownloader,
+#ncdownloader-content,.ncdownloader-content-wrapper,#ncdownloader-form-wrapper, #ncdownloader-table-content{
+    width: 100%;
+}
+.ncdownloader-content-wrapper {
+    padding-top: 0.3em;
+}
+.app-ncdownloader #app-content #app-content-wrapper {
+    flex-wrap: wrap;
+}
+
+#app-content-wrapper #ncdownloader-table-content .table-cell {
+    border-bottom: 1px solid #9d9595;
+    border-left  : 1px solid #eee;
+
+}
+
+.app-navigation-entry-bullet {
+    background-color: rgb(80, 80, 173);
+}
+
+.notinstalled {
+    color: red;
+}
+
+.checkboxes label {
+    display      : inline-block;
+    padding-right: 10px;
+    white-space  : nowrap;
+}
+
+.checkboxes input {
+    vertical-align: middle;
+}
+
+.checkboxes label span {
+    vertical-align: middle;
+}
+
+#ncdownloader-content>#app-navigation:not(.vue)>ul>li>a {
+    padding: 0 12px 0 44px;
+}
+
+.button-container [class^='icon-'],
+.button-container [class*=' icon-'] {
+    background-repeat  : no-repeat;
+    background-position: center;
+    /* min-width       : 18px; */
+    min-height         : 24px;
+}
+
+@media only screen and (min-width: 800px) {}
+
+@media only screen and (max-width: 1024px) {
+    #ncdownloader-form-wrapper {
+        position  : relative;
+        margin-top: 2em;
+    }
+
+    #ncdownloader-settings-form input[type=text] {
+        width: 135px;
+    }
+}
+
+
+/* from bootstrap */
+.visually-hidden,
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+    position   : absolute !important;
+    width      : 1px !important;
+    height     : 1px !important;
+    padding    : 0 !important;
+    margin     : -1px !important;
+    overflow   : hidden !important;
+    clip       : rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border     : 0 !important;
+}
+
+@-webkit-keyframes spinner-border {
+    to {
+        transform   : rotate(360deg)
+            /* rtl  :ignore */
+        ;
+    }
+}
+
+@keyframes spinner-border {
+    to {
+        transform   : rotate(360deg)
+            /* rtl  :ignore */
+        ;
+    }
+}
+
+.spinner-border {
+    display           : inline-block;
+    width             : 2rem;
+    height            : 2rem;
+    vertical-align    : -0.125em;
+    border            : 0.25em solid currentColor;
+    border-right-color: transparent;
+    border-radius     : 50%;
+    -webkit-animation : 0.75s linear infinite spinner-border;
+    animation         : 0.75s linear infinite spinner-border;
+}
+
+.spinner-border-sm {
+    width       : 1rem;
+    height      : 1rem;
+    border-width: 0.2em;
+}
+
+@-webkit-keyframes spinner-grow {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        opacity  : 1;
+        transform: none;
+    }
+}
+
+@keyframes spinner-grow {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        opacity  : 1;
+        transform: none;
+    }
+}
+
+.spinner-grow {
+    display          : inline-block;
+    width            : 2rem;
+    height           : 2rem;
+    vertical-align   : -0.125em;
+    background-color : currentColor;
+    border-radius    : 50%;
+    opacity          : 0;
+    -webkit-animation: 0.75s linear infinite spinner-grow;
+    animation        : 0.75s linear infinite spinner-grow;
+}
+
+.spinner-grow-sm {
+    width : 1rem;
+    height: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .spinner-border,
+    .spinner-grow {
+        -webkit-animation-duration: 1.5s;
+        animation-duration        : 1.5s;
+    }
+}

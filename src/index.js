@@ -7,6 +7,9 @@ import inputAction from './inputAction'
 import updatePage from './updatePage'
 import buttonActions from './buttonActions'
 import inputBox from './inputBox'
+import './css/style.scss'
+import './css/table.scss'
+
 'use strict'
 const basePath = "/apps/ncdownloader";
 $(document).on('ajaxSend', function (elm, xhr, settings) {

@@ -53,7 +53,7 @@ class YoutubeController extends Controller
             $filename = sprintf('<a class="download-file-folder" href="%s">%s</a>', $folderLink, $value['filename']);
             $fileInfo = sprintf("%s | %s", $value['filesize'], date("Y-m-d H:i:s", $value['timestamp']));
             $tmp['filename'] = array($filename, $fileInfo);
-            $tmp['speed'] = $value['speed'];
+            $tmp['speed'] = explode("|", $value['speed']);
             $tmp['progress'] = $value['progress'];
             if ((int) $value['status'] == Helper::STATUS['COMPLETE']) {
                 $path = $this->urlGenerator->linkToRoute('ncdownloader.Youtube.Delete');
