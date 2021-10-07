@@ -103,7 +103,7 @@ class DBConn
     public function updateStatus($gid, $status = 1)
     {
         $query = $this->queryBuilder;
-        $query->update('ncdownloader_info')
+        $query->update($this->table)
             ->set("status", $query->createNamedParameter($status))
             ->where('gid = :gid')
             ->setParameter('gid', $gid);

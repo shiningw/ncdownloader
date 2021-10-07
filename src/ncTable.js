@@ -93,7 +93,7 @@ class ncTable {
                             return;
                         }
                         let data = value.data || '';
-                        container.appendChild(this.createActionButton(value.name, value.path,data));
+                        container.appendChild(this.createActionButton(value.name, value.path, data));
                     })
                     rowItem.appendChild(container);
                     row.appendChild(rowItem);
@@ -132,6 +132,10 @@ class ncTable {
         button.classList.add("icon-" + name);
         button.setAttribute("path", path);
         button.setAttribute("data", data);
+        if (name == 'refresh') {
+            name = 'Redownload';
+        }
+        button.setAttribute("title", helper.ucfirst(name));
         return button;
     }
 
