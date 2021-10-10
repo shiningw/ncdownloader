@@ -10,7 +10,7 @@ class Youtube
 {
     private $ipv4Only;
     public $audioOnly = 0;
-    private $audioFormat = 'm4a', $videoFormat;
+    public $audioFormat = 'm4a', $videoFormat;
     private $format = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best';
     private $options = [];
     private $downloadDir;
@@ -62,9 +62,9 @@ class Youtube
             $this->addOption('--add-metadata');
             $this->addOption('--metadata-from-title');
             $this->addOption("%(artist)s - %(title)s");
-            $this->addOption('--audio-format');
-            $this->addOption($this->audioFormat);
+            $this->audioFormat = 'mp3';
         }
+        $this->setAudioFormat($this->audioFormat);
         $this->addOption('--extract-audio');
         return $this;
     }
@@ -72,6 +72,16 @@ class Youtube
     public function setAudioQuality($value = 0)
     {
         $this->setOption('--audio-quality', $value);
+    }
+
+    public function setAudioFormat($format)
+    {
+        $this->setOption('--audio-format',$format);
+    }
+
+    public function setvideoFormat($format)
+    {
+        $this->videoFormat = $format;
     }
 
     public function GetUrlOnly()
@@ -199,16 +209,6 @@ class Youtube
     {
         $this->addOption('-4');
         return $this;
-    }
-
-    public function setAudioFormat($format)
-    {
-        $this->audioFormat = $format;
-    }
-
-    public function setvideoFormat($format)
-    {
-        $this->videoFormat = $format;
     }
 
     private function buildCMD()
