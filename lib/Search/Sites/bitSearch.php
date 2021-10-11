@@ -38,7 +38,7 @@ class bitSearch implements searchBase
     public function parse()
     {
 
-        $data = $this->crawler->filter(".w3-col.s12.mt-4 .search-result")->each(function ($node, $i) {
+        $data = $this->crawler->filter(".search-result")->each(function ($node, $i) {
 
             if ($node->getNode(0)) {
                 try {
