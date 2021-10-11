@@ -61,11 +61,11 @@ class Youtube
             $this->addOption('--prefer-ffmpeg');
             $this->addOption('--add-metadata');
             $this->addOption('--metadata-from-title');
-            $this->addOption("%(artist)s - %(title)s");
-            $this->audioFormat = 'mp3';
+            $this->addOption("%(artist)s-%(title)s");
+            $this->addOption('--extract-audio');
         }
+        $this->outTpl = "/%(id)s-%(title)s.m4a";
         $this->setAudioFormat($this->audioFormat);
-        $this->addOption('--extract-audio');
         return $this;
     }
 
@@ -76,7 +76,7 @@ class Youtube
 
     public function setAudioFormat($format)
     {
-        $this->setOption('--audio-format',$format);
+        $this->setOption('--audio-format', $format);
     }
 
     public function setvideoFormat($format)
@@ -136,10 +136,8 @@ class Youtube
     {
         if ($this->audioOnly) {
             $this->audioMode();
-            $this->outTpl = "/%(id)s-%(title)s." . $this->audioFormat;
         } else {
-            $this->addOption('--format');
-            $this->addOption($this->format);
+            $this->setOption('--format',$this->format);
         }
         $this->helper = YoutubeHelper::create();
         $this->downloadDir = $this->downloadDir ?? $this->defaultDir;
@@ -148,7 +146,7 @@ class Youtube
         $this->setUrl($url);
         $this->prependOption($this->bin);
         $process = new Process($this->options, null, $this->env);
-        //\OC::$server->getLogger()->error($process->getCommandLine(), ['app' => 'PHP']);
+        //\OC::$server->getLogger()->error($process->getWorkingDirectory(), ['app' => 'PHP']);
         $process->setTimeout($this->timeout);
         $process->run(function ($type, $buffer) use ($url) {
             if (Process::ERR === $type) {

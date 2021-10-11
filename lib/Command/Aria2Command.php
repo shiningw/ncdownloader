@@ -56,7 +56,11 @@ class Aria2Command extends base
             $this->dbconn->updateStatus($gid, Helper::STATUS[$status]);
         }
         if ($action === 'start') {
-            //Helper::log("$gid started");
+            if ($path = $input->getArgument('path')) {
+                $filename = basename($path);
+                $this->dbconn->updateFilename($gid,$filename);
+            }
+
         }
         return 1;
     }

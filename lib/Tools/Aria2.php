@@ -50,6 +50,7 @@ class Aria2
         }
         $this->php = Helper::findBinaryPath('php');
         $this->completeHook = $completeHook;
+        $this->startHook = $startHook;
         $this->rpcUrl = sprintf("http://%s:%s/jsonrpc", $host, $port);
         $this->tokenString = $token ?? 'ncdownloader123';
         $this->setToken($this->tokenString);
@@ -311,6 +312,7 @@ class Aria2
             '--max-concurrent-downloads=10',
             '--check-certificate=false',
             '--on-download-complete=' . $this->completeHook,
+            '--on-download-start=' . $this->startHook,
         ];
     }
     public function start($bin = null)

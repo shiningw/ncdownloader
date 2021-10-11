@@ -112,4 +112,16 @@ class DBConn
         //$this->execute($sql, [$status, $gid]);
     }
 
+    public function updateFilename($gid, $filename)
+    {
+        $query = $this->queryBuilder;
+        $query->update($this->table)
+            ->set("filename", $query->createNamedParameter($filename))
+            ->where('gid = :gid')
+            ->andWhere('filename = :filename')
+            ->setParameter('gid', $gid)
+            ->setParameter('filename', 'unknown');
+        return $query->execute();
+    }
+
 }
