@@ -19,10 +19,9 @@ const createInputBox = (event, type) => {
     let height = $(window).scrollTop();
     if (height > 50)
         $("html, body").animate({ scrollTop: 0 }, "fast");
-    let name, path;
+    let name = t("ncdownloader", 'Download'), path;
     switch (type) {
         case "ytdl":
-            name = t("ncdownloader", 'YTDL Download');
             path = basePath + "/youtube/new";
             break;
         case "search":
@@ -30,7 +29,6 @@ const createInputBox = (event, type) => {
             path = basePath + "/search";
             break;
         default:
-            name = t("ncdownloader", 'New Download');
             path = basePath + "/new";
     }
     let container;

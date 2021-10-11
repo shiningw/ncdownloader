@@ -83,14 +83,14 @@ class inputBox {
             let text = document.createTextNode(element.label);
             let span = document.createElement('span');
             span.appendChild(text);
-        
+
             let input = document.createElement('input');
             input.setAttribute('type', 'checkbox');
             input.setAttribute('id', element.id);
             input.setAttribute('value', 'off');
             input.setAttribute('name', element.name || element.id);
 
-            label.setAttribute('for',element.id);
+            label.setAttribute('for', element.id);
             label.classList.add("checkbox-label");
             label.appendChild(input);
             label.appendChild(span);
@@ -124,6 +124,17 @@ class inputBox {
         textInput.setAttribute('data-type', id);
         textInput.setAttribute('value', '');
         textInput.classList.add('form-input-text');
+        switch (id) {
+            case 'general':
+                textInput.setAttribute('placeholder', t("ncdownloader",'Paste your magnet/http link here'));
+                break;
+            case 'ytdl':
+                textInput.setAttribute('placeholder', t("ncdownloader",'Paste your video link here'));
+                break;
+            case 'search':
+                textInput.setAttribute('placeholder', t("ncdownloader",'Enter your keyword to search'));
+                break;
+        }
         return textInput;
     }
     _createButton() {

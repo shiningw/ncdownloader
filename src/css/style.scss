@@ -7,14 +7,17 @@ a {
     text-decoration: none;
 }
 
-#ncdownloader-form-wrapper .form-input-wrapper {
-    display  : flex;
-    flex-flow: row nowrap;
-}
+#ncdownloader-form-wrapper {
+    margin-left: 2px;
 
-#ncdownloader-form-wrapper .form-input-wrapper select,
-#ncdownloader-form-wrapper .form-input-wrapper input {
-    justify-content: left;
+    .form-input-wrapper {
+        display  : flex;
+        flex-flow: row nowrap;
+
+        select input {
+            justify-content: left;
+        }
+    }
 }
 
 a:hover,
@@ -118,12 +121,17 @@ div .number {
 }
 
 .app-ncdownloader,
-#ncdownloader-content,.ncdownloader-content-wrapper,#ncdownloader-form-wrapper, #ncdownloader-table-content{
+#ncdownloader-content,
+.ncdownloader-content-wrapper,
+#ncdownloader-form-wrapper,
+#ncdownloader-table-content {
     width: 100%;
 }
+
 .ncdownloader-content-wrapper {
     padding-top: 0.3em;
 }
+
 .app-ncdownloader #app-content #app-content-wrapper {
     flex-wrap: wrap;
 }
