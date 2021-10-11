@@ -43,7 +43,7 @@ const helper = {
         return pattern.test(url);
     },
     isMagnetURI(url) {
-        const magnetURI = /^magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32,40}&dn=.+&tr=.+$/i;
+        const magnetURI = /^magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32,40}(&dn=.+&tr=.+)?$/i;
 
         return magnetURI.test(url.trim());
     },
