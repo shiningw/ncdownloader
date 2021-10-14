@@ -92,8 +92,14 @@ class Aria2Controller extends Controller
             }
         }
         if (in_array($action, ['removeDownloadResult', 'remove'])) {
-            if (isset($resp['result']) && strtolower($resp['result']) === 'ok') {
-                return ['message' => $this->l10n->t("DONE!"), 'status' => 1];
+            $result = $resp['result'] ?? null;
+            if (isset($result)) {
+                if (strtolower($result) === 'ok') {
+                    return ['message' => $this->l10n->t("DONE!"), 'status' => 1];
+                }
+                if (is_string($result)) {
+                    return ['message' => $this->l10n->t($result), 'status' => 1];
+                }
             } else {
                 return ['error' => $this->l10n->t("FAILED!"), 'status' => 0];
             }
