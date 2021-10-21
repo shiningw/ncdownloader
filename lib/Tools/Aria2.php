@@ -30,6 +30,7 @@ class Aria2
             'host' => '127.0.0.1',
             'port' => 6800,
             'dir' => '/tmp/Downloads',
+            'torrents_dir' => '/tmp/Torrents',
             'token' => null,
             'conf_dir' => '/tmp/aria2',
             'completeHook' => $_SERVER['DOCUMENT_ROOT'] . "/apps/ncdownloader/hooks/completeHook.sh",
@@ -43,6 +44,7 @@ class Aria2
             $this->bin = Helper::findBinaryPath('aria2c');
         }
         $this->setDownloadDir($dir);
+        $this->setTorrentsDir($torrents_dir);
         if (!empty($settings)) {
             foreach ($settings as $key => $value) {
                 $this->setOption($key, $value);
@@ -113,6 +115,18 @@ class Aria2
     public function getOptions()
     {
         return $this->options;
+    }
+    public function setTorrentsDir($dir)
+    {
+        $this->torrentsDir = $dir;
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+        return $this;
+    }
+    public function getTorrentsDir()
+    {
+        return $this->torrentsDir;
     }
     public function setDownloadDir($dir)
     {
@@ -185,12 +199,14 @@ class Aria2
     public function __call($name, $args)
     {
         $this->methodName = $name;
+
         $data = array();
         if (isset($args[0]) && is_array($args[0]) && count($args) == 1 && strtolower($name) !== "adduri") {
             $args = reset($args);
         }
         switch ($name) {
             case "addUri":
+            case "addTorrent":
                 array_push($args, $this->options);
                 break;
             case "tellActive":
@@ -281,6 +297,26 @@ class Aria2
 
         if (isset($resp['result']) && is_string($gid = $resp['result'])) {
             return $gid;
+        }
+
+        return false;
+    }
+
+    public function btDownload($file)
+    {
+        if ($data = file_get_contents($file)) {
+            $filename = Helper::getBasicFilename($file);
+            $torrent = base64_encode($data);
+            $resp = $this->addTorrent($torrent, []);
+        }else{
+            return ['error' => "no valid torrents file!"];
+        }
+        if (isset($resp['error'])) {
+            return $resp;
+        }
+
+        if (isset($resp['result']) && is_string($gid = $resp['result'])) {
+            return ['gid' => $gid, 'filename' => $filename];
         }
 
         return false;

@@ -27,7 +27,7 @@ class SearchController extends Controller
      */
     public function execute()
     {
-        $keyword = trim($this->request->getParam('form_input_text'));
+        $keyword = trim($this->request->getParam('text-input-value'));
         $site = trim($this->request->getParam('select-value-search'));
         $this->search->setSite($site);
         $data = $this->search->go($keyword);

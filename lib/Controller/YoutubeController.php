@@ -77,9 +77,9 @@ class YoutubeController extends Controller
     public function Download()
     {
         $params = array();
-        $url = trim($this->request->getParam('form_input_text'));
+        $url = trim($this->request->getParam('text-input-value'));
         $yt = $this->youtube;
-        $yt->audioOnly = (bool) $this->request->getParam('audioOnly');
+        $yt->audioOnly = (bool) $this->request->getParam('audio-only');
         if (!$yt->isInstalled()) {
             return new JSONResponse($this->installYTD());
         }

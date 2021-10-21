@@ -124,7 +124,7 @@ class Helper
             '/[’‘‹›‚]/u' => '', // Literally a single quote
             '/[“”«»„]/u' => '', // Double quote
             '/ /' => '_', // nonbreaking space(equiv. to 0x160)
-            '/[^a-z0-9_\s.-]/i' => '_',
+           // '/[^a-z0-9_\s.-]/i' => '_',
         );
         return preg_replace(array_keys($replace), array_values($replace), $string);
     }
@@ -285,6 +285,10 @@ class Helper
     public static function ffmpegInstalled()
     {
         return (bool) self::findBinaryPath('ffmpeg');
+    }
+    // filename without extension
+    public static function getBasicFilename($path){
+       return pathinfo($path, PATHINFO_FILENAME);
     }
 
 }

@@ -14,12 +14,16 @@ const Http = class {
         this.data = data
         return this
     }
+    setDataType($value) {
+        this.dataType = $value;
+    }
     send() {
         let token = this.getToken();
         this.xhr.open(this.method, this.url);
         this.xhr.setRequestHeader('requesttoken', token)
         this.xhr.setRequestHeader('OCS-APIREQUEST', 'true')
-        this.xhr.setRequestHeader('Content-Type', this.dataType);
+        if (this.dataType)
+            this.xhr.setRequestHeader('Content-Type', this.dataType);
         let callback = this.handler;
         this.xhr.onload = () => {
             if (typeof callback === 'function')
@@ -46,6 +50,17 @@ const Http = class {
     setErrorHandler(handler) {
         this.errorHandler = handler
         return this;
+    }
+    upload(file) {
+        const fd = new FormData();
+        this.xhr.open(this.method, this.url, true);
+        let callback = this.handler;
+        this.xhr.onload = () => {
+            if (typeof callback === 'function')
+                callback(JSON.parse(this.xhr.response));
+        }
+        fd.append('torrentfile', file);
+        return this.xhr.send(fd);
     }
 }
 

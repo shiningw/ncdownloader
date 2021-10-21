@@ -104,12 +104,17 @@ class Application extends App
         $dir = $this->settings->get('ncd_downloader_dir') ?? "/Downloads";
         return $this->dataDir . $this->userFolder . $dir;
     }
+    private function getRealTorrentsDir()
+    {
+        $dir = $this->settings->get('ncd_torrents_dir') ?? "/Torrents";
+        return $this->dataDir . $this->userFolder . $dir;
+    }
 
     private function getConfig()
     {
         //$this->config = \OC::$server->getAppConfig();
         $realDownloadDir = $this->getRealDownloadDir();
-        $this->torrentsDir = $this->settings->get('torrents_dir');
+        $torrentsDir = $this->getRealTorrentsDir();
         $aria2_dir = $this->dataDir . "/aria2";
         $settings['seed_time'] = $this->settings->get("ncd_seed_time");
         $settings['seed_ratio'] = $this->settings->get("ncd_seed_ratio");
@@ -119,6 +124,7 @@ class Application extends App
         $token = $this->settings->setType(Settings::TYPE['SYSTEM'])->get('ncd_rpctoken');
         $config = [
             'dir' => $realDownloadDir,
+            'torrents_dir' => $torrentsDir,
             'conf_dir' => $aria2_dir,
             'token' => $token,
             'settings' => $settings,

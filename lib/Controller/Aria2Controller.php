@@ -3,6 +3,7 @@ namespace OCA\NCDownloader\Controller;
 
 use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\DBConn;
+use OCA\NCDownloader\Tools\Counters;
 use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Tools\Settings;
@@ -38,6 +39,8 @@ class Aria2Controller extends Controller
         $this->aria2 = $aria2;
         $this->aria2->init();
         $this->dbconn = new DBConn();
+        $this->counters = new Counters($aria2, $this->dbconn,$UserId);
+
     }
     /**
      * @NoAdminRequired
@@ -98,7 +101,7 @@ class Aria2Controller extends Controller
                     return ['message' => $this->l10n->t("DONE!"), 'status' => 1];
                 }
                 if (is_string($result)) {
-                    return ['message' => $this->l10n->t($result), 'status' => 1];
+                    return ['message' => $this->l10n->t("DONE!"), 'status' => 1];
                 }
             } else {
                 return ['error' => $this->l10n->t("FAILED!"), 'status' => 0];
@@ -140,7 +143,7 @@ class Aria2Controller extends Controller
     public function getStatus($path)
     {
         //$path = $this->request->getRequestUri();
-        $counter = $this->getCounters();
+        $counter = $this->counters->getCounters();
         folderScan::sync();
         switch (strtolower($path)) {
             case "active":
@@ -269,6 +272,9 @@ class Aria2Controller extends Controller
         if (empty($resp)) {
             return $data;
         }
+        if (isset($resp['error'])) {
+            return $resp;
+        }
 
         $data = array_filter($resp, function ($value) {
             $gid = $value['following'] ?? $value['gid'];
@@ -276,27 +282,5 @@ class Aria2Controller extends Controller
         });
 
         return $data;
-    }
-    private function getCounters()
-    {
-        return [
-            'active' => $this->getCounter(),
-            'waiting' => $this->getCounter('tellWaiting'),
-            'complete' => $this->getCounter('tellStopped'),
-            'fail' => $this->getCounter('tellFail'),
-        ];
-    }
-    private function getCounter($action = 'tellActive')
-    {
-        if ($action === 'tellActive') {
-            $data = $this->aria2->{$action}([]);
-        } else {
-            $data = $this->aria2->{$action}($this->minmax);
-        }
-
-        if (!is_array($data)) {
-            return 0;
-        }
-        return count($this->filterData($data));
     }
 }
