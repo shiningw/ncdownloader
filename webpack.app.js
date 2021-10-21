@@ -1,8 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
+const { VueLoaderPlugin } = require('vue-loader')
 
 
 module.exports = {
+  experiments: {
+    asset: true
+  },
   entry: {
     app: './src/index.js',
     appSettings: './src/settings.js'
@@ -37,30 +41,32 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        use: [
-          {
-            loader: 'svg-url-loader',
-            options: {
-              limit: 10000,
-            },
-          },
-        ],
+        use: 'svgo-loader',
+        type: 'asset'
       },
+      {
+        test: /\.vue$/,
+        use: 'vue-loader'
+      },
+      /*{ test: /\.css$/, use: ['vue-style-loader', 'css-loader'] },*/
     ]
   },
-  /*  resolve: {
+  resolve: {
+    extensions: [
+      '.tsx',
+      '.ts',
+      '.js',
+      '.jsx',
+      '.vue',
+      '.json',
+    ],
     alias: {
-      vue: 'vue/dist/vue.js'
+      /* vue: 'vue/dist/vue.esm-bundler.js'*/
+      assets: path.resolve(__dirname, 'img')
     },
-  }
-  module: {
-    rules: [
-      { test: /\.vue$/, use: 'vue-loader' },
-      { test: /\.css$/, use: ['vue-style-loader', 'css-loader']},
-    ]
-  },*/
+  },
   plugins: [
-    // new VueLoaderPlugin(),
+    new VueLoaderPlugin(),
     new webpack.ProvidePlugin({
       $: "jquery",
       jquery: "jQuery",

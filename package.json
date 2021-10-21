@@ -32,24 +32,8 @@
 		"stylelint:fix": "stylelint src --fix"
 	},
 	"dependencies": {
-		"@nextcloud/dialogs": "^3.1.2",
-		"@nextcloud/l10n": "^1.4.1",
-		"@nextcloud/router": "^2.0.0",
-		"bootstrap": "^5.1.0",
-		"html-webpack-plugin": "^5.3.2",
-		"jquery": "^3.6.0",
-		"popper.js": "^1.16.1",
-		"sass": "^1.38.0",
-		"sass-loader": "^10.2.0",
-		"svg-url-loader": "^7.1.1",
-		"tippy.js": "^6.3.1",
-		"toastify-js": "^1.11.1",
-		"url-loader": "^4.1.1",
-		"validator": "^13.6.0"
+
 	},
-	"browserslist": [
-		"extends @nextcloud/browserslist-config"
-	],
 	"engines": {
 		"node": ">=14.0.0",
 		"npm": ">=7.0.0"
@@ -57,11 +41,28 @@
 	"devDependencies": {
 		"@babel/core": "^7.15.0",
 		"@babel/preset-env": "^7.15.0",
-		"@nextcloud/babel-config": "^1.0.0",
-		"@nextcloud/browserslist-config": "^2.1.0",
-		"@nextcloud/eslint-config": "^6.0.0",
-		"@nextcloud/stylelint-config": "^1.0.0-beta.0",
-		"@nextcloud/webpack-vue-config": "^4.0.3",
-		"babel-loader": "^8.2.2"
+		"@vue/compiler-sfc": "^3.2.20",
+		"babel-loader": "^8.2.2",
+		"svgo-loader": "^3.0.0",
+		"vue-svg-loader": "^0.17.0-beta.2",
+		"webpack-cli": "^4.9.0",
+		"@nextcloud/dialogs": "^3.1.2",
+		"@nextcloud/l10n": "^1.4.1",
+		"@nextcloud/router": "^2.0.0",
+		"bootstrap": "^5.1.0",
+		"css-loader": "^6.4.0",
+		"html-webpack-plugin": "^5.3.2",
+		"jquery": "^3.6.0",
+		"popper.js": "^1.16.1",
+		"sass": "^1.38.0",
+		"sass-loader": "^10.2.0",
+		"style-loader": "^3.3.0",
+		"svg-url-loader": "^7.1.1",
+		"tippy.js": "^6.3.1",
+		"toastify-js": "^1.11.1",
+		"url-loader": "^4.1.1",
+		"validator": "^13.6.0",
+		"vue": "^3.2.20",
+		"vue-loader": "^16.0.0-beta.10"
 	}
 }
