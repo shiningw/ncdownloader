@@ -9,7 +9,7 @@ const buttonHandler = (event, type) => {
     let row, data = {};
     let removeRow = true;
     if (row = element.closest('.table-row-search')) {
-        data['form_input_text'] = row.dataset.link;
+        data['text-input-value'] = row.dataset.link;
     } else {
         row = element.closest('.table-row')
         data = row.dataset;

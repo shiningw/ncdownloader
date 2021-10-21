@@ -8,6 +8,7 @@ export default {
 
         const clickHandler = (event, type) => {
             event.preventDefault();
+            helper.hideDownload();
             let path = basePath + type;
             if (type === "youtube-dl") {
                 path = "/apps/ncdownloader/youtube/get";
@@ -38,14 +39,6 @@ export default {
             let url = helper.generateUrl(path);
             Http.getInstance(url).setMethod('GET').send();
         });
-
-        helper.refresh(basePath + "waiting")
-        helper.refresh(basePath + "complete")
-        helper.refresh(basePath + "fail")
-        helper.refresh("/apps/ncdownloader/youtube/get")
-
-        helper.loop(helper.refresh, 1000, basePath + "active");
-
         helper.polling(function (url) {
             url = helper.generateUrl(url);
             Http.getInstance(url).setMethod('GET').send();

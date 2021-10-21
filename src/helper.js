@@ -9,13 +9,20 @@ import nctable from './ncTable';
 import Http from './http'
 
 const helper = {
+    vue: {},
+    addVue(name, object) {
+        helper.vue[name] = object;
+    },
+    getVue(name) {
+        return helper.vue[name];
+    },
     generateUrl: generateUrl,
     loop(callback, delay, ...args) {
         callback(...args);
         clearTimeout(helper.timeoutID);
         this.polling(callback, delay, ...args);
     },
-    enabledPolling: 1,
+    enabledPolling: 0,
     trim(string, char) {
         return string.split(char).filter(Boolean).join(char)
     },
@@ -47,10 +54,10 @@ const helper = {
 
         return magnetURI.test(url.trim());
     },
-    message: function (message,duration = 3000) {
+    message: function (message, duration = 3000) {
         Toastify({
             text: message,
-            duration:duration,
+            duration: duration,
             newWindow: true,
             close: true,
             gravity: "top", // `top` or `bottom`
@@ -142,6 +149,34 @@ const helper = {
             data[key] = element.value
         }
         return data;
+    },
+    showElement(prop) {
+        let vm = helper.getVue('mainApp');
+        vm.$data.display[prop] = true;
+        //hide all other elements;
+        for (let key in vm.$data.display) {
+            if (key !== prop) {
+                vm.$data.display[key] = false;
+            }
+        }
+    },
+    hideElement(prop) {
+        let vm = helper.getVue('mainApp');
+        vm.$data.display[prop] = false;
+    },
+    showDownload() {
+        helper.showElement('download');
+        nctable.getInstance().clear();
+        helper.enabledPolling = 0;
+    },
+    hideDownload() {
+        helper.hideElement('download');
+    },
+    topleft(id) {
+        let container = typeof id === 'object' ? id : document.getElementById(id);
+        container.style.top = 0;
+        container.style.left = 0;
+        container.style.width = "100%";
     }
 }
 export default helper

@@ -121,18 +121,18 @@ div .number {
 }
 
 .app-ncdownloader,
-#ncdownloader-content,
-.ncdownloader-content-wrapper,
+#app-ncdownloader-wrapper,
+.ncdownloader-body-wrapper,
 #ncdownloader-form-wrapper,
 #ncdownloader-table-content {
     width: 100%;
 }
 
-.ncdownloader-content-wrapper {
+.ncdownloader-body-wrapper {
     padding-top: 0.3em;
 }
 
-.app-ncdownloader #app-content #app-content-wrapper {
+.app-ncdownloader  #app-content-wrapper {
     flex-wrap: wrap;
 }
 
@@ -164,7 +164,7 @@ div .number {
     vertical-align: middle;
 }
 
-#ncdownloader-content>#app-navigation:not(.vue)>ul>li>a {
+#app-ncdownloader-wrapper>#app-navigation:not(.vue)>ul>li>a {
     padding: 0 12px 0 44px;
 }
 
