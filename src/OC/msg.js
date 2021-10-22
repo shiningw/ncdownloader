@@ -1,5 +1,3 @@
-import $ from 'jquery'
-
 /**
  * A little class to manage a status field for a "saving" process.
  * It can be used to display a starting message (e.g. "Saving...") and then
@@ -24,11 +22,9 @@ export default {
 	 * @param {string} message    Plain text message to display (no HTML allowed)
 	 */
 	startAction(selector, message) {
-		$(selector).text(message)
-			.removeClass('success')
-			.removeClass('error')
-			.stop(true, true)
-			.show()
+		let el = document.querySelector(selector);
+		el.textContent = message;
+		el.style.removeProperty("display")
 	},
 
 	/**
@@ -70,13 +66,11 @@ export default {
 	 * @param {string} message Plain text success message to display (no HTML allowed)
 	 */
 	finishedSuccess(selector, message) {
-		$(selector).text(message)
-			.addClass('success')
-			.removeClass('error')
-			.stop(true, true)
-			.delay(3000)
-			.fadeOut(900)
-			.show()
+		let el = document.querySelector(selector);
+		el.textContent = message;
+		if (el.classList.contains("error")) el.classList.remove("error");
+		el.classList.add("success");
+		this.fadeOut(el);
 	},
 
 	/**
@@ -86,9 +80,41 @@ export default {
 	 * @param {string} message Plain text error message to display (no HTML allowed)
 	 */
 	finishedError(selector, message) {
-		$(selector).text(message)
-			.addClass('error')
-			.removeClass('success')
-			.show()
+		let el = document.querySelector(selector);
+		el.textContent = message;
+		if (el.classList.contains("success")) el.classList.remove("success");
+		el.classList.add("error");
 	},
+	fadeIn(element, duration = 1000) {
+		(function increment() {
+			element.style.opacity = String(0);
+			element.style.removeProperty("display")
+			let opacity = parseFloat(element.style.opacity);
+			if (opacity !== 1) {
+				setTimeout(() => {
+					increment(opacity + 0.1);
+				}, duration / 10);
+			}
+		})();
+	},
+
+	fadeOut(element, duration = 1000) {
+		let opacity = parseFloat(element.style.opacity) || 1;
+		(function decrement() {
+			if ((opacity -= 0.1) < 0) {
+				element.style.display = 'none'
+				element.style.removeProperty('opacity');
+			} else {
+				setTimeout(() => {
+					decrement();
+				}, duration / 10);
+			}
+		})();
+	},
+	show(el) {
+		el.style.display = '';
+	},
+	hide(el) {
+		el.style.display = 'none';
+	}
 }

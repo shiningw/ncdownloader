@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import {
     generateUrl
 } from '@nextcloud/router'
@@ -74,12 +73,14 @@ const helper = {
         if (!data.status && data.error) {
             return;
         }
-        let $element = $("#start-aria2 button");
-        let aria2 = $element.attr("data-aria2");
+        let element = document.querySelector("#start-aria2 button");
+        let aria2 = element.getAttribute("data-aria2");
         if (aria2 === 'on') {
-            $element.attr("data-aria2", "off").html(t("ncdownloader", "Start Aria2"));
+            element.setAttribute("data-aria2", "off");
+            element.textContent = t("ncdownloader", "Start Aria2");
         } else {
-            $element.attr("data-aria2", "on").html(t("ncdownloader", "Stop Aria2"));
+            element.setAttribute("data-aria2", "on");
+            element.textContent = t("ncdownloader", "Stop Aria2");
         }
     },
     getPathLast: function (path) {
@@ -179,4 +180,5 @@ const helper = {
         container.style.width = "100%";
     }
 }
+
 export default helper

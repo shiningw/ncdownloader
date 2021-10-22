@@ -9,13 +9,15 @@ import eventHandler from './eventHandler';
 import aria2Options from './aria2Options';
 import helper from './helper';
 import './css/autoComplete.css'
+import './css/style.scss'
+
 
 'use strict';
 window.addEventListener('DOMContentLoaded', function () {
 
     eventHandler.add('click', '.ncdownloader-admin-settings', 'input[type="button"]', function (event) {
         event.stopPropagation();
-        OC_msg.startSaving('#ncdownloader-message-banner');
+        OC_msg.startSaving('#ncdownloader-message-banner',"Saving");
         const target = this.getAttribute("data-rel");
         let inputData = helper.getData(target);
         const path = inputData.url || "/apps/ncdownloader/admin/save";

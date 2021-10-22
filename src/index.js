@@ -1,5 +1,5 @@
 import helper from './helper'
-import $ from 'jquery'
+import eventHandler from './eventHandler'
 import Http from './http'
 import { translate as t, translatePlural as n } from '@nextcloud/l10n'
 import updatePage from './updatePage'
@@ -11,37 +11,29 @@ import App from './App';
 
 'use strict'
 const basePath = "/apps/ncdownloader";
-$(document).on('ajaxSend', function (elm, xhr, settings) {
-    let token = document.getElementsByTagName('head')[0].getAttribute('data-requesttoken')
-    if (settings.crossDomain === false) {
-        xhr.setRequestHeader('requesttoken', token)
-        xhr.setRequestHeader('OCS-APIREQUEST', 'true')
-    }
-})
+
 window.addEventListener('DOMContentLoaded', function () {
 
     // inputAction.run();
     updatePage.run();
     buttonActions.run();
-    let container = 'ncdownloader-form-container';
+    let container = 'ncdownloader-form-wrapper';
     let app = createApp(App);
     let vm = app.mount('#' + container);
     helper.addVue(vm.$options.name, vm);
 
-    $("#start-aria2").on("click", function (e) {
+    eventHandler.add("click","#start-aria2 button", function (e) {
         const path = basePath + "/aria2/start";
         let url = helper.generateUrl(path);
         Http.getInstance(url).setHandler(function (data) {
             helper.aria2Toggle(data);
         }).send();
     })
-
-    $('#ncdownloader-user-settings button').on("click", function (e) {
+    eventHandler.add("click", '#ncdownloader-user-settings button', function (e) {
         let link = helper.generateUrl(e.target.getAttribute('path'));
         window.location.href = link;
     })
-
-    $("#app-navigation").on("click", "#search-download", helper.showDownload);
+    eventHandler.add("click", "#app-navigation", "#search-download", helper.showDownload);
 
 });
 

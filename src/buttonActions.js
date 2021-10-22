@@ -1,6 +1,6 @@
-import $ from 'jquery'
 import Http from './http'
 import helper from './helper'
+import eventHandler from './eventHandler'
 const buttonHandler = (event, type) => {
     let element = event.target;
     event.stopPropagation();
@@ -37,6 +37,6 @@ const buttonHandler = (event, type) => {
 }
 export default {
     run: function () {
-        $("#ncdownloader-table-wrapper").on("click", ".table-cell-action-item .button-container button", e => buttonHandler(e, ''));
+        eventHandler.add("click", "#ncdownloader-table-wrapper", ".table-cell-action-item .button-container button", e => buttonHandler(e, ''));
     }
 }
