@@ -30,9 +30,8 @@ class Youtube
         if (isset($binary) && @is_executable($binary)) {
             $this->bin = $binary;
         } else {
-            $this->bin = Helper::findBinaryPath('youtube-dl');
+            $this->bin = Helper::findBinaryPath('youtube-dl',__DIR__."/../../bin/youtube-dl");
         }
-
         $this->setDownloadDir($downloadDir);
         if (!empty($settings)) {
             foreach ($settings as $key => $value) {
