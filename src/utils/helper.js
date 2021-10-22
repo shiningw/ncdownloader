@@ -4,8 +4,8 @@ import {
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import { translate as t, translatePlural as n } from '@nextcloud/l10n'
-import nctable from './ncTable';
-import Http from './http'
+import nctable from '../lib/ncTable';
+import Http from '../lib/http'
 
 const helper = {
     vue: {},

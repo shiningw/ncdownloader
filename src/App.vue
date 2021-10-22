@@ -12,10 +12,10 @@
 <script>
 import mainForm from "./components/mainForm";
 import toggleButton from "./components/toggleButton";
-import helper from "./helper";
+import helper from "./utils/helper";
 import { translate as t, translatePlural as n } from "@nextcloud/l10n";
-import Http from "./http";
-import nctable from "./ncTable";
+import Http from "./lib/http";
+import nctable from "./lib/ncTable";
 
 const successCallback = (data, element) => {
   if (!data) {

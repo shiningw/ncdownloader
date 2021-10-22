@@ -1,6 +1,7 @@
-import helper from './helper'
-import eventHandler from './eventHandler';
-import Http from './http'
+import helper from '../utils/helper'
+import eventHandler from '../lib/eventHandler';
+import Http from '../lib/http'
+
 const basePath = "/apps/ncdownloader/status/";
 const tableContainer = ".table";
 export default {

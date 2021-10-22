@@ -1,6 +1,6 @@
-import Http from './http'
-import helper from './helper'
-import eventHandler from './eventHandler'
+import Http from '../lib/http'
+import helper from '../utils/helper'
+import eventHandler from '../lib/eventHandler'
 const buttonHandler = (event, type) => {
     let element = event.target;
     event.stopPropagation();

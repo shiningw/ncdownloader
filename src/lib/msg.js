@@ -3,7 +3,7 @@
  * It can be used to display a starting message (e.g. "Saving...") and then
  * replace it with a green success message or a red error message.
  *
- * @namespace OC.msg
+ * 
  */
 export default {
 	/**

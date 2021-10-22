@@ -1,13 +1,13 @@
-import Http from './http'
-import OC_msg from './OC/msg'
+import Http from './lib/http'
+import OC_msg from './lib/msg'
 import {
     generateUrl
 } from '@nextcloud/router'
-import settingsForm from './settingsForm'
-import autoComplete from './autoComplete';
-import eventHandler from './eventHandler';
-import aria2Options from './aria2Options';
-import helper from './helper';
+import settingsForm from './lib/settingsForm'
+import autoComplete from './lib/autoComplete';
+import eventHandler from './lib/eventHandler';
+import aria2Options from './utils/aria2Options';
+import helper from './utils/helper';
 import './css/autoComplete.css'
 import './css/style.scss'
 
