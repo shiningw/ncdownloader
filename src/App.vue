@@ -124,14 +124,14 @@ export default {
 $box-height: 110px;
 
 #app-content-wrapper {
-  .ncdownloader-form-container {
+  .ncdownloader-form-wrapper {
     position: relative;
     width: 100%;
     max-height: $box-height;
     top: 0;
     left: 0;
   }
-  .ncdownloader-form-container.top-left {
+  .ncdownloader-form-wrapper.top-left {
     width: 100%;
     top: 0;
     left: 0;
@@ -147,7 +147,7 @@ $box-height: 110px;
 
 @media only screen and (max-width: 1024px) {
   #app-content-wrapper {
-    #ncdownloader-form-container {
+    #ncdownloader-form-wrapper {
       position: relative;
       margin: 2px;
     }
