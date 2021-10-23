@@ -102,7 +102,7 @@ export default {
       if (files) {
         let formWrapper = element.closest("form");
         let url = formWrapper.getAttribute("action");
-        Http.getInstance(url)
+        return Http.getInstance(url)
           .setHandler(function (data) {
             successCallback(data, element);
           })
@@ -121,13 +121,11 @@ export default {
 
 <style lang="scss">
 @import "css/dl_variables.scss";
-$box-height: 110px;
 
 #app-content-wrapper {
   .ncdownloader-form-wrapper {
     position: relative;
     width: 100%;
-    max-height: $box-height;
     top: 0;
     left: 0;
   }

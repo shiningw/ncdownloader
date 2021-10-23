@@ -86,7 +86,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.uris);
   },
   name: "mainForm",
   props: {

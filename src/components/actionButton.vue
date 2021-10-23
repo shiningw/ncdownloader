@@ -23,7 +23,6 @@ export default {
   },
   methods: {
     handler(event) {
-      console.log(this.enableLoading);
       if (this.enableLoading) this.loading = 1;
       this.$emit("clicked", event, this);
     },
