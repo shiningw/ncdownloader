@@ -2,8 +2,8 @@
 namespace OCA\NCDownloader\Controller;
 
 use OCA\NCDownloader\Tools\Aria2;
-use OCA\NCDownloader\Tools\DBConn;
 use OCA\NCDownloader\Tools\Counters;
+use OCA\NCDownloader\Tools\DBConn;
 use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Tools\Settings;
@@ -39,7 +39,7 @@ class Aria2Controller extends Controller
         $this->aria2 = $aria2;
         $this->aria2->init();
         $this->dbconn = new DBConn();
-        $this->counters = new Counters($aria2, $this->dbconn,$UserId);
+        $this->counters = new Counters($aria2, $this->dbconn, $UserId);
 
     }
     /**
@@ -65,6 +65,9 @@ class Aria2Controller extends Controller
             case "remove":
             case "pause":
                 $resp = $this->doAction($path, $gid);
+                if ($path === "remove" && isset($resp['status']) && $resp['status']) {
+                    $this->dbconn->deleteByGid($gid);
+                }
                 break;
             case "get":
                 $resp = $this->doAction('tellStatus', $gid);
@@ -236,11 +239,10 @@ class Aria2Controller extends Controller
 
             if ($this->aria2->methodName === "tellStopped") {
                 $actions[] = $this->createActionItem('purge', 'purge');
-            } else {
-                $actions[] = $this->createActionItem('delete', 'remove');
-            }
+            } 
             if ($this->aria2->methodName === "tellWaiting") {
                 $actions[] = $this->createActionItem('unpause', 'unpause');
+                $actions[] = $this->createActionItem('delete', 'remove');
             }
             if ($this->aria2->methodName === "tellActive") {
                 $speed = [Helper::formatBytes($value['downloadSpeed']), $left];
