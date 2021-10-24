@@ -70,12 +70,10 @@ class MainController extends Controller
 
     private function _download($url)
     {
-        $filename = Helper::getFileName($url);
-        if ($filename) {
+        if ($filename = Helper::getFileName($url)) {
             $this->aria2->setFileName($filename);
         }
-        $result = $this->aria2->download($url);
-        if (!$result) {
+        if (!($result = $this->aria2->download($url))) {
             return ['error' => 'failed to download the file for some reason!'];
         }
         if (isset($result['error'])) {
@@ -105,14 +103,12 @@ class MainController extends Controller
 
             move_uploaded_file($_FILES['torrentfile']['tmp_name'], $file);
 
-            $result = $this->aria2->btDownload($file);
-            if (!$result) {
+            if (!($result = $this->aria2->btDownload($file))) {
                 return ['error' => 'failed to download the file for some reason!'];
             }
             if (isset($result['error'])) {
                 return $result;
             }
-
             $data = [
                 'uid' => $this->uid,
                 'gid' => $result['gid'],
