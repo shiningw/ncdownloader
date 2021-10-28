@@ -164,7 +164,8 @@ export default {
   .checkboxes {
     border-radius: 0%;
   }
-  .download-button {
+  .download-button,
+  .search-button {
     height: $column-height;
     .btn-primary {
       color: #fff;
@@ -179,15 +180,15 @@ export default {
 
   .magnet-link,
   .choose-file {
-    background-color: #9f9fcd;
+    background-color: #a0a0ae;
     border-radius: 15px 0px 0px 15px;
   }
 
   .youtube-dl-link {
-    background-color: #c4c4d9;
+    background-color: #b8b8ca;
   }
   .search-torrents {
-    background-color: #b4b4c6;
+    background-color: #d0d0e0;
   }
 
   .checkboxes {
