@@ -1,15 +1,24 @@
 <template>
   <form class="main-form" id="nc-vue-unified-form" :action="path">
     <div class="options-group">
-      <button class="magnet-link http-link" @click.prevent="whichType('aria2')">
+      <div
+        class="magnet-link http-link option-buttons"
+        @click.prevent="whichType('aria2', $event)"
+      >
         HTTP/MAGNET
-      </button>
-      <button class="youtube-dl-link" @click.prevent="whichType('youtube-dl')">
+      </div>
+      <div
+        class="youtube-dl-link option-buttons"
+        @click.prevent="whichType('youtube-dl', $event)"
+      >
         Youtube-dl
-      </button>
-      <button class="search-torrents" @click.prevent="whichType('search')">
+      </div>
+      <div
+        class="search-torrents option-buttons"
+        @click.prevent="whichType('search', $event)"
+      >
         Search Torrents
-      </button>
+      </div>
     </div>
     <div class="action-group">
       <div class="download-input-container" v-if="inputType === 'download'">
@@ -57,11 +66,15 @@ export default {
     searchInput,
     uploadFile,
   },
-  computed: {
-
-  },
+  computed: {},
   methods: {
-    whichType(type) {
+    whichType(type, event) {
+      let element = event.target;
+      let nodeList = document.querySelectorAll(".option-buttons");
+      nodeList.forEach((node) => {
+        node.classList.remove("active-button");
+      });
+      element.classList.toggle("active-button");
       this.downloadType = type;
       if (type === "aria2") {
         this.path = this.uris.aria2_url;
@@ -85,8 +98,7 @@ export default {
       this.$emit("uploadfile", event, vm);
     },
   },
-  mounted() {
-  },
+  mounted() {},
   name: "mainForm",
   props: {
     uris: Object,
@@ -110,6 +122,22 @@ export default {
     width: auto;
     height: 100%;
     position: relative;
+  }
+  .options-group > .option-buttons {
+    margin: 0;
+    padding: 10px;
+    outline: 0;
+    font-weight: bold;
+    font-size: 13px;
+    font-family: inherit;
+    vertical-align: baseline;
+    cursor: pointer;
+    white-space: nowrap;
+    min-height: 34px;
+    width: auto;
+  }
+  .active-button {
+    border: 2px #9a5c8b solid;
   }
 
   .action-group {
@@ -157,6 +185,9 @@ export default {
 
   .youtube-dl-link {
     background-color: #c4c4d9;
+  }
+  .search-torrents {
+    background-color: #b4b4c6;
   }
 
   .checkboxes {

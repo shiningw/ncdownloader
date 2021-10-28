@@ -5,6 +5,7 @@ use OCA\NCDownloader\Search\torrentSearch;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
+use OCA\NCDownloader\Tools\Helper;
 
 class SearchController extends Controller
 {
