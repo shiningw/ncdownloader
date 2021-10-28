@@ -8,7 +8,7 @@ use OC\Files\Filesystem;
 class Helper
 {
     public const DOWNLOADTYPE = ['ARIA2' => 1, 'YOUTUBE-DL' => 2, 'OTHERS' => 3];
-    public const STATUS = ['ACTIVE' => 1, 'PAUSED' => 2, 'COMPLETE' => 3, 'WAITING' => 4,'ERROR' => 5];
+    public const STATUS = ['ACTIVE' => 1, 'PAUSED' => 2, 'COMPLETE' => 3, 'WAITING' => 4, 'ERROR' => 5];
 
     public static function isUrl($URL)
     {
@@ -124,7 +124,7 @@ class Helper
             '/[’‘‹›‚]/u' => '', // Literally a single quote
             '/[“”«»„]/u' => '', // Double quote
             '/ /' => '_', // nonbreaking space(equiv. to 0x160)
-           // '/[^a-z0-9_\s.-]/i' => '_',
+            // '/[^a-z0-9_\s.-]/i' => '_',
         );
         return preg_replace(array_keys($replace), array_values($replace), $string);
     }
@@ -193,7 +193,7 @@ class Helper
         return true;
     }
 
-    public static function findBinaryPath($program,$default = null)
+    public static function findBinaryPath($program, $default = null)
     {
         $memcache = \OC::$server->getMemCacheFactory()->createDistributed('findBinaryPath');
         if ($memcache->hasKey($program)) {
@@ -287,8 +287,13 @@ class Helper
         return (bool) self::findBinaryPath('ffmpeg');
     }
     // filename without extension
-    public static function getBasicFilename($path){
-       return pathinfo($path, PATHINFO_FILENAME);
+    public static function getBasicFilename($path)
+    {
+        return pathinfo($path, PATHINFO_FILENAME);
+    }
+    public static function sanitize($string)
+    {
+        return filter_var($string, FILTER_SANITIZE_STRING);
     }
 
 }
