@@ -135,6 +135,7 @@ class ncTable {
         if (name == 'refresh') {
             name = 'Redownload';
         }
+        button.setAttribute("data-tippy-content", helper.ucfirst(name));
         button.setAttribute("title", helper.ucfirst(name));
         return button;
     }

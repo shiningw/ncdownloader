@@ -8,9 +8,11 @@ import './css/style.scss'
 import './css/table.scss'
 import { createApp } from 'vue'
 import App from './App';
-
+import tippy, { delegate } from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
 'use strict'
 const basePath = "/apps/ncdownloader";
+
 
 window.addEventListener('DOMContentLoaded', function () {
 
@@ -22,7 +24,7 @@ window.addEventListener('DOMContentLoaded', function () {
     let vm = app.mount('#' + container);
     helper.addVue(vm.$options.name, vm);
 
-    eventHandler.add("click","#start-aria2 button", function (e) {
+    eventHandler.add("click", "#start-aria2 button", function (e) {
         const path = basePath + "/aria2/start";
         let url = helper.generateUrl(path);
         Http.getInstance(url).setHandler(function (data) {
@@ -34,6 +36,9 @@ window.addEventListener('DOMContentLoaded', function () {
         window.location.href = link;
     })
     eventHandler.add("click", "#app-navigation", "#search-download", helper.showDownload);
+    delegate('#ncdownloader-table-wrapper',
+        { target: '[data-tippy-content]' }
+    );
 
 });
 
