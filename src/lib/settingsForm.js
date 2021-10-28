@@ -6,6 +6,10 @@ class settingsForm {
     static getInstance() {
         return new this();
     }
+    setParent(selector) {
+        this.parent = selector;
+        return this;
+    }
     create(parent, element) {
         let label = this._createLabel(element.name, element.id)
         let input = this._createInput(element);
@@ -15,11 +19,8 @@ class settingsForm {
         [label, input, cancelBtn].forEach(ele => {
             container.appendChild(ele);
         })
-        let button;
-        if (button = parent.querySelector('button.add-custom-aria2-settings')) {
-            return parent.insertBefore(container, button);
-        }
-        return parent.appendChild(container);
+ 
+        return parent.prepend(container);
     }
 
     createCustomInput(keyId, valueId) {
@@ -85,14 +86,14 @@ class settingsForm {
     _createInput(data) {
         let input = document.createElement('input');
         let type = data.type || "text";
-        let placeholder = data.placeholder || '';
-        let value = data.value || placeholder;
+        let placeholder = data.placeholder || 'Leave empty if no value needed';
+        let value = data.value || '';
         input.setAttribute('type', type);
         input.setAttribute('id', data.id);
         input.setAttribute("name", data.name || data.id);
         if (type === 'text') {
             input.setAttribute('value', value);
-            input.setAttribute('placeholder', value);
+            input.setAttribute('placeholder', placeholder);
         }
         input.classList.add('form-input-' + type);
         return input;

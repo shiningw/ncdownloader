@@ -40,6 +40,7 @@ class Application extends App
             $config = [
                 'binary' => $this->settings->setType(Settings::TYPE['SYSTEM'])->get("ncd_yt_binary"),
                 'downloadDir' => $this->getRealDownloadDir(),
+                'settings' => $this->settings->setType(Settings::TYPE['USER'])->getYoutube(),
             ];
             return new Youtube($config);
         });

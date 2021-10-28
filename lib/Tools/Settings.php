@@ -49,6 +49,12 @@ class Settings extends AllConfig
         $settings = $this->allConfig->getUserValue($this->user, $this->appName, "custom_aria2_settings", '');
         return json_decode($settings, 1);
     }
+
+    public function getYoutube()
+    {
+        $settings = $this->get("custom_youtube_dl_settings");
+        return json_decode($settings, 1);
+    }
     public function getAll()
     {
         if ($this->type === self::TYPE['APP']) {
@@ -61,13 +67,18 @@ class Settings extends AllConfig
     }
     public function save($key, $value)
     {
-        if ($this->type == self::TYPE['USER'] && isset($this->user)) {
-            return $this->allConfig->setUserValue($this->user, $this->appName, $key, $value);
-        } else if ($this->type == self::TYPE['SYSTEM']) {
-            return $this->allConfig->setSystemValue($key, $value);
-        } else {
-            return $this->allConfig->setAppValue($this->appName, $key, $value);
+        try {
+            if ($this->type == self::TYPE['USER'] && isset($this->user)) {
+                $this->allConfig->setUserValue($this->user, $this->appName, $key, $value);
+            } else if ($this->type == self::TYPE['SYSTEM']) {
+                $this->allConfig->setSystemValue($key, $value);
+            } else {
+                $this->allConfig->setAppValue($this->appName, $key, $value);
+            }
+        } catch (\Exception $e) {
+            return ['error' => $e->getMessage];
         }
+        return ['message' => "Saved!"];
 
     }
     public function getAllAppValues()

@@ -20,6 +20,9 @@ return [
         ['name' => 'Settings#aria2Get', 'url' => '/personal/aria2/get', 'verb' => 'POST'],
         ['name' => 'Settings#aria2Save', 'url' => '/personal/aria2/save', 'verb' => 'POST'],
         ['name' => 'Settings#aria2Delete', 'url' => '/personal/aria2/delete', 'verb' => 'POST'],
+        ['name' => 'Settings#youtubeGet', 'url' => '/personal/youtube-dl/get', 'verb' => 'POST'],
+        ['name' => 'Settings#youtubeSave', 'url' => '/personal/youtube-dl/save', 'verb' => 'POST'],
+        ['name' => 'Settings#youtubeDelete', 'url' => '/personal/youtube-dl/delete', 'verb' => 'POST'],
 
     ],
 ];

@@ -1,17 +1,17 @@
 <?php
-//script("ncdownloader", 'common');
-//script("ncdownloader", 'settings/personal');
 script("ncdownloader", 'appSettings');
 style("ncdownloader", "autocomplete");
-style("ncdownloader", "style");
+style("ncdownloader", "settings");
 extract($_);
 $time_map = array('i' => 'minutes', 'h' => 'hours', 'w' => 'weeks', 'd' => 'days', 'y' => 'years');
 ?>
 <div class="ncdownloader-personal-settings">
+    <div id="ncdownloader-message-banner"></div>
     <div id="ncdownloader-settings-form" class="section">
-        <div class="ncdownloader-common-settings">
-            <h2><?php print($l->t('NCDownloader Settings'));?></h2>
-            <div id="ncdownloader-message-banner"></div>
+        <div class="ncdownloader-general-settings">
+            <h2 class="title">
+                <?php print($l->t('NCDownloader Settings'));?>
+            </h2>
             <div id="ncd_downloader_dir_settings" path="<?php print $path;?>">
                 <label for="ncd_downloader_dir">
                     <?php print($l->t('Downloads Folder'));?>
@@ -33,7 +33,7 @@ $time_map = array('i' => 'minutes', 'h' => 'hours', 'w' => 'weeks', 'd' => 'days
         <hr />
         <div class="ncdownloader-bt-settings">
             <h2>
-                <?php print($l->t('BitTorrent protocol settings - Ratio'));?>
+                <?php print($l->t('BT Sharing settings'));?>
             </h2>
             <div id="ncd_btratio_container" path="<?php print $path;?>">
                 <label for="ncd_seed_ratio">
@@ -55,18 +55,41 @@ $time_map = array('i' => 'minutes', 'h' => 'hours', 'w' => 'weeks', 'd' => 'days
                         data-rel="seed_time_settings_container" />
                 </div>
             </div>
-
-            <h2>
-                <?php print($l->t('Custom Aria2 Settings'));?>
+        </div>
+        <hr />
+        <div class="advanced-settings-container">
+            <h2 class="title">
+                <?php print($l->t('Advanced Settings'));?>
             </h2>
-            <div class="message-banner"></div>
-            <div classs="section" id="custom-aria2-settings-container" path="/apps/ncdownloader/personal/aria2/save">
-                <button class="add-custom-aria2-settings">
-                    <?php print $l->t('Add Options');?>
-                </button>
-                <button class="save-custom-aria2-settings" data-rel="custom-aria2-settings-container">
-                    <?php print $l->t('Save');?>
-                </button>
+            <div class="ncdownloader-aria2-settings">
+                <h3 class="title">
+                    <?php print($l->t('Custom Aria2 Settings'));?>
+                </h3>
+                <div classs="section" id="custom-aria2-settings-container"
+                    path="/apps/ncdownloader/personal/aria2/save">
+                    <button class="add-custom-aria2-settings">
+                        <?php print $l->t('Add Options');?>
+                    </button>
+                    <button class="save-custom-aria2-settings" data-rel="custom-aria2-settings-container">
+                        <?php print $l->t('Save');?>
+                    </button>
+                </div>
+            </div>
+            <div class="ncdownloader-youtube-dl-settings">
+                <h3 class="title">
+                    <?php print($l->t('Custom Youtube-dl Settings'));?>
+                </h3>
+                <div classs="section" id="custom-youtube-dl-settings-container"
+                    path="/apps/ncdownloader/personal/youtube-dl/save">
+                    <button class="add-custom-youtube-dl-settings">
+                        <?php print $l->t('Add Options');?>
+                    </button>
+                    <button class="save-custom-youtube-dl-settings" data-tippy-content=''
+                        data-rel="custom-youtube-dl-settings-container">
+                        <?php print $l->t('Save');?>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+</div>

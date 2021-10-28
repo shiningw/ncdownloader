@@ -7,7 +7,6 @@ use OCA\NCDownloader\Tools\Settings;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OC_Util;
 
 class SettingsController extends Controller
 {
@@ -34,13 +33,11 @@ class SettingsController extends Controller
     {
         $params = $this->request->getParams();
         foreach ($params as $key => $value) {
-            if (substr($key, 0, 1) == '_') {
-                continue;
-            }
-            $this->save($key, $value);
+            $resp = $this->save($key, $value);
         }
+        return new JSONResponse($resp);
     }
-       /**
+    /**
      * @NoAdminRequired
      * @NoCSRFRequired
      */
@@ -54,15 +51,13 @@ class SettingsController extends Controller
     {
         $this->settings->setType($this->settings::TYPE['SYSTEM']);
         $params = $this->request->getParams();
-        foreach ($params as $key => $value) {
-            if (substr($key, 0, 1) == '_') {
-                continue;
-            }
-            $this->save($key, $value);
-        }
 
+        foreach ($params as $key => $value) {
+            $resp = $this->save($key, $value);
+        }
+        return new JSONResponse($resp);
     }
-       /**
+    /**
      * @NoAdminRequired
      * @NoCSRFRequired
      */
@@ -70,26 +65,72 @@ class SettingsController extends Controller
     {
         $params = $this->request->getParams();
         $data = Helper::filterData($params, Helper::aria2Options());
-        $this->settings->save("custom_aria2_settings", json_encode($data));
+        $resp = $this->settings->save("custom_aria2_settings", json_encode($data));
+        return new JSONResponse($resp);
     }
-       /**
+    /**
      * @NoAdminRequired
      * @NoCSRFRequired
      */
     public function aria2Delete()
     {
-        $saved = json_decode($this->settings->get("custom_aria2_settings"),1);
+        $saved = json_decode($this->settings->get("custom_aria2_settings"), 1);
         $params = $this->request->getParams();
         $data = Helper::filterData($params, Helper::aria2Options());
         foreach ($data as $key => $value) {
             unset($saved[$key]);
         }
-        $this->settings->save("custom_aria2_settings", json_encode($saved));
-        return new JSONResponse($saved);
+        $resp = $this->settings->save("custom_aria2_settings", json_encode($saved));
+        return new JSONResponse($resp);
+    }
+
+    /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function youtubeGet()
+    {
+        $data = json_decode($this->settings->get("custom_youtube_dl_settings"));
+        return new JSONResponse($data);
+    }
+
+    public function youtubeSave()
+    {
+        $params = $this->request->getParams();
+        $data = array_filter($params, function ($key) {
+            return (bool) (!in_array(substr($key, 0, 1), ['_']));
+        }, ARRAY_FILTER_USE_KEY);
+        $resp = $this->settings->save("custom_youtube_dl_settings", json_encode($data));
+        return new JSONResponse($resp);
+    }
+    /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function youtubeDelete()
+    {
+        $saved = json_decode($this->settings->get("custom_youtube_dl_settings"), 1);
+        $params = $this->request->getParams();
+        foreach ($data as $key => $value) {
+            unset($saved[$key]);
+        }
+        $resp = $this->settings->save("custom_youtube_dl_settings", json_encode($saved));
+        return new JSONResponse($resp);
     }
     public function save($key, $value)
     {
-        $this->settings->save($key, $value);
+        //key starting with _ is invalid
+        if (substr($key, 0, 1) == '_') {
+            return;
+        }
+        $key = Helper::sanitize($key);
+        $value = Helper::sanitize($value);
+        try {
+            $this->settings->save($key, $value);
+        } catch (\Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
+        return ['message' => "Saved!"];
     }
 
 }

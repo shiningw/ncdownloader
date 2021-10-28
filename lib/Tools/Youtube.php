@@ -30,15 +30,15 @@ class Youtube
         if (isset($binary) && @is_executable($binary)) {
             $this->bin = $binary;
         } else {
-            $this->bin = Helper::findBinaryPath('youtube-dl',__DIR__."/../../bin/youtube-dl");
+            $this->bin = Helper::findBinaryPath('youtube-dl', __DIR__ . "/../../bin/youtube-dl");
         }
         $this->setDownloadDir($downloadDir);
         if (!empty($settings)) {
             foreach ($settings as $key => $value) {
                 if (empty($value)) {
-                    $this->addOption($key);
+                    $this->addOption($key, true);
                 } else {
-                    $this->setOption($key, $value);
+                    $this->setOption($key, $value, true);
                 }
             }
         }
@@ -47,6 +47,7 @@ class Youtube
         }
         $this->setEnv('LANG', $lang);
         $this->addOption("--no-mtime");
+        $this->addOption('--ignore-errors');
     }
 
     public function setEnv($key, $val)
@@ -59,8 +60,7 @@ class Youtube
         if (Helper::ffmpegInstalled()) {
             $this->addOption('--prefer-ffmpeg');
             $this->addOption('--add-metadata');
-            $this->addOption('--metadata-from-title');
-            $this->addOption("%(artist)s-%(title)s");
+            $this->setOption('--metadata-from-title',"%(artist)s-%(title)s");
             $this->addOption('--extract-audio');
         }
         $this->outTpl = "/%(id)s-%(title)s.m4a";
@@ -114,7 +114,7 @@ class Youtube
     {
         $this->downloadDir = $this->downloadDir ?? $this->defaultDir;
         $this->prependOption($this->downloadDir . $this->outTpl);
-        $this->prependOption("-o");
+        $this->prependOption("--output");
         $this->setUrl($url);
         $this->prependOption($this->bin);
         // $this->buildCMD();
@@ -136,16 +136,15 @@ class Youtube
         if ($this->audioOnly) {
             $this->audioMode();
         } else {
-            $this->setOption('--format',$this->format);
+            $this->setOption('--format', $this->format);
         }
         $this->helper = YoutubeHelper::create();
         $this->downloadDir = $this->downloadDir ?? $this->defaultDir;
-        $this->prependOption($this->downloadDir . $this->outTpl);
-        $this->prependOption("-o");
+        $this->setOption("--output", $this->downloadDir . $this->outTpl);
         $this->setUrl($url);
         $this->prependOption($this->bin);
         $process = new Process($this->options, null, $this->env);
-        //\OC::$server->getLogger()->error($process->getWorkingDirectory(), ['app' => 'PHP']);
+        \OC::$server->getLogger()->error($process->getCommandLine(), ['app' => 'PHP']);
         $process->setTimeout($this->timeout);
         $process->run(function ($type, $buffer) use ($url) {
             if (Process::ERR === $type) {
@@ -186,25 +185,27 @@ class Youtube
 
     public function setUrl($url)
     {
-        $this->addOption('-i');
-        $this->addOption($url);
+        $this->prependOption($url);
         //$index = array_search('-i', $this->options);
         //array_splice($this->options, $index + 1, 0, $url);
     }
-    public function setOption($key, $value)
+    public function setOption($key, $value, $hyphens = false)
     {
-        $this->addOption($key);
-        $this->addOption($value);
+        $this->addOption($key, $hyphens);
+        $this->addOption($value, $hyphens);
         return $this;
     }
-    public function addOption($option)
+    public function addOption(String $option, $hyphens = false)
     {
+        if ($hyphens && substr($option, 0, 2) !== '--') {
+            $option = "--" . $option;
+        }
         array_push($this->options, $option);
     }
 
     public function forceIPV4()
     {
-        $this->addOption('-4');
+        $this->addOption('force-ipv4', true);
         return $this;
     }
 

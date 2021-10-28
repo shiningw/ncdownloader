@@ -1,13 +1,12 @@
 <?php
 script("ncdownloader", 'appSettings');
+style("ncdownloader", "settings");
 extract($_);
 ?>
 <div class="ncdownloader-admin-settings">
+<div id="ncdownloader-message-banner"></div>
     <form id="ncdownloader" class="section">
         <h2>NCDownloader admin Settings</h2>
-        <div>
-            <span id="ncdownloader-message-banner"></span>
-        </div>
         <div id="ncd_rpctoken_settings" path="<?php print $path;?>">
             <label for="ncd_rpctoken">
                 <?php print($l->t('Aria2 RPC Token'));?>
@@ -33,7 +32,7 @@ extract($_);
             <input type="text" class="ncd_aria2_binary" id="ncd_aria2_binary" name="ncd_aria2_binary"
                 value="<?php print($ncd_aria2_binary ?? '/usr/bin/aria2c');?>"
                 placeholder="/usr/bin/aria2c" />
-            <input type="button" value="<?php print($l->t('Save'));?>" data-rel="ncd_aria2_binary" />
+            <input type="button" value="<?php print($l->t('Save'));?>" data-rel="ncd_aria2_binary_container" />
         </div>
   </form>
 </div>

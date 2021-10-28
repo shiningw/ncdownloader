@@ -115,7 +115,7 @@ const helper = {
             let index;
             if ((index = key.indexOf(prefix + "-key-")) !== -1) {
                 let valueKey = prefix + "-value-" + key.substring(key.lastIndexOf('-') + 1);
-                if (!data[valueKey]) continue;
+                if (data[valueKey] === undefined) continue;
                 let newkey = data[key];
                 data[newkey] = data[valueKey];
                 delete data[key];
