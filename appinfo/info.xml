@@ -3,8 +3,11 @@
     <id>ncdownloader</id>
     <name>NCDownloader</name>
     <summary>Aria2 and youtube-dl web gui for nextcloud</summary>
-    <description>built-in torrent search;Start and stop Aria2 process, manage Aria2 from the web;
-Download videos from youtube, twitter and other sites;</description>
+    <description>
+Search for torrents within the app from mutiple BT sites;
+Control Aria2 and manage download tasks from the web;
+download videos from 700+ video sites(youtube,youku,vimo,dailymotion,twitter,facebook and the likes
+</description>
     <version>0.5.0</version>
     <licence>agpl</licence>
     <author mail="freefallbenson@gmail.com" homepage="https://github.com/shiningw">jiaxinhuang</author>
@@ -12,8 +15,8 @@ Download videos from youtube, twitter and other sites;</description>
     <category>tools</category>
     <website>https://github.com/shiningw/ncdownloader</website>
     <bugs>https://github.com/shiningw/ncdownloader/issues</bugs>
-    <screenshot>https://user-images.githubusercontent.com/3911975/132008248-dbb6036e-e3c2-4e5c-9274-d2b1ae091373.png</screenshot>
-    <screenshot>https://user-images.githubusercontent.com/3911975/132008308-dec2a7ba-4387-441e-9ded-538d61fbccf0.png</screenshot>
+    <screenshot>https://user-images.githubusercontent.com/3911975/142444998-54dd54a6-0c8e-4d49-8188-270964a99c50.png</screenshot>
+    <screenshot>https://user-images.githubusercontent.com/3911975/142445020-27ec389a-5437-4d28-acc0-5e757fd6897d.png</screenshot>
     <repository>https://github.com/shiningw/ncdownloader</repository>
     <dependencies>
         <nextcloud min-version="18" max-version="22"/>
