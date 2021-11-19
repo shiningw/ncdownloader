@@ -6,7 +6,7 @@ extract($_);
 $time_map = array('i' => 'minutes', 'h' => 'hours', 'w' => 'weeks', 'd' => 'days', 'y' => 'years');
 ?>
 <div class="ncdownloader-personal-settings">
-    <div id="ncdownloader-message-banner"></div>
+    <div id="ncdownloader-message-banner" style="display: none;"></div>
     <div id="ncdownloader-settings-form" class="section">
         <div class="ncdownloader-general-settings">
             <h2 class="title">

@@ -4,7 +4,7 @@ style("ncdownloader", "settings");
 extract($_);
 ?>
 <div class="ncdownloader-admin-settings">
-<div id="ncdownloader-message-banner"></div>
+<div id="ncdownloader-message-banner" style="display: none;"></div>
     <form id="ncdownloader" class="section">
         <h2>NCDownloader admin Settings</h2>
         <div id="ncd_rpctoken_settings" path="<?php print $path;?>">

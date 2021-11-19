@@ -42,11 +42,11 @@ window.addEventListener('DOMContentLoaded', function () {
             return;
         }
         Http.getInstance(url).setData(data).setHandler(function (data) {
-            if (data.hasOwnProperty("error"))
+            if (data.hasOwnProperty("error")) {
                 OC_msg.finishedError('#ncdownloader-message-banner', data.error);
-            else if (data.hasOwnProperty("message"))
+            } else if (data.hasOwnProperty("message")) {
                 OC_msg.finishedSuccess('#ncdownloader-message-banner', data.message);
-            else {
+            } else {
                 OC_msg.finishedSuccess('#ncdownloader-message-banner', "DONE");
             }
         }).send();

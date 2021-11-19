@@ -1,4 +1,5 @@
-.ncdownloader-personal-settings,.ncdownloader-admin-settings {
+.ncdownloader-personal-settings,
+.ncdownloader-admin-settings {
     position: relative;
 
     #ncdownloader-message-banner {
@@ -12,14 +13,15 @@
         text-shadow       : 0 1px 0 rgba(255, 255, 255, .2);
         -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 1px 2px rgba(0, 0, 0, .05);
         box-shadow        : inset 0 1px 0 rgba(255, 255, 255, .25), 0 1px 2px rgba(0, 0, 0, .05);
+        width             : 100%;
+        background-color: #dff0d8;
     }
 
     #ncdownloader-message-banner.success,
     .message-banner.success {
-        color           : #3c763d;
+        color           : #799479;
         background-color: #dff0d8;
         border-color    : #d6e9c6;
-        width           : 100%;
     }
 
     #ncdownloader-message-banner.error,
@@ -27,7 +29,6 @@
         color           : #a94442;
         background-color: #f2dede;
         border-color    : #ebccd1;
-        width           : 100%;
     }
 
 }

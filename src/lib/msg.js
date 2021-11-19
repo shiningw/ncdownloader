@@ -23,8 +23,8 @@ export default {
 	 */
 	startAction(selector, message) {
 		let el = document.querySelector(selector);
-		el.textContent = message;
 		el.style.removeProperty("display")
+		el.textContent = message;
 	},
 
 	/**
