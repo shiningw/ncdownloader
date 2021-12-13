@@ -81,7 +81,7 @@ class YoutubeController extends Controller
         $yt = $this->youtube;
         $yt->audioOnly = (bool) $this->request->getParam('audio-only');
         if (!$yt->isInstalled()) {
-            return new JSONResponse(["error" => "Youtube-dl is not installed!"]);
+            return new JSONResponse(["error" => "Please install the latest youtube-dl or make the bundled binary file executable in ncdownloader/bin"]);
         }
         if (Helper::isGetUrlSite($url)) {
             return new JSONResponse($this->downloadUrlSite($url));

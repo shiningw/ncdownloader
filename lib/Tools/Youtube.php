@@ -60,7 +60,7 @@ class Youtube
         if (Helper::ffmpegInstalled()) {
             $this->addOption('--prefer-ffmpeg');
             $this->addOption('--add-metadata');
-            $this->setOption('--metadata-from-title',"%(artist)s-%(title)s");
+            $this->setOption('--metadata-from-title', "%(artist)s-%(title)s");
             $this->addOption('--extract-audio');
         }
         $this->outTpl = "/%(id)s-%(title)s.m4a";

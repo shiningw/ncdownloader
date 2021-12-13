@@ -201,7 +201,7 @@ class Helper
         }
         $dataPath = \OC::$server->getSystemConfig()->getValue('datadirectory');
         $paths = ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/opt/bin', $dataPath . "/bin"];
-        $result = null;
+        $result = $default;
         $exeSniffer = new ExecutableFinder();
         // Returns null if nothing is found
         $result = $exeSniffer->find($program, $default, $paths);
