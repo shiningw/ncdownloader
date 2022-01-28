@@ -1,7 +1,7 @@
 <?php
 namespace OCA\NCDownloader\Tools;
 
-use OCA\NCDownloader\Tools\DBConn;
+use OCA\NCDownloader\Tools\DbHelper;
 use OCA\NCDownloader\Tools\Helper;
 
 class YoutubeHelper
@@ -18,7 +18,7 @@ class YoutubeHelper
     public $filesize = null;
     public function __construct()
     {
-        $this->dbconn = new DBConn();
+        $this->dbconn = new DbHelper();
         $this->tablename = $this->dbconn->queryBuilder->getTableName("ncdownloader_info");
         $this->user = \OC::$server->getUserSession()->getUser()->getUID();
     }

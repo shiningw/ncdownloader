@@ -3,13 +3,13 @@
 namespace OCA\NCDownloader\Tools;
 
 use OCA\NCDownloader\Tools\Aria2;
-use OCA\NCDownloader\Tools\DBConn;
+use OCA\NCDownloader\Tools\DbHelper;
 
 class Counters
 {
     private $minmax = [0, 999];
 
-    public function __construct(Aria2 $aria2, DBConn $dbconn, $uid)
+    public function __construct(Aria2 $aria2, DbHelper $dbconn, $uid)
     {
         $this->aria2 = $aria2;
         $this->dbconn = $dbconn;

@@ -3,7 +3,7 @@ namespace OCA\NCDownloader\Controller;
 
 use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\Counters;
-use OCA\NCDownloader\Tools\DBConn;
+use OCA\NCDownloader\Tools\DbHelper;
 use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Tools\Settings;
@@ -38,7 +38,7 @@ class Aria2Controller extends Controller
         //$this->config = \OC::$server->getAppConfig();
         $this->aria2 = $aria2;
         $this->aria2->init();
-        $this->dbconn = new DBConn();
+        $this->dbconn = new DbHelper();
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
 
     }

@@ -2,7 +2,7 @@
 
 namespace OCA\NCDownloader\Command;
 
-use OCA\NCDownloader\Tools\DBConn;
+use OCA\NCDownloader\Tools\DbHelper;
 use OCA\NCDownloader\Tools\Helper;
 use OC\Core\Command\Base;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,7 +13,7 @@ class Aria2Command extends base
 {
     public function __construct()
     {
-        $this->dbconn = new DBConn();
+        $this->dbconn = new DbHelper();
         parent::__construct();
     }
     protected function configure()

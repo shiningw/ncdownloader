@@ -2,7 +2,7 @@
 namespace OCA\NCDownloader\Controller;
 
 use OCA\NCDownloader\Tools\Aria2;
-use OCA\NCDownloader\Tools\DBConn;
+use OCA\NCDownloader\Tools\DbHelper;
 use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Tools\Settings;
@@ -28,7 +28,7 @@ class YoutubeController extends Controller
         $this->l10n = $IL10N;
         $this->settings = new Settings($UserId);
         $this->downloadDir = $this->settings->get('ncd_downloader_dir') ?? "/Downloads";
-        $this->dbconn = new DBConn();
+        $this->dbconn = new DbHelper();
         $this->youtube = $youtube;
         $this->aria2 = $aria2;
         $this->aria2->init();
