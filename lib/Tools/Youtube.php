@@ -15,7 +15,7 @@ class Youtube
     private $options = [];
     private $downloadDir;
     private $timeout = 60 * 60 * 10; //10 hours
-    private $outTpl = "/%(id)s-%(title)s.%(ext)s";
+    private $outTpl = "%(id)s-%(title)s.%(ext)s";
     private $defaultDir = "/tmp/downloads";
     private $env = [];
 
@@ -48,6 +48,12 @@ class Youtube
         $this->setEnv('LANG', $lang);
         $this->addOption("--no-mtime");
         $this->addOption('--ignore-errors');
+
+        if (($index = $this->hasOption('--output')) !== false) {
+            $this->outTpl = $this->options[$index + 1];
+            unset($this->options[$index]);
+            unset($this->options[$index + 1]);
+        }
     }
 
     public function setEnv($key, $val)
@@ -63,7 +69,9 @@ class Youtube
             $this->setOption('--metadata-from-title', "%(artist)s-%(title)s");
             $this->addOption('--extract-audio');
         }
-        $this->outTpl = "/%(id)s-%(title)s.m4a";
+        $pos = strrpos($this->outTpl, '.');
+        $this->outTpl = substr($this->outTpl, 0, $pos) . ".m4a";
+        //$this->outTpl = "/%(id)s-%(title)s.m4a";
         $this->setAudioFormat($this->audioFormat);
         return $this;
     }
@@ -140,11 +148,11 @@ class Youtube
         }
         $this->helper = YoutubeHelper::create();
         $this->downloadDir = $this->downloadDir ?? $this->defaultDir;
-        $this->setOption("--output", $this->downloadDir . $this->outTpl);
+        $this->setOption("--output", $this->downloadDir . "/" . $this->outTpl);
         $this->setUrl($url);
         $this->prependOption($this->bin);
+        //\OC::$server->getLogger()->error($process->getCommandLine(), ['app' => 'PHP']);
         $process = new Process($this->options, null, $this->env);
-        \OC::$server->getLogger()->error($process->getCommandLine(), ['app' => 'PHP']);
         $process->setTimeout($this->timeout);
         $process->run(function ($type, $buffer) use ($url) {
             if (Process::ERR === $type) {
@@ -192,7 +200,7 @@ class Youtube
     public function setOption($key, $value, $hyphens = false)
     {
         $this->addOption($key, $hyphens);
-        $this->addOption($value, $hyphens);
+        $this->addOption($value, false);
         return $this;
     }
     public function addOption(String $option, $hyphens = false)
@@ -201,6 +209,11 @@ class Youtube
             $option = "--" . $option;
         }
         array_push($this->options, $option);
+    }
+
+    protected function hasOption($name)
+    {
+        return array_search($name, $this->options);
     }
 
     public function forceIPV4()
