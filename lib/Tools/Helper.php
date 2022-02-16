@@ -9,6 +9,7 @@ class Helper
 {
     public const DOWNLOADTYPE = ['ARIA2' => 1, 'YOUTUBE-DL' => 2, 'OTHERS' => 3];
     public const STATUS = ['ACTIVE' => 1, 'PAUSED' => 2, 'COMPLETE' => 3, 'WAITING' => 4, 'ERROR' => 5];
+    const MAXLEN = 255;
 
     public static function isUrl($URL)
     {
@@ -41,7 +42,7 @@ class Helper
     public static function isGetUrlSite($url)
     {
         $host = parse_url($url, PHP_URL_HOST);
-        $sites = ['twitter.com', 'www.twitter.com'];
+        //$sites = ['twitter.com', 'www.twitter.com'];
         return (bool) (in_array($host, $sites));
     }
     public static function parseUrl($url)
@@ -66,10 +67,11 @@ class Helper
     public static function getFilename($url)
     {
         if (self::isMagnet($url)) {
-            return self::parseUrl($url)['dn'];
+            $filename = self::parseUrl($url)['dn'];
         } else {
-            return self::getUrlPath($url);
+            $filename = self::getUrlPath($url);
         }
+        return substr($filename, 0, self::MAXLEN);
     }
     public static function formatBytes($size, $precision = 2)
     {

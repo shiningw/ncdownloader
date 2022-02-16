@@ -33,6 +33,7 @@ class MainController extends Controller
         OC_Util::setupFS();
         $this->aria2 = $aria2;
         $this->aria2->init();
+        $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->dbconn = new DbHelper();
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
     }
@@ -51,7 +52,9 @@ class MainController extends Controller
         $params['aria2_installed'] = $this->aria2->isInstalled();
         $params['youtube_installed'] = (bool) Helper::findBinaryPath('youtube-dl');
         $params['counter'] = $this->counters->getCounters();
-
+        $params['settings_url'] = $this->urlGenerator->linkToRoute("settings.PersonalSettings.index", ['section' => 'ncdownloader']);
+        $params['admin_settings_url'] = $this->urlGenerator->linkToRoute("settings.AdminSettings.index", ['section' => 'ncdownloader']);
+        $params['is_admin'] = \OC_User::isAdminUser($this->uid);
         $response = new TemplateResponse($this->appName, 'Index', $params);
 
         return $response;

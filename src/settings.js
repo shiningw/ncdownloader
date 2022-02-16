@@ -126,4 +126,20 @@ window.addEventListener('DOMContentLoaded', function () {
         }
         settingsForm.getInstance().setParent("custom-youtube-dl-settings-container").render(input);
     }).send();
+    const filepicker = function (event) {
+        let element = event.target;
+        OC.dialogs.filepicker(
+            t('ncdownloader', 'Select a directory'),
+            function (path) {
+                if (element.value !== path) {
+                    element.value = path;
+                }
+            },
+            false,
+            'httpd/unix-directory',
+            true
+        );
+    }
+    eventHandler.add('click', "#ncd_downloader_dir", filepicker);
+    eventHandler.add('click', "#ncd_torrents_dir", filepicker);
 });

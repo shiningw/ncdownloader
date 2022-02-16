@@ -4,9 +4,9 @@ const { VueLoaderPlugin } = require('vue-loader')
 
 
 module.exports = {
-  experiments: {
+ /* experiments: {
     asset: true
-  },
+  },*/
   entry: {
     app: './src/index.js',
     appSettings: './src/settings.js'
@@ -72,5 +72,9 @@ module.exports = {
       jquery: "jQuery",
       "window.jQuery": "jquery"
     }),
-  ]
+  ],
+  externals: {
+    jquery: 'jQuery',
+    OC: "OC"
+  },
 };

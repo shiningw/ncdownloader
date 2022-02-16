@@ -23,11 +23,6 @@ $aria2_installed = $_['aria2_installed'];
         </button>
         <?php endif;?>
     </div>
-    <div class="app-navigation-new" id="ncdownloader-user-settings">
-        <button type="button" class="icon-settings" path="/settings/user/ncdownloader">
-                <?php print $l->t('Settings');?>
-        </button>
-    </div>
     <ul>
         <li class="active-downloads">
             <div class="app-navigation-entry-bullet"></div>
@@ -95,4 +90,5 @@ $aria2_installed = $_['aria2_installed'];
             </div>
         </li>
     </ul>
+    <?php print_unescaped($this->inc('settings/Settings'));?>
 </div>

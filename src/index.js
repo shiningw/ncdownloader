@@ -31,10 +31,6 @@ window.addEventListener('DOMContentLoaded', function () {
             helper.aria2Toggle(data);
         }).send();
     })
-    eventHandler.add("click", '#ncdownloader-user-settings button', function (e) {
-        let link = helper.generateUrl(e.target.getAttribute('path'));
-        window.location.href = link;
-    })
     eventHandler.add("click", "#app-navigation", "#search-download", helper.showDownload);
     delegate('#ncdownloader-table-wrapper',
         { target: '[data-tippy-content]' }

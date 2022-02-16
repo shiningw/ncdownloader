@@ -15,7 +15,7 @@ class Youtube
     private $options = [];
     private $downloadDir;
     private $timeout = 60 * 60 * 10; //10 hours
-    private $outTpl = "%(id)s-%(title)s.%(ext)s";
+    private $outTpl = "%(id)s-%(title).64s.%(ext)s";
     private $defaultDir = "/tmp/downloads";
     private $env = [];
 
@@ -66,7 +66,7 @@ class Youtube
         if (Helper::ffmpegInstalled()) {
             $this->addOption('--prefer-ffmpeg');
             $this->addOption('--add-metadata');
-            $this->setOption('--metadata-from-title', "%(artist)s-%(title)s");
+            $this->setOption('--metadata-from-title', "%(artist)s-%(title).64s");
             $this->addOption('--extract-audio');
         }
         $pos = strrpos($this->outTpl, '.');
