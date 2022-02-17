@@ -113,6 +113,7 @@ export default {
   display: flex;
   width: 100%;
   height: $column-height;
+  font-size: medium;
   .action-group {
     width: 100%;
   }
@@ -156,6 +157,9 @@ export default {
         & div,
         & select {
           height: 100%;
+          color: #181616;
+          font-size: medium;
+          background-color: #bdbdcf;
         }
       }
     }
@@ -191,11 +195,18 @@ export default {
     background-color: #d0d0e0;
   }
 
+  .search-torrents,
+  .youtube-dl-link,
+  .magnet-link,
+  .choose-file {
+    color: #181616;
+  }
   .checkboxes {
     background-color: #c4c4d9;
     padding: 5px 1px;
   }
   input,
+  select,
   button {
     margin: 0px;
     border: 0px;

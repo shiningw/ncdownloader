@@ -28,13 +28,12 @@
 
     .table-row,
     .table-row-search {
-      color      : #3e3e3e;
       font-weight: bold;
     }
 
     .table-cell:hover {
       cursor          : pointer;
-      background-color: #c4afaf;
+      background-color: #547573;
       /*   box-shadow : 0px 1px 4px rgba(0, 0, 0, .08); */
     }
   }
@@ -59,7 +58,6 @@
   }
   .table-cell:hover {
     cursor          : pointer;
-    background-color: #F0F0F0;
     /*   box-shadow : 0px 1px 4px rgba(0, 0, 0, .08); */
   }
 

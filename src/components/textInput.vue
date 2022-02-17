@@ -29,6 +29,8 @@ export default {
     height: 100%;
     margin: 0px;
     background-color: $bg-color;
+    font-size: medium;
+    color: #181616;
   }
 }
 @media only screen and (max-width: 1024px) {
