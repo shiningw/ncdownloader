@@ -16,9 +16,9 @@ $aria2_installed = $_['aria2_installed'];
             data-aria2="<?php $aria2_running ? print $l->t('on') : print $l->t('off');?>">
             <?php $aria2_running ? print $l->t('Stop Aria2') : print $l->t('Start Aria2');?>
         </button>
+    </button>
         <?php else: ?>
-        <button type="button" class="icon-power notinstalled"
-            data-aria2="<?php $aria2_running ? print $l->t('on') : print $l->t('off');?>">
+        <button type="button" class="icon-power notinstalled">
             <?php print $l->t('Aria2 is not installed!');?>
         </button>
         <?php endif;?>

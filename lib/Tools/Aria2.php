@@ -308,7 +308,7 @@ class Aria2
             $filename = Helper::getBasicFilename($file);
             $torrent = base64_encode($data);
             $resp = $this->addTorrent($torrent, []);
-        }else{
+        } else {
             return ['error' => "no valid torrents file!"];
         }
         if (isset($resp['error'])) {
@@ -353,7 +353,7 @@ class Aria2
     }
     public function start($bin = null)
     {
-        //aria2c wont't start without any errors when input-file is set but missing
+        //aria2c refuses to start with no errors when input-file is set but missing
         if (!file_exists($this->sessionFile)) {
             file_put_contents($this->sessionFile, '');
         }
@@ -389,6 +389,7 @@ class Aria2
     public function stop()
     {
         $resp = $this->shutdown();
+        sleep(1);
         return $resp ?? null;
     }
     private function confTemplate()

@@ -61,27 +61,10 @@ const helper = {
             close: true,
             gravity: "top", // `top` or `bottom`
             position: "center", // `left`, `center` or `right`
-            backgroundColor: "linear-gradient(to right,  rgb(26, 28, 27), rgb(126, 138, 105))",
+            backgroundColor: "#295b86",
             stopOnFocus: true, // Prevents dismissing of toast on hover
             onClick: function () { } // Callback after click
         }).showToast();
-    },
-    aria2Toggle: function (data) {
-        if (!data.status) {
-            return;
-        }
-        if (!data.status && data.error) {
-            return;
-        }
-        let element = document.querySelector("#start-aria2 button");
-        let aria2 = element.getAttribute("data-aria2");
-        if (aria2 === 'on') {
-            element.setAttribute("data-aria2", "off");
-            element.textContent = t("ncdownloader", "Start Aria2");
-        } else {
-            element.setAttribute("data-aria2", "on");
-            element.textContent = t("ncdownloader", "Stop Aria2");
-        }
     },
     getPathLast: function (path) {
         return path.substring(path.lastIndexOf('/') + 1)
@@ -178,6 +161,17 @@ const helper = {
         container.style.top = 0;
         container.style.left = 0;
         container.style.width = "100%";
+    },
+    loadingTpl() {
+        let html = `<button class="bs-spinner">
+        <span
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+          disabled
+        ></span
+        ><span class="visually-hidden">Loading...</span>`;
+        return html;
     }
 }
 
