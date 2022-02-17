@@ -2,7 +2,7 @@
   <form class="main-form" id="nc-vue-unified-form" :action="path">
     <div class="options-group">
       <div
-        class="magnet-link http-link option-buttons"
+        class="magnet-link http-link option-buttons active-button"
         @click.prevent="whichType('aria2', $event)"
       >
         HTTP/MAGNET
