@@ -120,7 +120,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "css/dl_variables.scss";
+@import "css/variables.scss";
 
 #app-content-wrapper {
   .ncdownloader-form-wrapper {

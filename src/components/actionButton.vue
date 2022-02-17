@@ -35,7 +35,7 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "../css/dl_variables.scss";
+@import "../css/variables.scss";
 button {
   cursor: pointer;
   border-radius: 0px;

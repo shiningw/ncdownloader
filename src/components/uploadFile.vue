@@ -17,7 +17,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import "../css/dl_variables.scss";
+@import "../css/variables.scss";
 #nc-vue-upload-file-form {
   .icon-upload {
     background-image: url("../../img/upload.svg");
