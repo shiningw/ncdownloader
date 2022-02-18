@@ -16,6 +16,7 @@ class YoutubeHelper
     '(\s+in\s+(?<totalTime>[\d:]{2,8}))?#i';
     public $file = null;
     public $filesize = null;
+    protected $pid = 0;
     public function __construct()
     {
         $this->dbconn = new DbHelper();
@@ -47,9 +48,13 @@ class YoutubeHelper
         //$sql = sprintf("UPDATE %s set status = ? WHERE gid = ?", $this->tablename);
         $this->dbconn->updateStatus($this->gid, $this->status);
     }
-    public function run($buffer, $url)
+    public function setPid($pid)
     {
-        $this->gid = Helper::generateGID($url);
+        $this->pid = $pid;
+    }
+    public function run($buffer, $extra)
+    {
+        $this->gid = Helper::generateGID($extra['link']);
         $file = $this->getFilePath($buffer);
         if ($file) {
             $data = [
@@ -59,7 +64,7 @@ class YoutubeHelper
                 'filename' => basename($file),
                 'status' => Helper::STATUS['ACTIVE'],
                 'timestamp' => time(),
-                'data' => serialize(['link' => $url]),
+                'data' => serialize($extra),
             ];
             //save the filename as this runs only once
             $this->file = $file;

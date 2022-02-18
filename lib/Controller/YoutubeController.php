@@ -50,18 +50,18 @@ class YoutubeController extends Controller
         $folderLink = $this->urlGenerator->linkToRoute('files.view.index', $params);
         foreach ($data as $value) {
             $tmp = [];
+            $extra = unserialize($value['data']);
             $filename = sprintf('<a class="download-file-folder" href="%s">%s</a>', $folderLink, $value['filename']);
-            $fileInfo = sprintf("%s | %s", $value['filesize'], date("Y-m-d H:i:s", $value['timestamp']));
+            $fileInfo = sprintf('<div class="ncd-file-info"><button id="icon-clipboard" class="icon-clipboard" data-text="%s"></button> %s | % s</div>', $extra['link'], $value['filesize'], date("Y-m-d H:i:s", $value['timestamp']));
             $tmp['filename'] = array($filename, $fileInfo);
             $tmp['speed'] = explode("|", $value['speed']);
             $tmp['progress'] = $value['progress'];
-            if ((int) $value['status'] == Helper::STATUS['COMPLETE']) {
-                $path = $this->urlGenerator->linkToRoute('ncdownloader.Youtube.Delete');
-                $tmp['actions'][] = ['name' => 'delete', 'path' => $path];
-            } else {
-                $path = $this->urlGenerator->linkToRoute('ncdownloader.Youtube.Redownload');
-                $tmp['actions'][] = ['name' => 'refresh', 'path' => $path];
-            }
+
+            $path = $this->urlGenerator->linkToRoute('ncdownloader.Youtube.Delete');
+            $tmp['actions'][] = ['name' => 'delete', 'path' => $path];
+            $path = $this->urlGenerator->linkToRoute('ncdownloader.Youtube.Redownload');
+            $tmp['actions'][] = ['name' => 'refresh', 'path' => $path];
+
             $tmp['data_gid'] = $value['gid'] ?? 0;
             array_push($resp['row'], $tmp);
         }
@@ -111,10 +111,30 @@ class YoutubeController extends Controller
             return new JSONResponse(['error' => "no gid value is received!"]);
         }
 
-        if ($this->dbconn->deleteByGid($gid)) {
-            return new JSONResponse(['message' => $gid . " Deleted!"]);
-
+        $row = $this->dbconn->getByGid($gid);
+        $data = unserialize($row['data']);
+        if (!isset($data['pid'])) {
+            if ($this->dbconn->deleteByGid($gid)) {
+                $msg = sprintf("%s is deleted from database!", $gid);
+            }
+            return new JSONResponse(['message' => $msg]);
         }
+        $pid = $data['pid'];
+        if (!Helper::isRunning($pid)) {
+            if ($this->dbconn->deleteByGid($gid)) {
+                $msg = sprintf("%s is deleted from database!", $gid);
+            } else {
+                $msg = sprintf("process %d is not running!", $pid);
+            }
+        } else {
+            if (Helper::stop($pid)) {
+                $msg = sprintf("process %d has been terminated!", $pid);
+            } else {
+                $msg = sprintf("failed to terminate process %d!", $pid);
+            }
+            $this->dbconn->deleteByGid($gid);
+        }
+        return new JSONResponse(['message' => $msg]);
     }
     /**
      * @NoAdminRequired
@@ -129,6 +149,7 @@ class YoutubeController extends Controller
         $row = $this->dbconn->getByGid($gid);
         $data = unserialize($row['data']);
         if (!empty($data['link'])) {
+            //$this->dbconn->deleteByGid($gid);
             $resp = $this->youtube->forceIPV4()->download($data['link']);
             folderScan::sync();
             return new JSONResponse($resp);

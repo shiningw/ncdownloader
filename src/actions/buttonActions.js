@@ -1,6 +1,9 @@
 import Http from '../lib/http'
 import helper from '../utils/helper'
 import eventHandler from '../lib/eventHandler'
+import Clipboard from '../utils/clipboard'
+import '../css/clipboard.scss';
+
 const buttonHandler = (event, type) => {
     let element = event.target;
     event.stopPropagation();
@@ -9,6 +12,11 @@ const buttonHandler = (event, type) => {
     let row, data = {};
     let removeRow = true;
     if (row = element.closest('.table-row-search')) {
+        if (element.className == 'icon-clipboard') {
+            const clippy = new Clipboard(element, row.dataset.link);
+            clippy.Copy();
+            return;
+        }
         data['text-input-value'] = row.dataset.link;
     } else {
         row = element.closest('.table-row')
@@ -38,5 +46,10 @@ const buttonHandler = (event, type) => {
 export default {
     run: function () {
         eventHandler.add("click", "#ncdownloader-table-wrapper", ".table-cell-action-item .button-container button", e => buttonHandler(e, ''));
+        eventHandler.add("click", "#ncdownloader-table-wrapper", ".table-row button.icon-clipboard", function (e) {
+            let element = e.target;
+            const clippy = new Clipboard(element);
+            clippy.Copy();
+        });
     }
 }

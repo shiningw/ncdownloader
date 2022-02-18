@@ -154,11 +154,13 @@ class Youtube
         //\OC::$server->getLogger()->error($process->getCommandLine(), ['app' => 'PHP']);
         $process = new Process($this->options, null, $this->env);
         $process->setTimeout($this->timeout);
-        $process->run(function ($type, $buffer) use ($url) {
+        $data = ['link' => $url];
+        $process->run(function ($type, $buffer) use ($data, $process) {
             if (Process::ERR === $type) {
-                $this->onError($buffer);
+               // $this->onError($buffer);
             } else {
-                $this->onOutput($buffer, $url);
+                $data['pid'] = $process->getPid();
+                $this->onOutput($buffer, $data);
             }
         });
         if ($process->isSuccessful()) {
@@ -173,9 +175,9 @@ class Youtube
         $this->helper->log($buffer);
     }
 
-    public function onOutput($buffer, $url)
+    public function onOutput($buffer, $extra)
     {
-        $this->helper->run($buffer, $url);
+        $this->helper->run($buffer, $extra);
     }
     public function getDownloadUrl($url)
     {

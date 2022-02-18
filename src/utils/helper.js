@@ -172,6 +172,12 @@ const helper = {
         ></span
         ><span class="visually-hidden">Loading...</span>`;
         return html;
+    },
+    getCssVar(prop) {
+        return window.getComputedStyle(document.documentElement).getPropertyValue(prop);
+    },
+    getScrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     }
 }
 

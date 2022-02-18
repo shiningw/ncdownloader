@@ -46,7 +46,7 @@ class torrentSearch
             if (!$value) {
                 continue;
             }
-            $value['actions'][] = array("name" => 'download', 'path' => '/index.php/apps/ncdownloader/new');
+            $value['actions'] = [["name" => 'download', 'path' => '/index.php/apps/ncdownloader/new'], ['name' => 'clipboard']];
         }
     }
 

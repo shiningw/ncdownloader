@@ -43,6 +43,7 @@ class Helper
     {
         $host = parse_url($url, PHP_URL_HOST);
         //$sites = ['twitter.com', 'www.twitter.com'];
+        $sites = [];
         return (bool) (in_array($host, $sites));
     }
     public static function parseUrl($url)
@@ -134,7 +135,7 @@ class Helper
     public static function debug($msg)
     {
         $logger = \OC::$server->getLogger();
-        $logger->debug($msg, ['app' => 'ncdownloader']);
+        $logger->error($msg, ['app' => 'ncdownloader']);
     }
 
     public static function log($msg, $file = "/tmp/nc.log")
@@ -296,6 +297,30 @@ class Helper
     public static function sanitize($string)
     {
         return filter_var($string, FILTER_SANITIZE_STRING);
+    }
+
+    public static function doSignal($pid, $signal): bool
+    {
+        if (\function_exists('posix_kill')) {
+            $ok = @posix_kill($pid, $signal);
+        } elseif ($ok = proc_open(sprintf('kill -%d %d', $signal, $pid), [2 => ['pipe', 'w']], $pipes)) {
+            $ok = false === fgets($pipes[2]);
+        }
+
+        if (!$ok) {
+            return false;
+        }
+        return true;
+    }
+
+    public static function isRunning($pid)
+    {
+        return self::doSignal($pid, 0);
+    }
+
+    public static function stop($pid)
+    {
+        return self::doSignal($pid, 9);
     }
 
 }
