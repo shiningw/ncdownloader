@@ -2,164 +2,179 @@
     padding-left: 4%;
 }
 
-.action-item {
-    position: relative;
-}
+#app-ncdownloader-wrapper {
+    width: 100%;
 
-a {
-    color          : #337ab7;
-    text-decoration: none;
-}
+    .action-item {
+        position: relative;
+    }
 
-#ncdownloader-form-wrapper {
-    margin-left: 2px;
+    a {
+        color          : #337ab7;
+        text-decoration: none;
+    }
 
-    .form-input-wrapper {
-        display  : flex;
-        flex-flow: row nowrap;
+    .icon-power {
+        background-image: url('../../img/power.svg');
+    }
 
-        select input {
-            justify-content: left;
+    .icon-purge {
+        background-image: url('../../img/trash.svg');
+    }
+
+    .icon-unpause {
+        background-image: url('../../img/play.svg');
+    }
+
+    .icon-refresh {
+        background-image: url('../../img/refresh.svg');
+    }
+
+    .icon-delete {
+        background-image: url('../../img/delete.svg');
+    }
+
+    .icon-download {
+        background-image: url('../../img/download.svg');
+    }
+
+    .icon-add {
+        background-image: url('../../img/add.svg');
+    }
+
+    #ncdownloader-form-wrapper {
+        margin-left: 2px;
+
+        .form-input-wrapper {
+            display  : flex;
+            flex-flow: row nowrap;
+
+            select input {
+                justify-content: left;
+            }
         }
     }
-}
 
-a:hover,
-a:focus {
-    color          : #23527c;
-    text-decoration: underline;
-}
+    a:hover,
+    a:focus {
+        color          : #23527c;
+        text-decoration: underline;
+    }
 
-a:focus {
-    outline       : 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
-}
+    a:focus {
+        outline       : 5px auto -webkit-focus-ring-color;
+        outline-offset: -2px;
+    }
 
-div .number {
-    background   : none repeat scroll 0 0 #5f5853;
-    border-radius: 999px;
-    color        : #FFFFFF;
-    display      : inline-block;
-    font-size    : 15px;
-    font-style   : italic;
-    height       : 20px;
-    line-height  : 20px;
-    margin-right : 10px;
-    padding      : 0 8px;
+    div .number {
+        background   : none repeat scroll 0 0 #5f5853;
+        border-radius: 999px;
+        color        : #FFFFFF;
+        display      : inline-block;
+        font-size    : 15px;
+        font-style   : italic;
+        height       : 20px;
+        line-height  : 20px;
+        margin-right : 10px;
+        padding      : 0 8px;
+    }
+
+    #ncdownloader-form-wrapper input[type=text] {
+        padding: 0px 5px;
+        flex   : auto;
+    }
+
+    #ncdownloader-table-data .table-cell {
+        padding-left: 4px;
+    }
+
+    #ncdownloader-action-links-container {
+        position: relative;
+
+        .action-link-item a:hover {
+            background-color: #c2afaf;
+        }
+
+        ul {
+            background-color: #ededed;
+        }
+    }
+
+    .action-links {
+        /*visibility: hidden;*/
+        display         : none;
+        position        : absolute;
+        background-color: #f1f1f1;
+        min-width       : 60px;
+        box-shadow      : 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index         : 9999;
+    }
+
+    .action-link-item a {
+        color          : black;
+        padding        : 6px 6px;
+        text-decoration: none;
+        display        : block;
+    }
+
+    .ncdownloader-body-wrapper,
+    #ncdownloader-form-wrapper,
+    #ncdownloader-table-content {
+        width: 100%;
+    }
+
+    .ncdownloader-body-wrapper {
+        padding-top: 0.3em;
+    }
+
+    #app-content-wrapper #ncdownloader-table-content .table-cell {
+        border-bottom: 1px solid #9d9595;
+        border-left  : 1px solid #eee;
+
+    }
+
+    #app-content-wrapper {
+        flex-wrap: wrap;
+    }
+
+    .app-navigation-entry-bullet {
+        background-color: rgb(80, 80, 173);
+    }
+
+    .notinstalled {
+        color: rgb(236, 9, 9);
+    }
+
+    .checkboxes label {
+        display      : inline-block;
+        padding-right: 10px;
+        white-space  : nowrap;
+    }
+
+    .checkboxes input {
+        vertical-align: middle;
+    }
+
+    .checkboxes label span {
+        vertical-align: middle;
+    }
+
+    &>#app-navigation:not(.vue)>ul>li>a {
+        padding: 0 12px 0 44px;
+    }
+
+    .button-container [class^='icon-'],
+    .button-container [class*=' icon-'] {
+        background-repeat  : no-repeat;
+        background-position: center;
+        /* min-width       : 18px; */
+        min-height         : 24px;
+    }
+
 }
 
 #ncdownloader-settings-form input[type=text] {
     width: 160px;
-}
-
-#ncdownloader-form-wrapper input[type=text] {
-    padding: 0px 5px;
-    flex   : auto;
-}
-
-#ncdownloader-table-data .table-cell {
-    padding-left: 4px;
-}
-
-.icon-power {
-    background-image: url('../../img/power.svg');
-}
-
-.icon-purge {
-    background-image: url('../../img/trash.svg');
-}
-
-.icon-unpause {
-    background-image: url('../../img/play.svg');
-}
-
-.icon-refresh {
-    background-image: url('../../img/refresh.svg');
-}
-
-#ncdownloader-action-links-container {
-    position: relative;
-
-    .action-link-item a:hover {
-        background-color: #c2afaf;
-    }
-
-    ul {
-        background-color: #ededed;
-    }
-}
-
-.action-links {
-    /*visibility: hidden;*/
-    display         : none;
-    position        : absolute;
-    background-color: #f1f1f1;
-    min-width       : 60px;
-    box-shadow      : 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index         : 9999;
-}
-
-.action-link-item a {
-    color          : black;
-    padding        : 6px 6px;
-    text-decoration: none;
-    display        : block;
-}
-
-.app-ncdownloader,
-#app-ncdownloader-wrapper,
-.ncdownloader-body-wrapper,
-#ncdownloader-form-wrapper,
-#ncdownloader-table-content {
-    width: 100%;
-}
-
-.ncdownloader-body-wrapper {
-    padding-top: 0.3em;
-}
-
-.app-ncdownloader #app-content-wrapper {
-    flex-wrap: wrap;
-}
-
-#app-content-wrapper #ncdownloader-table-content .table-cell {
-    border-bottom: 1px solid #9d9595;
-    border-left  : 1px solid #eee;
-
-}
-
-.app-navigation-entry-bullet {
-    background-color: rgb(80, 80, 173);
-}
-
-.notinstalled {
-    color: red;
-}
-
-.checkboxes label {
-    display      : inline-block;
-    padding-right: 10px;
-    white-space  : nowrap;
-}
-
-.checkboxes input {
-    vertical-align: middle;
-}
-
-.checkboxes label span {
-    vertical-align: middle;
-}
-
-#app-ncdownloader-wrapper>#app-navigation:not(.vue)>ul>li>a {
-    padding: 0 12px 0 44px;
-}
-
-.button-container [class^='icon-'],
-.button-container [class*=' icon-'] {
-    background-repeat  : no-repeat;
-    background-position: center;
-    /* min-width       : 18px; */
-    min-height         : 24px;
 }
 
 @media only screen and (min-width: 800px) {}
@@ -174,7 +189,6 @@ div .number {
         width: 135px;
     }
 }
-
 
 /* from bootstrap */
 .visually-hidden,
