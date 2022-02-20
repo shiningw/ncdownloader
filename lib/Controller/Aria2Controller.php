@@ -186,6 +186,7 @@ class Aria2Controller extends Controller
             if ($row = $this->dbconn->getByGid($gid)) {
                 $filename = $row['filename'];
                 $timestamp = $row['timestamp'];
+                $extra = unserialize($row['data']);
             } else if (isset($value['files'][0]['path'])) {
                 $parts = explode("/", ($path = $value['files'][0]['path']));
                 if (count($parts) > 1) {
@@ -234,12 +235,12 @@ class Aria2Controller extends Controller
             $tmp = [];
             $actions = [];
             $filename = sprintf('<a class="download-file-folder" href="%s">%s</a>', $folderLink, $filename);
-            $fileInfo = sprintf("%s | %s", $total, date("Y-m-d H:i:s", $timestamp));
+            $fileInfo = sprintf('<button id="icon-clipboard" class="icon-clipboard" data-text="%s"></button> %s | %s', $extra ? $extra['link'] : 'nolink', $total, date("Y-m-d H:i:s", $timestamp));
             $tmp['filename'] = array($filename, $fileInfo);
 
             if ($this->aria2->methodName === "tellStopped") {
                 $actions[] = $this->createActionItem('purge', 'purge');
-            } 
+            }
             if ($this->aria2->methodName === "tellWaiting") {
                 $actions[] = $this->createActionItem('unpause', 'unpause');
                 $actions[] = $this->createActionItem('delete', 'remove');
