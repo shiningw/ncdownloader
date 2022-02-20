@@ -36,11 +36,11 @@ window.addEventListener('DOMContentLoaded', function () {
         let url = helper.generateUrl(path);
         const callback = function (parent, html, data) {
             parent.innerHTML = html;
+
             if (!data.status) {
+                if (data.error)
+                    helper.message(data.error);
                 return;
-            }
-            if (!data.status && data.error) {
-                helper.message(data.error);
             }
             let element = document.querySelector("#start-aria2 button");
             let aria2 = element.getAttribute("data-aria2");
