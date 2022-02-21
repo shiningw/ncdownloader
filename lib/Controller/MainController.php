@@ -60,7 +60,8 @@ class MainController extends Controller
         $params['youtube_installed'] = $this->youtube->isInstalled();
         $params['youtube_bin'] = $this->youtube->getBin();
         $params['youtube_executable'] = $this->youtube->isExecutable();
-        $params['ncd_hide_errors'] = $this->settings->get("ncd_hide_errors");
+        $params['ncd_hide_errors'] = $this->settings->get("ncd_hide_errors",null);
+
         
         $params['counter'] = $this->counters->getCounters();
         $params['settings_url'] = $this->urlGenerator->linkToRoute("settings.PersonalSettings.index", ['section' => 'ncdownloader']);

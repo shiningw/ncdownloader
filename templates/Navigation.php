@@ -1,17 +1,22 @@
 <?php
 extract($_);
-$permission_error = sprintf("aria2 is installed but not executable.Please execute command sudo chmod 755 %s", $aria2_bin);
-if ($youtube_installed && !$youtube_executable) {
-    $ytb_error = sprintf("youtube-dl is installed but not executable.Please execute command sudo chmod 755 %s", $youtube_bin);
-} else if (!$youtube_installed && !$youtube_executable) {
-    $ytb_error = "youtube-dl is not installed!";
+$errors = [];
+if ($aria2_installed && !$aria2_executable) {
+    array_push($errors, sprintf("aria2 is installed but not executable.Please execute command sudo chmod 755 %s", $aria2_bin));
 }
+
+if ($youtube_installed && !$youtube_executable) {
+    array_push($errors, sprintf("youtube-dl is installed but not executable.Please execute command sudo chmod 755 %s", $youtube_bin));
+} else if (!$youtube_installed) {
+    array_push($errors, "youtube-dl is not installed!");
+}
+
 ?>
 <div id="app-navigation">
-    <?php if ($ncd_hide_errors): ?>
-        <?php if (isset($ytb_error)): ?>
-            <div data-error-message="<?php print $l->t($ytb_error);?>"></div>
-        <?php endif;?>
+    <?php if (!$ncd_hide_errors): ?>
+        <?php foreach ($errors as $error): ?>
+            <div data-error-message="<?php print $l->t($error);?>"></div>
+        <?php endforeach;?>
     <?php endif;?>
 
     <div class="app-navigation-new" id="search-download"  data-inputbox="form-input-wrapper">
@@ -27,7 +32,7 @@ if ($youtube_installed && !$youtube_executable) {
         </button>
     </button>
         <?php elseif ($aria2_installed && !$aria2_executable): ?>
-        <button type="button" class="icon-power notinstalled" data-error-message="<?php print $l->t($permission_error);?>">
+        <button type="button" class="icon-power notinstalled" >
             <?php print $l->t("aria2c is installed but not executable");?>
         </button>
         <?php else: ?>

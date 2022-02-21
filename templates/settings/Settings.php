@@ -1,6 +1,7 @@
 <?php
 extract($_);
 $checked = '';
+$checkbox = $ncd_hide_errors ? "true" : "false";
 if ($ncd_hide_errors) {
     $checked = "checked";
 }
@@ -16,7 +17,7 @@ if ($ncd_hide_errors) {
     <div id="app-settings-content">
         <ul id="ncdownloader-settings-collapsible-container">
         <li class="ncdownloader-settings-item" data-tippy-content="check this to show or suppress errors">
-                <input class="checkbox" type="checkbox" value="<?php print($ncd_hide_errors);?>" <?php print($checked);?> id="ncd-hide-errors"><label for="ncd-hide-errors"><?php p($l->t('Hide Errors'));?></label>
+                <input class="checkbox" type="checkbox" value="<?php print($checkbox);?>" <?php print($checked);?> id="ncd-hide-errors"><label for="ncd-hide-errors"><?php p($l->t('Hide Errors'));?></label>
             </li>
             <li class="ncdownloader-settings-item">
                 <a href="<?php p($l->t($settings_url));?>" title="<?php p($l->t('Personal Settings'));?>" >

@@ -182,9 +182,11 @@ const helper = {
     showErrors(target) {
         let errors = document.querySelectorAll(target);
         errors.forEach(element => {
-            helper.message(element.getAttribute('data-error-message'), 20000);
+            let msg;
+            if (msg = element.getAttribute('data-error-message'))
+                helper.message(msg, 20000);
         })
-    }
+    },
 }
 
 export default helper
