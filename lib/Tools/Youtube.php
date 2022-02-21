@@ -18,6 +18,7 @@ class Youtube
     private $outTpl = "%(id)s-%(title).64s.%(ext)s";
     private $defaultDir = "/tmp/downloads";
     private $env = [];
+    private $bin;
 
     public function __construct(array $options)
     {
@@ -27,7 +28,7 @@ class Youtube
     public function init(array $options)
     {
         extract($options);
-        if (isset($binary) && @is_executable($binary)) {
+        if (isset($binary) && $this->isExecutable($binary)) {
             $this->bin = $binary;
         } else {
             $this->bin = Helper::findBinaryPath('youtube-dl', __DIR__ . "/../../bin/youtube-dl");
@@ -157,7 +158,7 @@ class Youtube
         $data = ['link' => $url];
         $process->run(function ($type, $buffer) use ($data, $process) {
             if (Process::ERR === $type) {
-               // $this->onError($buffer);
+                // $this->onError($buffer);
             } else {
                 $data['pid'] = $process->getPid();
                 $this->onOutput($buffer, $data);
@@ -235,7 +236,16 @@ class Youtube
     }
     public function isInstalled()
     {
-        return (bool) (isset($this->bin) && @is_executable($this->bin));
+        return @is_file($this->bin);
+    }
+    public function isExecutable()
+    {
+        return @is_executable($this->bin);
+    }
+
+    public function getBin()
+    {
+        return $this->bin;
     }
     public static function install()
     {

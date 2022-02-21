@@ -6,6 +6,8 @@ use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\Counters;
 use OCA\NCDownloader\Tools\DbHelper;
 use OCA\NCDownloader\Tools\Helper;
+use OCA\NCDownloader\Tools\Settings;
+use OCA\NCDownloader\Tools\Youtube;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -23,7 +25,7 @@ class MainController extends Controller
     private $aria2Opts;
     private $l10n;
 
-    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2)
+    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Youtube $youtube)
     {
         parent::__construct($appName, $request);
         $this->appName = $appName;
@@ -36,6 +38,9 @@ class MainController extends Controller
         $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->dbconn = new DbHelper();
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
+        $this->youtube = $youtube;
+        $this->settings = new Settings($UserId);
+
     }
     /**
      * @NoAdminRequired
@@ -50,7 +55,13 @@ class MainController extends Controller
         $params = array();
         $params['aria2_running'] = $this->aria2->isRunning();
         $params['aria2_installed'] = $this->aria2->isInstalled();
-        $params['youtube_installed'] = (bool) Helper::findBinaryPath('youtube-dl');
+        $params['aria2_bin'] = $this->aria2->getBin();
+        $params['aria2_executable'] = $this->aria2->isExecutable();
+        $params['youtube_installed'] = $this->youtube->isInstalled();
+        $params['youtube_bin'] = $this->youtube->getBin();
+        $params['youtube_executable'] = $this->youtube->isExecutable();
+        $params['ncd_hide_errors'] = $this->settings->get("ncd_hide_errors");
+        
         $params['counter'] = $this->counters->getCounters();
         $params['settings_url'] = $this->urlGenerator->linkToRoute("settings.PersonalSettings.index", ['section' => 'ncdownloader']);
         $params['admin_settings_url'] = $this->urlGenerator->linkToRoute("settings.AdminSettings.index", ['section' => 'ncdownloader']);

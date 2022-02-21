@@ -5,3 +5,4 @@ build.sh
 test.php
 js/app*
 exclude
+bin

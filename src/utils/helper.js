@@ -178,6 +178,12 @@ const helper = {
     },
     getScrollTop() {
         return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    },
+    showErrors(target) {
+        let errors = document.querySelectorAll(target);
+        errors.forEach(element => {
+            helper.message(element.getAttribute('data-error-message'), 20000);
+        })
     }
 }
 

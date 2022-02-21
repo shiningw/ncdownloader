@@ -16,6 +16,7 @@ const basePath = "/apps/ncdownloader";
 
 window.addEventListener('DOMContentLoaded', function () {
 
+    helper.showErrors('[data-error-message]');
     // inputAction.run();
     updatePage.run();
     buttonActions.run();
@@ -60,9 +61,19 @@ window.addEventListener('DOMContentLoaded', function () {
         }).send();
     })
     eventHandler.add("click", "#app-navigation", "#search-download", helper.showDownload);
-    delegate('#ncdownloader-table-wrapper',
+    eventHandler.add("change", "#app-navigation", "#ncd-hide-errors", e => {
+        let data = {};
+        data["ncd_hide_errors"] = e.target.checked === "true";
+        console.log(data)
+        const url = helper.generateUrl(basePath + "/personal/save");
+        Http.getInstance(url).setData(data).setHandler(data => {
+            console.log(data);
+        }).send();
+    })
+    delegate('#app-ncdownloader-wrapper',
         { target: '[data-tippy-content]' }
     );
+
 
 });
 

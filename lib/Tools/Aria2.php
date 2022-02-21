@@ -38,10 +38,10 @@ class Aria2
         );
         //turn keys in $options into variables
         extract($options);
-        if (isset($binary) && @is_executable($binary)) {
+        if (isset($binary) && $this->isExecutable($binary)) {
             $this->bin = $binary;
         } else {
-            $this->bin = Helper::findBinaryPath('aria2c');
+            $this->bin = Helper::findBinaryPath('aria2c', __DIR__ . "/../../bin/aria2c");
         }
         $this->setDownloadDir($dir);
         $this->setTorrentsDir($torrents_dir);
@@ -379,17 +379,27 @@ class Aria2
     }
     public function isInstalled()
     {
-        return (bool) (isset($this->bin) && @is_executable($this->bin));
+        return @is_file($this->bin);
     }
+    public function isExecutable()
+    {
+        return @is_executable($this->bin);
+    }
+
     public function isRunning()
     {
         $resp = $this->getSessionInfo();
         return (bool) $resp;
     }
+
+    public function getBin()
+    {
+        return $this->bin;
+    }
     public function stop()
     {
         $resp = $this->shutdown();
-        sleep(1);
+        sleep(3);
         return $resp ?? null;
     }
     private function confTemplate()

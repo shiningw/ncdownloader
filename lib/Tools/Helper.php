@@ -202,6 +202,7 @@ class Helper
         if ($memcache->hasKey($program)) {
             return $memcache->get($program);
         }
+
         $dataPath = \OC::$server->getSystemConfig()->getValue('datadirectory');
         $paths = ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/opt/bin', $dataPath . "/bin"];
         $result = $default;
