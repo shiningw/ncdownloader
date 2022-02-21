@@ -64,10 +64,11 @@ window.addEventListener('DOMContentLoaded', function () {
     eventHandler.add("change", "#app-navigation", "#ncd-hide-errors", e => {
         let data = {};
         data["ncd_hide_errors"] = e.target.checked === "true";
-        console.log(data)
         const url = helper.generateUrl(basePath + "/personal/save");
-        Http.getInstance(url).setData(data).setHandler(data => {
-            console.log(data);
+        Http.getInstance(url).setData(data).setHandler(resp => {
+            if (resp['message']) {
+                helper.message(t("ncdownloader", resp['message']),1000);
+            }
         }).send();
     })
     delegate('#app-ncdownloader-wrapper',
