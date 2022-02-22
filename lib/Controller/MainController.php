@@ -60,13 +60,15 @@ class MainController extends Controller
         $params['youtube_installed'] = $this->youtube->isInstalled();
         $params['youtube_bin'] = $this->youtube->getBin();
         $params['youtube_executable'] = $this->youtube->isExecutable();
-        $params['ncd_hide_errors'] = $this->settings->get("ncd_hide_errors",null);
-
-        
+        $params['ncd_hide_errors'] = $this->settings->get("ncd_hide_errors", false);
         $params['counter'] = $this->counters->getCounters();
-        $params['settings_url'] = $this->urlGenerator->linkToRoute("settings.PersonalSettings.index", ['section' => 'ncdownloader']);
-        $params['admin_settings_url'] = $this->urlGenerator->linkToRoute("settings.AdminSettings.index", ['section' => 'ncdownloader']);
-        $params['is_admin'] = \OC_User::isAdminUser($this->uid);
+
+        $params['settings'] = json_encode([
+            'is_admin' =>\OC_User::isAdminUser($this->uid),
+            'admin_url' => $this->urlGenerator->linkToRoute("settings.AdminSettings.index", ['section' => 'ncdownloader']),
+            'personal_url' =>  $this->urlGenerator->linkToRoute("settings.PersonalSettings.index", ['section' => 'ncdownloader']),
+            'ncd_hide_errors' =>  $params['ncd_hide_errors'],
+         ]);
         $response = new TemplateResponse($this->appName, 'Index', $params);
 
         return $response;

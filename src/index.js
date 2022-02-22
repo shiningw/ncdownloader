@@ -11,17 +11,32 @@ import App from './App';
 import tippy, { delegate } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 'use strict'
+import settingsBar from './settingsBar';
 const basePath = "/apps/ncdownloader";
 
 
 window.addEventListener('DOMContentLoaded', function () {
 
     helper.showErrors('[data-error-message]');
-    // inputAction.run();
     updatePage.run();
     buttonActions.run();
     let container = 'ncdownloader-form-wrapper';
+    const settingsID = "app-settings-content";
     let app = createApp(App);
+    let bar = createApp(settingsBar);
+
+    let values;
+    try {
+        const barEle = document.getElementById(settingsID);
+        let settings = barEle.getAttribute("data-settings");
+        values = JSON.parse(settings);
+    } catch (e) {
+        values = {}
+        console.log(e);
+    }
+    bar.provide('settings', values);
+    bar.mount("#" + settingsID);
+
     let vm = app.mount('#' + container);
     helper.addVue(vm.$options.name, vm);
 
@@ -67,7 +82,7 @@ window.addEventListener('DOMContentLoaded', function () {
         const url = helper.generateUrl(basePath + "/personal/save");
         Http.getInstance(url).setData(data).setHandler(resp => {
             if (resp['message']) {
-                helper.message(t("ncdownloader", resp['message']),1000);
+                helper.message(t("ncdownloader", resp['message']), 1000);
             }
         }).send();
     })

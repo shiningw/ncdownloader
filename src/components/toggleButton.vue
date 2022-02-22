@@ -15,6 +15,7 @@
 
 <script>
 export default {
+  name: "toggleButton",
   props: {
     disabled: {
       type: Boolean,
@@ -40,6 +41,7 @@ export default {
       default: false,
     },
   },
+  methods: {},
 
   data() {
     return {
@@ -68,7 +70,7 @@ export default {
 
       set(value) {
         this.status = value;
-        this.$emit("change", value);
+        this.$emit("changed", value);
       },
     },
   },

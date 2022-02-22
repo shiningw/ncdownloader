@@ -108,5 +108,16 @@ if ($youtube_installed && !$youtube_executable) {
             </div>
         </li>
     </ul>
-    <?php print_unescaped($this->inc('settings/Settings'));?>
+    <div id="app-settings">
+      <div id="app-settings-header">
+        <button
+          name="app settings"
+          class="settings-button"
+          data-apps-slide-toggle="#app-settings-content"
+        >
+        <?php p($l->t('Settings'));?>
+        </button>
+      </div>
+      <div id="app-settings-content" data-settings='<?php print($settings);?>' ></div>
+    </div>
 </div>
