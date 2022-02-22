@@ -54,21 +54,38 @@ class MainController extends Controller
         // OC_Util::addStyle($this->appName, 'table');
         $params = array();
         $params['aria2_running'] = $this->aria2->isRunning();
-        $params['aria2_installed'] = $this->aria2->isInstalled();
-        $params['aria2_bin'] = $this->aria2->getBin();
-        $params['aria2_executable'] = $this->aria2->isExecutable();
-        $params['youtube_installed'] = $this->youtube->isInstalled();
-        $params['youtube_bin'] = $this->youtube->getBin();
-        $params['youtube_executable'] = $this->youtube->isExecutable();
+        $params['aria2_installed'] = $aria2_installed = $this->aria2->isInstalled();
+        $params['aria2_bin'] = $aria2_bin = $this->aria2->getBin();
+        $params['aria2_executable'] = $aria2_executable = $this->aria2->isExecutable();
+        $params['youtube_installed'] = $youtube_installed = $this->youtube->isInstalled();
+        $params['youtube_bin'] = $youtube_bin = $this->youtube->getBin();
+        $params['youtube_executable'] = $youtube_executable = $this->youtube->isExecutable();
         $params['ncd_hide_errors'] = $this->settings->get("ncd_hide_errors", false);
         $params['counter'] = $this->counters->getCounters();
+        $params['python_installed'] = $python_installed = Helper::pythonInstalled();
+
+        $errors = [];
+        if ($aria2_installed && !$aria2_executable) {
+            array_push($errors, sprintf("aria2 is installed but don't have the right permissions.Please execute command sudo chmod 755 %s", $aria2_bin));
+        }
+
+        if ($youtube_installed && (!$youtube_executable || !@is_readable($youtube_bin))) {
+            array_push($errors, sprintf("youtube-dl is installed but don't have the right permissions.Please execute command sudo chmod 755 %s", $youtube_bin));
+        } else if (!$youtube_installed) {
+            array_push($errors, "youtube-dl is not installed!");
+        }
+
+        if (!$python_installed) {
+            array_push($errors, "python is not installed!");
+        }
+        $params['errors'] = $errors;
 
         $params['settings'] = json_encode([
-            'is_admin' =>\OC_User::isAdminUser($this->uid),
+            'is_admin' => \OC_User::isAdminUser($this->uid),
             'admin_url' => $this->urlGenerator->linkToRoute("settings.AdminSettings.index", ['section' => 'ncdownloader']),
-            'personal_url' =>  $this->urlGenerator->linkToRoute("settings.PersonalSettings.index", ['section' => 'ncdownloader']),
-            'ncd_hide_errors' =>  $params['ncd_hide_errors'],
-         ]);
+            'personal_url' => $this->urlGenerator->linkToRoute("settings.PersonalSettings.index", ['section' => 'ncdownloader']),
+            'ncd_hide_errors' => $params['ncd_hide_errors'],
+        ]);
         $response = new TemplateResponse($this->appName, 'Index', $params);
 
         return $response;

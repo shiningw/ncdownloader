@@ -209,8 +209,10 @@ class Helper
         $exeSniffer = new ExecutableFinder();
         // Returns null if nothing is found
         $result = $exeSniffer->find($program, $default, $paths);
-        // store the value for 5 minutes
-        $memcache->set($program, $result, 300);
+        if ($result) {
+            // store the value for 5 minutes
+            $memcache->set($program, $result, 300);
+        }
         return $result;
     }
 
@@ -322,6 +324,11 @@ class Helper
     public static function stop($pid)
     {
         return self::doSignal($pid, 9);
+    }
+
+    public static function pythonInstalled()
+    {
+        return (bool) self::findBinaryPath('python');
     }
 
 }

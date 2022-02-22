@@ -34,7 +34,7 @@ class Youtube
             $this->bin = Helper::findBinaryPath('youtube-dl', __DIR__ . "/../../bin/youtube-dl");
         }
         if ($this->isInstalled() && !$this->isExecutable()) {
-            chmod($this->bin, 755);
+            chmod($this->bin, 0744);
         }
         $this->setDownloadDir($downloadDir);
         if (!empty($settings)) {
@@ -244,6 +244,11 @@ class Youtube
     public function isExecutable()
     {
         return @is_executable($this->bin);
+    }
+
+    public function isReadable()
+    {
+        return @is_readable($this->bin);
     }
 
     public function getBin()

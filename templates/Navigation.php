@@ -1,16 +1,5 @@
 <?php
 extract($_);
-$errors = [];
-if ($aria2_installed && !$aria2_executable) {
-    array_push($errors, sprintf("aria2 is installed but not executable.Please execute command sudo chmod 755 %s", $aria2_bin));
-}
-
-if ($youtube_installed && !$youtube_executable) {
-    array_push($errors, sprintf("youtube-dl is installed but not executable.Please execute command sudo chmod 755 %s", $youtube_bin));
-} else if (!$youtube_installed) {
-    array_push($errors, "youtube-dl is not installed!");
-}
-
 ?>
 <div id="app-navigation">
     <?php if (!$ncd_hide_errors): ?>

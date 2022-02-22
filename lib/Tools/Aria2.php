@@ -44,7 +44,7 @@ class Aria2
             $this->bin = Helper::findBinaryPath('aria2c', __DIR__ . "/../../bin/aria2c");
         }
         if ($this->isInstalled() && !$this->isExecutable()) {
-            chmod($this->bin, 755);
+            chmod($this->bin, 0744);
         }
         $this->setDownloadDir($dir);
         $this->setTorrentsDir($torrents_dir);
