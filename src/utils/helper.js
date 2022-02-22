@@ -187,9 +187,12 @@ const helper = {
                 helper.message(msg, 20000);
         })
     },
-    str2Boolean: function (string) {
-        
-        switch (string.toLowerCase().trim()) {
+    str2Boolean: function (str) {
+        if (typeof str != "string") {
+            return false;
+        }
+
+        switch (str.toLowerCase().trim()) {
             case "true":
             case "yes":
             case "1":
@@ -201,7 +204,7 @@ const helper = {
             case null:
                 return false;
             default:
-                return Boolean(string);
+                return Boolean(str);
         }
     }
 }
