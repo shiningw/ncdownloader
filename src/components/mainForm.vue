@@ -211,6 +211,7 @@ export default {
     margin: 0px;
     border: 0px;
     padding: 10px;
+    height: 100%;
   }
   button {
     white-space: nowrap;
