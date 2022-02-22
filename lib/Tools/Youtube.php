@@ -33,6 +33,9 @@ class Youtube
         } else {
             $this->bin = Helper::findBinaryPath('youtube-dl', __DIR__ . "/../../bin/youtube-dl");
         }
+        if ($this->isInstalled() && !$this->isExecutable()) {
+            chmod($this->bin, 755);
+        }
         $this->setDownloadDir($downloadDir);
         if (!empty($settings)) {
             foreach ($settings as $key => $value) {
