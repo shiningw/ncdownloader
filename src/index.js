@@ -55,7 +55,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
             if (!data.status) {
                 if (data.error)
-                    helper.message(data.error);
+                    helper.error(data.error);
                 return;
             }
             let element = document.querySelector("#start-aria2 button");

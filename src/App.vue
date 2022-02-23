@@ -19,11 +19,11 @@ import nctable from "./lib/ncTable";
 
 const successCallback = (data, element) => {
   if (!data) {
-    helper.message(t("ncdownloader", "Something must have gone wrong!"));
+    helper.error(t("ncdownloader", "Something must have gone wrong!"));
     return;
   }
   if (data.hasOwnProperty("error")) {
-    helper.message(t("ncdownloader", data.error));
+    helper.error(t("ncdownloader", data.error));
   } else if (data.hasOwnProperty("message")) {
     helper.message(t("ncdownloader", data.message));
   } else if (data.hasOwnProperty("file")) {
@@ -51,15 +51,19 @@ export default {
       let formWrapper = element.closest("form");
       let formData = helper.getData(formWrapper);
       let inputValue = formData["text-input-value"];
+      let message;
       //formData.audioOnly = document.getElementById('audio-only').checked;
       if (formData.type === "youtube-dl") {
         formData["audio-only"] = formData["audio-only"] === "true";
+        message = helper.t("Download task started!");
       }
       if (!helper.isURL(inputValue) && !helper.isMagnetURI(inputValue)) {
-        helper.message(t("ncdownloader", inputValue + " is Invalid"));
+        helper.error(t("ncdownloader", inputValue + " is Invalid"));
         return;
       }
-
+      if (message) {
+        helper.info(message);
+      }
       let url = formWrapper.getAttribute("action");
       Http.getInstance(url)
         .setData(formData)
@@ -67,7 +71,6 @@ export default {
           successCallback(data, element);
         })
         .send();
-      helper.message(inputValue);
     },
     search(event, vm) {
       let element = event.target;
@@ -75,7 +78,7 @@ export default {
       let formData = helper.getData(formWrapper);
       let inputValue = formData["text-input-value"];
       if (inputValue && inputValue.length < 2) {
-        helper.message(t("ncdownloader", "Please enter valid keyword!"));
+        helper.error(t("ncdownloader", "Please enter valid keyword!"));
         vm.$data.loading = 0;
         return;
       }

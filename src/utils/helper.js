@@ -51,18 +51,60 @@ const helper = {
 
         return magnetURI.test(url.trim());
     },
-    message: function (message, duration = 3000) {
-        Toastify({
+    _message: function (message, options = {}) {
+        message = message || "Empty"
+        const defaults = {
             text: message,
-            duration: duration,
             newWindow: true,
             close: true,
             gravity: "top", // `top` or `bottom`
             position: "center", // `left`, `center` or `right`
-            backgroundColor: "#295b86",
+            // backgroundColor: "#295b86",
             stopOnFocus: true, // Prevents dismissing of toast on hover
-            onClick: function () { } // Callback after click
-        }).showToast();
+            onClick: function () { }, // Callback after click
+        }
+        Object.assign(defaults, options);
+        Toastify(defaults).showToast();
+    },
+    error: function (message, duration = 20000) {
+        let options = {
+            style: {
+                color: '#721c24',
+                'background-color': '#f8d7da',
+                'border-color': '#f5c6cb',
+            },
+            duration: duration,
+            backgroundColor: '#f8d7da',
+        }
+        helper._message(message, options);
+    },
+    info: function (message, duration = 2000) {
+        const options = {
+            style: {
+                color: '#004085',
+                'background-color': '#cce5ff',
+                'border-color': '#b8daff',
+            },
+            duration: duration,
+            text: message,
+            backgroundColor: '#cce5ff',
+        }
+        helper._message(message, options);
+    },
+    warn: function (message, duration = 2000) {
+        const options = {
+            style: {
+                color: '#856404',
+                'background-color': '#fff3cd',
+                'border-color': '#ffeeba',
+            },
+            duration: duration,
+            backgroundColor: '#fff3cd',
+        }
+        helper._message(message, options);
+    },
+    message: function (message, duration = 2000) {
+        helper.info(message, duration);
     },
     getPathLast: function (path) {
         return path.substring(path.lastIndexOf('/') + 1)
@@ -182,7 +224,7 @@ const helper = {
         errors.forEach(element => {
             let msg;
             if (msg = element.getAttribute('data-error-message'))
-                helper.message(msg, 20000);
+                helper.error(msg, 20000);
         })
     },
     str2Boolean: function (str) {
@@ -204,6 +246,9 @@ const helper = {
             default:
                 return Boolean(str);
         }
+    },
+    t: function (str) {
+       return t("ncdownloader", str);
     }
 }
 

@@ -161,7 +161,7 @@ class Youtube
         $data = ['link' => $url];
         $process->run(function ($type, $buffer) use ($data, $process) {
             if (Process::ERR === $type) {
-                // $this->onError($buffer);
+                $this->onError($buffer);
             } else {
                 $data['pid'] = $process->getPid();
                 $this->onOutput($buffer, $data);

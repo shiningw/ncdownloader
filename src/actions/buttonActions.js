@@ -29,7 +29,7 @@ const buttonHandler = (event, type) => {
         console.log(error);
     }).setHandler(function (data) {
         if (data.hasOwnProperty('error')) {
-            helper.message(data['error']);
+            helper.error(data['error']);
             return;
         }
         if (data.hasOwnProperty('result')) {

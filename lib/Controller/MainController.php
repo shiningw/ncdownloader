@@ -74,13 +74,18 @@ class MainController extends Controller
         $params['ffmpeg_installed'] = Helper::ffmpegInstalled();
 
         $errors = [];
-        if ($aria2_installed && !$aria2_executable) {
-            array_push($errors, sprintf("aria2 is installed but don't have the right permissions.Please execute command sudo chmod 755 %s", $aria2_bin));
+        if ($aria2_installed) {
+            if (!$aria2_executable) {
+                array_push($errors, sprintf("aria2 is installed but don't have the right permissions.Please execute command sudo chmod 755 %s", $aria2_bin));
+            }
+            if (!$params['aria2_running']) {
+                array_push($errors, $this->l10n->t("Aria2c is not running!"));
+            }
         }
-
         if ($youtube_installed && (!$youtube_executable || !@is_readable($youtube_bin))) {
             array_push($errors, sprintf("youtube-dl is installed but don't have the right permissions.Please execute command sudo chmod 755 %s", $youtube_bin));
         }
+
         foreach ($params as $key => $value) {
             if (strpos($key, "_") === false) {
                 continue;
@@ -90,7 +95,7 @@ class MainController extends Controller
                 continue;
             }
             if (!$value) {
-                array_push($errors, sprintf("%s is not installed", $name));
+                array_push($errors, $this->l10n->t(sprintf("%s is not installed", $name)));
             }
         }
         $params['errors'] = $errors;
