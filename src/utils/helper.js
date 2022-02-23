@@ -42,10 +42,8 @@ const helper = {
         }, delay);
     },
     isURL(url) {
-        let regex = '^(?:(?:https?|ftp)://)(?:\\S+(?::\\S*)?@|\\d{1,3}(?:\.\\d{1,3}){3}|(?:(?:[a-z\\d\\u{00a1}-\\u{ffff}'
-            + ']+-?)*[a-z\\d\\u{00a1}-\\u{ffff}]+)(?:\.(?:[a-z\\d\\u{00a1}-\\u{ffff}]+-?)*[a-z\\d\\u{00a1}-\\u{ffff}]+)*(?:\.'
-            + '[a-z\\u{00a1}-\\u{ffff}]{2,6}))(?::\\d+)?(?:[^\\s]*)?$';
-        const pattern = new RegExp(regex, 'iu');
+        let regex = '^((https?|ftp)://)([a-z0-9-]+\.)?(?:[-a-zA-Z0-9()@:%_\+.~#?&/=]+)$';
+        const pattern = new RegExp(regex, 'i');
         return pattern.test(url);
     },
     isMagnetURI(url) {
