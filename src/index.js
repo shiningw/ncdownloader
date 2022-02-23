@@ -76,16 +76,6 @@ window.addEventListener('DOMContentLoaded', function () {
         }).send();
     })
     eventHandler.add("click", "#app-navigation", "#search-download", helper.showDownload);
-    eventHandler.add("change", "#app-navigation", "#ncd-hide-errors", e => {
-        let data = {};
-        data["ncd_hide_errors"] = e.target.checked;
-        const url = helper.generateUrl(basePath + "/personal/save");
-        Http.getInstance(url).setData(data).setHandler(resp => {
-            if (resp['message']) {
-                helper.message(t("ncdownloader", resp['message']), 1000);
-            }
-        }).send();
-    })
     delegate('#app-ncdownloader-wrapper',
         { target: '[data-tippy-content]' }
     );

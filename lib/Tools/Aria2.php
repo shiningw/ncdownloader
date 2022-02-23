@@ -61,7 +61,7 @@ class Aria2
         $this->setToken($this->tokenString);
         $this->confDir = $conf_dir;
         $this->sessionFile = $this->confDir . "/aria2.session";
-        $this->confFile = $this->confDir . "/aria2.conf";
+        //$this->confFile = $this->confDir . "/aria2.conf";
         $this->logFile = $this->confDir . "/aria2.log";
     }
     public function init()
@@ -95,9 +95,6 @@ class Aria2
     {
         if (!is_dir($this->confDir)) {
             mkdir($this->confDir, 0755, true);
-        }
-        if (!file_exists($this->confDir . "/aria2.conf")) {
-            file_put_contents($this->confDir . "/aria2.conf", $this->confTemplate());
         }
         if (!is_dir($dir = $this->getDownloadDir())) {
             mkdir($dir, 0755, true);
@@ -404,40 +401,5 @@ class Aria2
         $resp = $this->shutdown();
         sleep(3);
         return $resp ?? null;
-    }
-    private function confTemplate()
-    {
-        return <<<EOF
-continue
-daemon=true
-#dir=/home/aria2/Downloads
-#file-allocation=falloc
-log-level=info
-max-connection-per-server=4
-max-concurrent-downloads=5
-max-overall-download-limit=0
-min-split-size=5M
-enable-http-pipelining=true
-#interface=127.0.0.1
-enable-rpc=true
-rpc-secret=$this->tokenString
-rpc-listen-all=true
-rpc-listen-port=6800
-follow-torrent=true
-listen-port=51413
-enable-dht=true
-enable-peer-exchange=true
-peer-id-prefix=-TR2770-
-user-agent=Transmission/2.77
-seed-ratio=0.1
-bt-seed-unverified=true
-max-overall-upload-limit=1M
-#on-download-complete=
-#on-download-error=
-#on-download-start=
-save-session=$this->sessionFile
-input-file=$this->sessionFile
-log=$this->logFile
-EOF;
     }
 }
