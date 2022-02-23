@@ -52,7 +52,15 @@ class MainController extends Controller
         //$config = \OC::$server->getAppConfig();
         OC_Util::addScript($this->appName, 'app');
         // OC_Util::addStyle($this->appName, 'table');
-        $params = array();
+        $params = $this->buildParams();
+        $response = new TemplateResponse($this->appName, 'Index', $params);
+
+        return $response;
+    }
+
+    private function buildParams(): array
+    {
+        $params = [];
         $params['aria2_running'] = $this->aria2->isRunning();
         $params['aria2_installed'] = $aria2_installed = $this->aria2->isInstalled();
         $params['aria2_bin'] = $aria2_bin = $this->aria2->getBin();
@@ -62,7 +70,8 @@ class MainController extends Controller
         $params['youtube_executable'] = $youtube_executable = $this->youtube->isExecutable();
         $params['ncd_hide_errors'] = $this->settings->get("ncd_hide_errors", false);
         $params['counter'] = $this->counters->getCounters();
-        $params['python_installed'] = $python_installed = Helper::pythonInstalled();
+        $params['python_installed'] = Helper::pythonInstalled();
+        $params['ffmpeg_installed'] = Helper::ffmpegInstalled();
 
         $errors = [];
         if ($aria2_installed && !$aria2_executable) {
@@ -71,12 +80,18 @@ class MainController extends Controller
 
         if ($youtube_installed && (!$youtube_executable || !@is_readable($youtube_bin))) {
             array_push($errors, sprintf("youtube-dl is installed but don't have the right permissions.Please execute command sudo chmod 755 %s", $youtube_bin));
-        } else if (!$youtube_installed) {
-            array_push($errors, "youtube-dl is not installed!");
         }
-
-        if (!$python_installed) {
-            array_push($errors, "python is not installed!");
+        foreach ($params as $key => $value) {
+            if (strpos($key, "_") === false) {
+                continue;
+            }
+            list($name, $suffix) = explode("_", $key);
+            if ($suffix !== "installed") {
+                continue;
+            }
+            if (!$value) {
+                array_push($errors, sprintf("%s is not installed", $name));
+            }
         }
         $params['errors'] = $errors;
 
@@ -86,9 +101,7 @@ class MainController extends Controller
             'personal_url' => $this->urlGenerator->linkToRoute("settings.PersonalSettings.index", ['section' => 'ncdownloader']),
             'ncd_hide_errors' => $params['ncd_hide_errors'],
         ]);
-        $response = new TemplateResponse($this->appName, 'Index', $params);
-
-        return $response;
+        return $params;
     }
     /**
      * @NoAdminRequired
