@@ -46,7 +46,7 @@ class Youtube
                 }
             }
         }
-        if (empty($lang = getenv('LANG')) || strpos(strtolower($lang), 'utf-8') === false) {
+        if (empty($lang = getenv('LANG')) || strpos(strtolower($lang), 'c.utf-8') === false) {
             $lang = 'C.UTF-8';
         }
         $this->setEnv('LANG', $lang);
