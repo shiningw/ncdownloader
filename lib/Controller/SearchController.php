@@ -32,9 +32,7 @@ class SearchController extends Controller
         $site = Helper::sanitize($this->request->getParam('select-value-search'));
         $this->search->setSite($site);
         $data = $this->search->go($keyword);
-        $resp['title'] = ['title', 'seeders', 'info', 'actions'];
-        $resp['row'] = $data;
-        return new JSONResponse($resp);
+        return new JSONResponse($data);
     }
 
 }

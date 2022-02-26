@@ -3,25 +3,26 @@
 namespace OCA\NCDownloader\Search\Sites;
 
 //bitsearch.to
-class bitSearch implements searchBase
+class bitSearch extends searchBase implements searchInterface
 {
     //html content
     private $content = null;
     public $baseUrl = "https://bitsearch.to/search";
-    private $query = null;
+    protected $query = null;
+    protected $tableTitles = [];
 
     public function __construct($crawler, $client)
     {
         $this->client = $client;
         $this->crawler = $crawler;
     }
-    public function search($keyword)
+    public function search(string $keyword): array
     {
         $this->query = ['q' => trim($keyword), 'sort' => 'seeders'];
         $this->searchUrl = $this->baseUrl;
-        //$this->setContent(file_get_contents(__DIR__ . "/BitSearch.html"));
         $this->crawler->add($this->getContent());
-        return $this->parse();
+        $this->getItems()->addActionLinks(null);
+        return ['title' =>$this->getTableTitles(), 'row' => $this->getRows()];
     }
     public function setContent($content)
     {
@@ -35,6 +36,7 @@ class bitSearch implements searchBase
         $response = $this->client->request('GET', $this->searchUrl, ['query' => $this->query]);
         return $response->getContent();
     }
+
     public function parse()
     {
 
@@ -61,5 +63,10 @@ class bitSearch implements searchBase
 
         });
         return $data;
+    }
+    public function getItems()
+    {
+        $this->rows = $this->parse();
+        return $this;
     }
 }

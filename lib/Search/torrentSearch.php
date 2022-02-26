@@ -27,7 +27,6 @@ class torrentSearch
             return ['message', $e->getMessage()];
         }
         $data = $siteInst->search($keyword);
-        $this->addAction($data);
         return $data;
     }
 
@@ -37,16 +36,6 @@ class torrentSearch
             $this->site = $site;
         } else {
             $this->site = __NAMESPACE__ . '\Sites\\' . $site;
-        }
-    }
-
-    private function addAction(&$data)
-    {
-        foreach ($data as $key => &$value) {
-            if (!$value) {
-                continue;
-            }
-            $value['actions'] = [["name" => 'download', 'path' => '/index.php/apps/ncdownloader/new'], ['name' => 'clipboard']];
         }
     }
 

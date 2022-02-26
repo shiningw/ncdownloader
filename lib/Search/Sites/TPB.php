@@ -3,7 +3,7 @@
 namespace OCA\NCDownloader\Search\Sites;
 
 //The Piratebay
-class TPB implements searchBase
+class TPB extends searchBase implements searchInterface
 {
     //html content
     private $content = null;
@@ -14,11 +14,12 @@ class TPB implements searchBase
         $this->client = $client;
         $this->crawler = $crawler;
     }
-    public function search($keyword)
+    public function search(string $keyword): array
     {
         $this->searchUrl = $this->baseUrl . trim($keyword);
         $this->crawler->add($this->getContent());
-        return $this->parse();
+        $this->getItems()->addActionLinks(null);
+        return ['title' => $this->getTableTitles(), 'row' => $this->getRows()];
     }
     public function setContent($content)
     {
@@ -52,5 +53,10 @@ class TPB implements searchBase
 
         });
         return $data;
+    }
+    public function getItems()
+    {
+        $this->rows = $this->parse();
+        return $this;
     }
 }
