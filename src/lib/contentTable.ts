@@ -85,7 +85,7 @@ class contentTable {
                     let name = key.replace("_", "-");
                     if (typeof element[key] == "string") {
                         row.setAttribute(name, (<string>element[key]));
-                        row.setAttribute("id", (<string>element[key]));
+                        row.setAttribute("id", key);
                     }
                     continue;
                 }
