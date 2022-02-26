@@ -4,7 +4,7 @@ import {
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 import { translate as t, translatePlural as n } from '@nextcloud/l10n'
-import nctable from '../lib/ncTable';
+import contentTable from '../lib/contentTable';
 import Http from '../lib/http'
 
 const helper = {
@@ -120,9 +120,9 @@ const helper = {
         let url = helper.generateUrl(path);
         Http.getInstance(url).setHandler(function (data) {
             if (data && data.row) {
-                nctable.getInstance(data.title, data.row).create();
+                contentTable.getInstance(data.title, data.row).create();
             } else {
-                nctable.getInstance().noData();
+                contentTable.getInstance().noData();
             }
             if (data.counter)
                 helper.updateCounter(data.counter);
@@ -190,7 +190,7 @@ const helper = {
     },
     showDownload() {
         helper.showElement('download');
-        nctable.getInstance().clear();
+        contentTable.getInstance().clear();
         helper.enabledPolling = 0;
     },
     hideDownload() {

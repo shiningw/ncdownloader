@@ -1,7 +1,7 @@
 import Http from '../lib/http'
 import helper from '../utils/helper'
 import eventHandler from '../lib/eventHandler'
-import Clipboard from '../utils/clipboard'
+import Clipboard from '../lib/clipboard'
 import '../css/clipboard.scss';
 
 const buttonHandler = (event, type) => {

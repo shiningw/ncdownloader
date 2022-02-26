@@ -15,7 +15,7 @@ import toggleButton from "./components/toggleButton";
 import helper from "./utils/helper";
 import { translate as t, translatePlural as n } from "@nextcloud/l10n";
 import Http from "./lib/http";
-import nctable from "./lib/ncTable";
+import contentTable from "./lib/contentTable";
 
 const successCallback = (data, element) => {
   if (!data) {
@@ -83,7 +83,7 @@ export default {
         return;
       }
       helper.enabledPolling = 0;
-      nctable.getInstance().loading();
+      contentTable.getInstance().loading();
 
       let url = formWrapper.getAttribute("action");
       Http.getInstance(url)
@@ -91,7 +91,7 @@ export default {
         .setHandler(function (data) {
           if (data && data.title) {
             vm.$data.loading = 0;
-            const tableInst = nctable.getInstance(data.title, data.row);
+            const tableInst = contentTable.getInstance(data.title, data.row);
             tableInst.actionLink = false;
             tableInst.rowClass = "table-row-search";
             tableInst.create();
