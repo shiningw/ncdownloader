@@ -36,7 +36,7 @@
             >
           </div>
           <actionButton className="download-button" @clicked="download"></actionButton>
-          <uploadFile @uploadfile="uploadFile" :path="uris.upload_url"></uploadFile>
+          <uploadFile v-if="downloadType === 'aria2'" @uploadfile="uploadFile" :path="uris.upload_url"></uploadFile>
         </div>
       </div>
       <searchInput v-else @search="search"></searchInput>
