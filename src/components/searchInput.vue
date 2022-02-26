@@ -2,8 +2,8 @@
   <div class="search-input" id="nc-vue-search-input">
     <textInput :placeholder="placeholder" dataType="search"></textInput>
     <div class="search-controls-container">
-      <div id="select-value-search">
-        <select :value="selected">
+      <div id="select-value-search-container">
+        <select :value="selected" @change="selectHandler" id="select-value-search">
           <option
             v-for="(option, key) in selectOptions"
             v-bind:key="key"
@@ -22,15 +22,17 @@
 <script>
 import textInput from "./textInput";
 import actionButton from "./actionButton";
+import { translate as t } from "@nextcloud/l10n";
 
 export default {
   data() {
     return {
-      placeholder: "Enter keyword to search",
+      placeholder: t("ncdownloader", "Enter keyword to search"),
       selected: "TPB",
       selectOptions: [
         { name: "TPB", label: "THEPIRATEBAY" },
         { name: "bitSearch", label: "BITSEARCH" },
+        { name: "sliderkz", label: "MUSIC" },
       ],
     };
   },
@@ -41,6 +43,13 @@ export default {
   methods: {
     search(event, btnVm) {
       this.$emit("search", event, btnVm);
+    },
+    selectHandler(event) {
+      const data = {};
+      const element = event.target;
+      data.key = element.value;
+      data.label = element.options[element.selectedIndex].text;
+      this.$emit("optionSelected", data);
     },
   },
   name: "searchInput",

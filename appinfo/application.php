@@ -6,6 +6,7 @@ use OCA\NCDownloader\Controller\Aria2Controller;
 use OCA\NCDownloader\Controller\MainController;
 use OCA\NCDownloader\Controller\YoutubeController;
 use OCA\NCDownloader\Search\Sites\bitSearch;
+use OCA\NCDownloader\Search\Sites\sliderkz;
 use OCA\NCDownloader\Search\Sites\TPB;
 use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\Helper;
@@ -85,7 +86,12 @@ class Application extends App
             return new Crawler();
         });
         $container->registerService('httpClient', function () {
-            return HttpClient::create();
+            $agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36';
+            return HttpClient::create([
+                'headers' => [
+                    'User-Agent' => $agent,
+                ],
+            ]);
         });
         $container->registerService(TPB::class, function (IContainer $container) {
             $crawler = $container->query('crawler');
@@ -96,6 +102,10 @@ class Application extends App
             $crawler = $container->query('crawler');
             $client = $container->query('httpClient');
             return new bitSearch($crawler, $client);
+        });
+        $container->registerService(sliderkz::class, function (IContainer $container) {
+            $client = $container->query('httpClient');
+            return new sliderkz($client);
         });
     }
 

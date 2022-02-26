@@ -17,7 +17,7 @@
         class="search-torrents option-buttons"
         @click.prevent="whichType('search', $event)"
       >
-        Search Torrents
+        {{ searchLabel }}
       </div>
     </div>
     <div class="action-group">
@@ -36,10 +36,14 @@
             >
           </div>
           <actionButton className="download-button" @clicked="download"></actionButton>
-          <uploadFile v-if="downloadType === 'aria2'" @uploadfile="uploadFile" :path="uris.upload_url"></uploadFile>
+          <uploadFile
+            v-if="downloadType === 'aria2'"
+            @uploadfile="uploadFile"
+            :path="uris.upload_url"
+          ></uploadFile>
         </div>
       </div>
-      <searchInput v-else @search="search"></searchInput>
+      <searchInput v-else @search="search" @optionSelected="optionCallback"></searchInput>
     </div>
   </form>
 </template>
@@ -48,6 +52,7 @@ import textInput from "./textInput";
 import searchInput from "./searchInput.vue";
 import actionButton from "./actionButton";
 import uploadFile from "./uploadFile";
+import { translate as t } from "@nextcloud/l10n";
 
 export default {
   data() {
@@ -57,7 +62,8 @@ export default {
       inputType: "download",
       checkboxes: false,
       downloadType: "aria2",
-      placeholder: "Paste your http/magnet link here",
+      placeholder: t("ncdownloader", "Paste your http/magnet link here"),
+      searchLabel: t("ncdownloader", "Search Torrents"),
     };
   },
   components: {
@@ -78,9 +84,8 @@ export default {
       this.downloadType = type;
       if (type === "aria2") {
         this.path = this.uris.aria2_url;
-        this.placeholder = "Paste your http/magnet link here";
       } else if (type === "youtube-dl") {
-        this.placeholder = "Paste your video link here";
+        this.placeholder = t("ncdownloader", "Paste your video link here");
         this.path = this.uris.ytd_url;
       } else {
         this.path = this.uris.search_url;
@@ -96,6 +101,13 @@ export default {
     },
     uploadFile(event, vm) {
       this.$emit("uploadfile", event, vm);
+    },
+    optionCallback(option) {
+      if (option.label.toLowerCase() == "music") {
+        this.searchLabel = t("ncdownloader", "Search Music");
+      }else{
+        this.searchLabel = t("ncdownloader", "Search Torrents");
+      }
     },
   },
   mounted() {},
