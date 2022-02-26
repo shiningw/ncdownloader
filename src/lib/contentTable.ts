@@ -51,7 +51,7 @@ class contentTable {
         div.appendChild(document.createTextNode(helper.t('No items')));
         this.table.appendChild(div);
     }
-    createHeading(prefix = "table-heading") {
+    createHeading(prefix = "table-heading"):HTMLElement {
         let thead = document.createElement("section");
         thead.classList.add(this.headingClass);
         let headRow = document.createElement("header");
@@ -134,7 +134,7 @@ class contentTable {
 
     }
 
-    createActionButton(name: string, path: string, data: string) {
+    createActionButton(name: string, path: string, data: string):HTMLElement {
         let button = document.createElement("button");
         button.classList.add("icon-" + name);
         button.setAttribute("path", path);

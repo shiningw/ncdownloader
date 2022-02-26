@@ -15,11 +15,11 @@ class settingsForm {
     static getInstance() {
         return new this();
     }
-    setParent(selector: string) {
+    setParent(selector: string):settingsForm {
         this.parent = selector;
         return this;
     }
-    create(parent: HTMLElement, element: dataItems) {
+    create(parent: HTMLElement, element: dataItems):void {
         let label = this._createLabel(element.name, element.id)
         let input = this._createInput(element);
         //let saveBtn = this._createSaveBtn(element.id);
@@ -32,7 +32,7 @@ class settingsForm {
         return parent.prepend(container);
     }
 
-    createCustomInput(keyId:string, valueId:string) {
+    createCustomInput(keyId:string, valueId:string):HTMLElement {
         let div = this._createContainer(keyId + "-container")
         let items:dataItems = {
             id:keyId,
@@ -46,12 +46,12 @@ class settingsForm {
         return div;
     }
 
-    _createContainer(id: string) {
+    _createContainer(id: string):HTMLElement {
         let div = document.createElement("div");
         div.classList.add(id);
         return div;
     }
-    _createCancelBtn(className = '') {
+    _createCancelBtn(className = ''):HTMLElement {
         let button = document.createElement("button");
         if (className)
             button.classList.add(className);
@@ -59,14 +59,14 @@ class settingsForm {
         button.classList.add("icon-close");
         return button;
     }
-    _createSaveBtn(id: string) {
+    _createSaveBtn(id: string):HTMLElement {
         let button = document.createElement("input");
         button.setAttribute('type', 'button');
         button.setAttribute('value', 'save');
         button.setAttribute("data-rel", id + "-container");
         return button;
     }
-    _createLabel(name: string, id: string) {
+    _createLabel(name: string, id: string):HTMLElement {
         name = name.replace('_', '-');
         let label = document.createElement("lable");
         label.setAttribute("for", id);
@@ -74,7 +74,7 @@ class settingsForm {
         label.appendChild(text);
         return label;
     }
-    _createInput(data: dataItems) {
+    _createInput(data: dataItems):HTMLElement {
         let input = document.createElement('input');
         let type = data.type || "text";
         let placeholder = data.placeholder || 'Leave empty if no value needed';
@@ -89,7 +89,6 @@ class settingsForm {
         input.classList.add('form-input-' + type);
         return input;
     }
-
     render(data: data) {
         let parent = document.getElementById(this.parent)
         for (const element of data) {
