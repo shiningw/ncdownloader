@@ -55,7 +55,7 @@ class Helper
     public static function getUrlPath($url)
     {
         $path = parse_url($url, PHP_URL_PATH);
-        $filename = self::cleanString(basename($path));
+        $filename = self::cleanString(urldecode(basename($path)));
         return self::clipFilename($filename);
     }
     public static function clipFilename($filename)
