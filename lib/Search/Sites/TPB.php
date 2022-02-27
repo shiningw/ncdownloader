@@ -19,6 +19,9 @@ class TPB extends searchBase implements searchInterface
         $this->searchUrl = $this->baseUrl . trim($keyword);
         $this->crawler->add($this->getContent());
         $this->getItems()->addActionLinks(null);
+        if ($this->hasErrors()) {
+            return ['error' => $this->getErrors()];
+        }
         return ['title' => $this->getTableTitles(), 'row' => $this->getRows()];
     }
     public function setContent($content)
@@ -30,8 +33,15 @@ class TPB extends searchBase implements searchInterface
         if ($this->content) {
             return $this->content;
         }
-        $response = $this->client->request('GET', $this->searchUrl);
-        return $response->getContent();
+        $content;
+        try {
+            $response = $this->client->request('GET', $this->searchUrl);
+            $content = $response->getContent();
+        } catch (\Exception $e) {
+            $this->errors[] = $e->getMessage();
+            return [];
+        }
+        return $content;
     }
     public function parse()
     {

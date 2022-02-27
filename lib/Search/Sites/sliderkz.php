@@ -1,15 +1,15 @@
 <?php
 
 namespace OCA\NCDownloader\Search\Sites;
+
 use OCA\NCDownloader\Tools\Helper;
 
 //slider.kz
-class sliderkz extends searchBase
+class sliderkz extends searchBase implements searchInterface
 {
     public $baseUrl = "https://slider.kz/vk_auth.php";
     protected $query = null;
     protected $tableTitles = [];
-
     public function __construct($client)
     {
         $this->client = $client;
@@ -19,6 +19,9 @@ class sliderkz extends searchBase
         $this->query = ['q' => trim($keyword)];
         $this->searchUrl = $this->baseUrl;
         $this->getItems()->setTableTitles(["Title", "Duration", "Actions"])->addActionLinks(null);
+        if ($this->hasErrors()) {
+            return ['error' => $this->getErrors()];
+        }
         return ["title" => $this->getTableTitles(), 'row' => $this->getRows()];
     }
 
@@ -37,7 +40,7 @@ class sliderkz extends searchBase
     private function transformResp($data): array
     {
         $items = [];
-        if (count($data) < 1) {
+        if (count($data) < 1 || $this->hasErrors()) {
             return [];
         }
         foreach ($data as $item) {
@@ -54,7 +57,8 @@ class sliderkz extends searchBase
             $response = $this->client->request('GET', $this->searchUrl, ['query' => $this->query]);
             $resp = $response->toArray();
         } catch (ExceptionInterface $e) {
-            return ["error" => $e->getMessage()];
+            $this->errors[] = $e->getMessage();
+            return [];
         }
         if (isset($resp['audios'])) {
             return array_values($resp["audios"])[0];

@@ -20,9 +20,13 @@ class bitSearch extends searchBase implements searchInterface
     {
         $this->query = ['q' => trim($keyword), 'sort' => 'seeders'];
         $this->searchUrl = $this->baseUrl;
-        $this->crawler->add($this->getContent());
+        $content = $this->getContent();
+        if ($this->hasErrors()) {
+            return ['error' => $this->getErrors()];
+        }
+        $this->crawler->add($content);
         $this->getItems()->addActionLinks(null);
-        return ['title' =>$this->getTableTitles(), 'row' => $this->getRows()];
+        return ['title' => $this->getTableTitles(), 'row' => $this->getRows()];
     }
     public function setContent($content)
     {
@@ -33,8 +37,15 @@ class bitSearch extends searchBase implements searchInterface
         if ($this->content) {
             return $this->content;
         }
-        $response = $this->client->request('GET', $this->searchUrl, ['query' => $this->query]);
-        return $response->getContent();
+        $content;
+        try {
+            $response = $this->client->request('GET', $this->searchUrl, ['query' => $this->query]);
+            $content = $response->getContent();
+        } catch (\Exception $e) {
+            $this->errors[] = $e->getMessage();
+            return [];
+        }
+        return $content;
     }
 
     public function parse()

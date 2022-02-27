@@ -96,6 +96,10 @@ export default {
             tableInst.rowClass = "table-row-search";
             tableInst.create();
           }
+          if (data.error) {
+            helper.resetSearch(vm);
+            helper.error(data.error);
+          }
         })
         .send();
     },

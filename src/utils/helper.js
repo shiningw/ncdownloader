@@ -248,7 +248,11 @@ const helper = {
         }
     },
     t: function (str) {
-       return t("ncdownloader", str);
+        return t("ncdownloader", str);
+    },
+    resetSearch: function (vm) {
+        vm.$data.loading = 0;
+        contentTable.getInstance([], []).clear();
     }
 }
 

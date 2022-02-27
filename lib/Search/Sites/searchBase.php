@@ -7,6 +7,7 @@ abstract class searchBase
     protected $query = null;
     protected $tableTitles = [];
     protected $rows = [];
+    protected $errors = [];
     protected $actionLinks = [["name" => 'download', 'path' => '/index.php/apps/ncdownloader/new'], ['name' => 'clipboard']];
 
     public function getTableTitles(): array
@@ -36,6 +37,16 @@ abstract class searchBase
     public function getRows(): array
     {
         return $this->rows;
+    }
+
+    public function hasErrors(): bool
+    {
+        return (bool) (count($this->errors) > 0);
+    }
+
+    public function getErrors(): string
+    {
+        return implode(",", $this->errors);
     }
 
 }
