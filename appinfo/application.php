@@ -9,13 +9,13 @@ use OCA\NCDownloader\Search\Sites\bitSearch;
 use OCA\NCDownloader\Search\Sites\sliderkz;
 use OCA\NCDownloader\Search\Sites\TPB;
 use OCA\NCDownloader\Tools\Aria2;
+use OCA\NCDownloader\Tools\Client;
 use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Tools\Settings;
 use OCA\NCDownloader\Tools\Youtube;
 use OCP\AppFramework\App;
 use OCP\IContainer;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpClient\HttpClient;
 
 class Application extends App
 {
@@ -82,16 +82,14 @@ class Application extends App
                 $container->query('Youtube')
             );
         });
+        $container->registerService('httpClient', function () {
+            $options = [
+                'ipv4' => true,
+            ];
+            return Client::create($options);
+        });
         $container->registerService('crawler', function () {
             return new Crawler();
-        });
-        $container->registerService('httpClient', function () {
-            $agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36';
-            return HttpClient::create([
-                'headers' => [
-                    'User-Agent' => $agent,
-                ],
-            ]);
         });
         $container->registerService(TPB::class, function (IContainer $container) {
             $crawler = $container->query('crawler');
