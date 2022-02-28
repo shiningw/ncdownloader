@@ -5,9 +5,6 @@ namespace OCA\NCDownloader\AppInfo;
 use OCA\NCDownloader\Controller\Aria2Controller;
 use OCA\NCDownloader\Controller\MainController;
 use OCA\NCDownloader\Controller\YoutubeController;
-use OCA\NCDownloader\Search\Sites\bitSearch;
-use OCA\NCDownloader\Search\Sites\sliderkz;
-use OCA\NCDownloader\Search\Sites\TPB;
 use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\Client;
 use OCA\NCDownloader\Tools\Helper;
@@ -91,20 +88,16 @@ class Application extends App
         $container->registerService('crawler', function () {
             return new Crawler();
         });
-        $container->registerService(TPB::class, function (IContainer $container) {
-            $crawler = $container->query('crawler');
-            $client = $container->query('httpClient');
-            return new TPB($crawler, $client);
-        });
-        $container->registerService(bitSearch::class, function (IContainer $container) {
-            $crawler = $container->query('crawler');
-            $client = $container->query('httpClient');
-            return new bitSearch($crawler, $client);
-        });
-        $container->registerService(sliderkz::class, function (IContainer $container) {
-            $client = $container->query('httpClient');
-            return new sliderkz($client);
-        });
+        $sites = Helper::getSearchSites();
+        foreach ($sites as $site) {
+            //fully qualified class name
+            $className = $site['class'];
+            $container->registerService($className, function (IContainer $container) use ($className) {
+                $crawler = $container->query('crawler');
+                $client = $container->query('httpClient');
+                return $className::create($crawler, $client);
+            });
+        }
     }
 
     private function getRealDownloadDir()

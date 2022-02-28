@@ -69,12 +69,6 @@ export default {
   components: {
     toggleButton,
   },
-  provide() {
-    return {
-      settings,
-    };
-  },
-
   mounted() {},
 };
 </script>

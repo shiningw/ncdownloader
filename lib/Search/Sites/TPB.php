@@ -69,4 +69,8 @@ class TPB extends searchBase implements searchInterface
         $this->rows = $this->parse();
         return $this;
     }
+    public static function getLabel(): string
+    {
+        return 'thepiratebay';
+    }
 }

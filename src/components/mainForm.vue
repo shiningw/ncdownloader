@@ -43,7 +43,12 @@
           ></uploadFile>
         </div>
       </div>
-      <searchInput v-else @search="search" @optionSelected="optionCallback"></searchInput>
+      <searchInput
+        v-else
+        @search="search"
+        @optionSelected="optionCallback"
+        :selectOptions="searchOptions"
+      ></searchInput>
     </div>
   </form>
 </template>
@@ -55,6 +60,7 @@ import uploadFile from "./uploadFile";
 import { translate as t } from "@nextcloud/l10n";
 
 export default {
+  inject: ["settings", "search_sites"],
   data() {
     return {
       checkedValue: false,
@@ -64,6 +70,7 @@ export default {
       downloadType: "aria2",
       placeholder: t("ncdownloader", "Paste your http/magnet link here"),
       searchLabel: t("ncdownloader", "Search Torrents"),
+      searchOptions: this.search_sites ? this.search_sites : this.noOptions(),
     };
   },
   components: {
@@ -72,6 +79,7 @@ export default {
     searchInput,
     uploadFile,
   },
+  created() {},
   computed: {},
   methods: {
     whichType(type, event) {
@@ -105,9 +113,12 @@ export default {
     optionCallback(option) {
       if (option.label.toLowerCase() == "music") {
         this.searchLabel = t("ncdownloader", "Search Music");
-      }else{
+      } else {
         this.searchLabel = t("ncdownloader", "Search Torrents");
       }
+    },
+    noOptions() {
+      return [{ name: "nooptions", label: "No Options" }];
     },
   },
   mounted() {},

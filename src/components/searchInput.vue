@@ -29,11 +29,6 @@ export default {
     return {
       placeholder: t("ncdownloader", "Enter keyword to search"),
       selected: "TPB",
-      selectOptions: [
-        { name: "TPB", label: "THEPIRATEBAY" },
-        { name: "bitSearch", label: "BITSEARCH" },
-        { name: "sliderkz", label: "MUSIC" },
-      ],
     };
   },
   components: {
@@ -53,7 +48,9 @@ export default {
     },
   },
   name: "searchInput",
-  props: [],
+  props: {
+    selectOptions: Object,
+  },
 };
 </script>
 <style scoped lang="scss">

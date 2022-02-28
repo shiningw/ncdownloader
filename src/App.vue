@@ -33,6 +33,12 @@ const successCallback = (data, element) => {
 
 export default {
   name: "mainApp",
+  inject: ["settings"],
+  provide() {
+    return {
+      search_sites: this.settings.search_sites,
+    };
+  },
   data() {
     return {
       display: { download: true, search: false },

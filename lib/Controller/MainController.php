@@ -72,6 +72,12 @@ class MainController extends Controller
         $params['counter'] = $this->counters->getCounters();
         $params['python_installed'] = Helper::pythonInstalled();
         $params['ffmpeg_installed'] = Helper::ffmpegInstalled();
+        $sites = [];
+        foreach (Helper::getSearchSites() as $site) {
+            $label = $site['class']::getLabel();
+            $sites[] = ['name' => $site['name'], 'label' => strtoupper($label)];
+        }
+        $params['search_sites'] = json_encode($sites);
 
         $errors = [];
         if ($aria2_installed) {

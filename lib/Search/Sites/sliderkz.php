@@ -10,10 +10,12 @@ class sliderkz extends searchBase implements searchInterface
     public $baseUrl = "https://slider.kz/vk_auth.php";
     protected $query = null;
     protected $tableTitles = [];
-    public function __construct($client)
+
+    public function __construct($crawler,$client)
     {
         $this->client = $client;
     }
+    
     public function search(string $keyword): array
     {
         $this->query = ['q' => trim($keyword)];
@@ -68,5 +70,10 @@ class sliderkz extends searchBase implements searchInterface
         }
 
         return [];
+    }
+
+    public static function getLabel(): string
+    {
+        return 'music';
     }
 }

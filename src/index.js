@@ -21,22 +21,24 @@ window.addEventListener('DOMContentLoaded', function () {
     updatePage.run();
     buttonActions.run();
     let container = 'ncdownloader-form-wrapper';
-    const settingsID = "app-settings-content";
+    const dataContainerID = "app-settings-data";
     let app = createApp(App);
     let bar = createApp(settingsBar);
 
-    let values;
+    const dataContainer = document.getElementById(dataContainerID);
+    let values = {};
     try {
-        const barEle = document.getElementById(settingsID);
-        let settings = barEle.getAttribute("data-settings");
-        values = JSON.parse(settings);
+        let settings = dataContainer.getAttribute("data-settings");
+        let searchSites = dataContainer.getAttribute("data-search-sites");
+        values['settings'] = JSON.parse(settings);
+        values['search_sites'] = JSON.parse(searchSites);
     } catch (e) {
         values = {}
         console.log(e);
     }
-    bar.provide('settings', values);
-    bar.mount("#" + settingsID);
-
+    bar.provide('settings', values['settings']);
+    bar.mount("#" + "app-settings-content");
+    app.provide('settings', values);
     let vm = app.mount('#' + container);
     helper.addVue(vm.$options.name, vm);
 

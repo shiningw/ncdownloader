@@ -2,6 +2,7 @@
 
 namespace OCA\NCDownloader\Tools;
 
+use OCA\NCDownloader\Search\Sites\searchInterface;
 use OCA\NCDownloader\Tools\aria2Options;
 use OC\Files\Filesystem;
 
@@ -329,6 +330,39 @@ class Helper
     public static function pythonInstalled()
     {
         return (bool) self::findBinaryPath('python');
+    }
+
+    public static function findSearchSites($dir, $suffix = 'php'): array
+    {
+        $filetool = File::create($dir, $suffix);
+        $files = $filetool->scandir();
+        $sites = [];
+        foreach ($files as $file) {
+            $basename = $filetool->getBasename($file);
+            $namespace = 'OCA\\NCDownloader\\Search\\Sites\\';
+            $className = $namespace . $basename;
+            if (in_array(searchInterface::class, class_implements($className))) {
+                $sites[] = ['class' => $className, 'name' => $basename];
+            }
+        }
+        return $sites;
+    }
+
+    public static function getSearchSites(): array
+    {
+        $key = 'searchSites';
+        $memcache = \OC::$server->getMemCacheFactory()->createDistributed($key);
+        if ($memcache->hasKey($key)) {
+            $sites = $memcache->get($key);
+        } else {
+            try {
+                $sites = Helper::findSearchSites(__DIR__ . "/../Search/Sites/");
+                $memcache->set($key, $sites, 300);
+            } catch (\Exception $e) {
+                self::debug($e->getMessage());
+            }
+        }
+        return $sites;
     }
 
 }

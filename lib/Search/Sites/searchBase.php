@@ -9,6 +9,7 @@ abstract class searchBase
     protected $rows = [];
     protected $errors = [];
     protected $actionLinks = [["name" => 'download', 'path' => '/index.php/apps/ncdownloader/new'], ['name' => 'clipboard']];
+    private static $instance = null;
 
     public function getTableTitles(): array
     {
@@ -16,6 +17,16 @@ abstract class searchBase
             return ['title', 'seeders', 'info', 'actions'];
         }
         return $this->tableTitles;
+    }
+
+    public static function create($crawler,$client)
+    {
+
+        if (!self::$instance) {
+            self::$instance = new static($crawler,$client);
+        }
+
+        return self::$instance;
     }
 
     public function setTableTitles(array $titles)

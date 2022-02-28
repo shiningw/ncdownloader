@@ -107,6 +107,6 @@ extract($_);
         <?php p($l->t('Settings'));?>
         </button>
       </div>
-      <div id="app-settings-content" data-settings='<?php print($settings);?>' ></div>
+      <div id="app-settings-content" ></div>
     </div>
 </div>
