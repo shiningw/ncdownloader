@@ -44,6 +44,9 @@ class sliderkz extends searchBase implements searchInterface
             return [];
         }
         foreach ($data as $item) {
+            if (empty($item)) {
+                continue;
+            }
             $items[] = array("title" => $item["tit_art"], "data-link" => $this->getDownloadUrl($item), "duration" => Helper::formatInterval($item["duration"]));
         }
         unset($data);
