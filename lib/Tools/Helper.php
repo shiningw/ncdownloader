@@ -127,7 +127,7 @@ class Helper
             '/–/' => '-', // UTF-8 hyphen to "normal" hyphen
             '/[’‘‹›‚]/u' => '', // Literally a single quote
             '/[“”«»„]/u' => '', // Double quote
-            '/ /' => '_', // nonbreaking space(equiv. to 0x160)
+            //'/ /' => '_', // nonbreaking space(equiv. to 0x160)
             // '/[^a-z0-9_\s.-]/i' => '_',
         );
         return preg_replace(array_keys($replace), array_values($replace), $string);
@@ -327,9 +327,9 @@ class Helper
         return self::doSignal($pid, 9);
     }
 
-    public static function pythonInstalled()
+    public static function pythonInstalled(): bool
     {
-        return (bool) self::findBinaryPath('python');
+        return (self::findBinaryPath('python') || self::findBinaryPath('python3'));
     }
 
     public static function findSearchSites($dir, $suffix = 'php'): array
