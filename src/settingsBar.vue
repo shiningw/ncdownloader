@@ -1,10 +1,21 @@
 <template>
   <section id="ncdownloader-settings-collapsible-container">
-    <div class="ncdownloader-settings-item" :data-tippy-content="tippy">
+    <div class="ncdownloader-settings-item" :data-tippy-content="errorTooltip">
       <toggleButton
-        :disabledText="toggleText"
-        :enabledText="toggleText"
+        :disabledText="errorText"
+        :enabledText="errorText"
         :defaultStatus="toggleStatus"
+        @changed="toggle"
+        name="ncd_hide_errors"
+      ></toggleButton>
+    </div>
+    <div class="ncdownloader-settings-item" :data-tippy-content="btTooltip">
+      <toggleButton
+        v-if="isAdmin"
+        disabledText="Disable BT for non-admin users"
+        enabledText="Disable BT for non-admin users"
+        :defaultStatus="btStatus"
+        name="ncd_disable_bt"
         @changed="toggle"
       ></toggleButton>
     </div>
@@ -45,17 +56,20 @@ export default {
       admin: admin,
       isAdmin: this.settings.is_admin,
       sectionName: t("ncdownloader", "Settings"),
-      toggleText: t("ncdownloader", "Hide Errors"),
+      errorText: t("ncdownloader", "Hide Errors"),
       toggleStatus: helper.str2Boolean(this.settings.ncd_hide_errors),
-      tippy: t("ncdownloader", "enable this to hide errors"),
+      btStatus: helper.str2Boolean(this.settings.ncd_disable_bt),
+      errorTooltip: t("ncdownloader", "Enable this to hide errors"),
+      btTooltip: t("ncdownload", "Disable BT for non-admin users"),
     };
   },
   created() {},
   methods: {
-    toggle(value) {
+    toggle(name, value) {
       let data = {};
-      data["ncd_hide_errors"] = value ? 1 : 0;
-      const url = helper.generateUrl(basePath + "/personal/save");
+      data[name] = value ? 1 : 0;
+      let path = (name == "ncd_disable_bt") ? "/admin/save" : "/personal/save";
+      const url = helper.generateUrl(basePath + path);
       Http.getInstance(url)
         .setData(data)
         .setHandler((resp) => {

@@ -13,6 +13,7 @@ extract($_);
             <?php print($l->t('Download & Search'));?>
         </button>
     </div>
+    <?php if ($is_admin): ?>
     <div class="app-navigation-new" id="start-aria2">
         <?php if ($aria2_installed && $aria2_executable): ?>
         <button type="button" class="icon-power"
@@ -30,6 +31,7 @@ extract($_);
         </button>
         <?php endif;?>
     </div>
+    <?php endif;?>
     <ul>
         <li class="active-downloads">
             <div class="app-navigation-entry-bullet"></div>

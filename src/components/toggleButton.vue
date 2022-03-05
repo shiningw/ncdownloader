@@ -70,7 +70,7 @@ export default {
 
       set(value) {
         this.status = value;
-        this.$emit("changed", value);
+        this.$emit("changed", this.name,value);
       },
     },
   },
