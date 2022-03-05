@@ -11,11 +11,11 @@ class sliderkz extends searchBase implements searchInterface
     protected $query = null;
     protected $tableTitles = [];
 
-    public function __construct($crawler,$client)
+    public function __construct($crawler, $client)
     {
         $this->client = $client;
     }
-    
+
     public function search(string $keyword): array
     {
         $this->query = ['q' => trim($keyword)];
@@ -61,12 +61,11 @@ class sliderkz extends searchBase implements searchInterface
         try {
             $response = $this->client->request('GET', $this->searchUrl, ['query' => $this->query]);
             $resp = $response->toArray();
+            if (isset($resp['audios'])) {
+                return array_values($resp["audios"])[0];
+            }
         } catch (ExceptionInterface $e) {
             $this->errors[] = $e->getMessage();
-            return [];
-        }
-        if (isset($resp['audios'])) {
-            return array_values($resp["audios"])[0];
         }
 
         return [];
