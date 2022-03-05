@@ -3,7 +3,6 @@ namespace OCA\NCDownloader\Tools;
 
 use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Tools\YoutubeHelper;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 class Youtube
@@ -31,7 +30,7 @@ class Youtube
         if (isset($binary) && $this->isExecutable($binary)) {
             $this->bin = $binary;
         } else {
-            $this->bin = Helper::findBinaryPath('youtube-dl', __DIR__ . "/../../bin/youtube-dl");
+            $this->bin = Helper::findBinaryPath('youtube-dl', __DIR__ . "/../../bin/yt-dlp");
         }
         if ($this->isInstalled() && !$this->isExecutable()) {
             chmod($this->bin, 0744);
@@ -90,7 +89,7 @@ class Youtube
         $this->setOption('--audio-format', $format);
     }
 
-    public function setvideoFormat($format)
+    public function setVideoFormat($format)
     {
         $this->videoFormat = $format;
     }
@@ -122,29 +121,9 @@ class Youtube
         array_unshift($this->options, $option);
     }
 
-    public function downloadSync($url)
-    {
-        $this->downloadDir = $this->downloadDir ?? $this->defaultDir;
-        $this->prependOption($this->downloadDir . $this->outTpl);
-        $this->prependOption("--output");
-        $this->setUrl($url);
-        $this->prependOption($this->bin);
-        // $this->buildCMD();
-        $process = new Process($this->options, null, $this->env);
-        //the maximum time required to download the file
-        $process->setTimeout($this->timeout);
-        try {
-            $process->mustRun();
-            $output = $process->getOutput();
-        } catch (ProcessFailedException $exception) {
-            $output = $exception->getMessage();
-        }
-
-        return $output;
-    }
-
     public function download($url)
     {
+        $this->install();
         if ($this->audioOnly) {
             $this->audioMode();
         } else {
@@ -255,16 +234,22 @@ class Youtube
     {
         return $this->bin;
     }
-    public static function install()
+    public function install()
     {
         $url = $this->installUrl();
-        $path = \OC::$server->getSystemConfig()->getValue('datadirectory');
-        Helper::Download($url, $path . "/youtube-dl");
+        $file = __DIR__ . "/../../bin/yt-dlp2";
+        try {
+            Helper::Download($url, $file);
+            chmod($file, 0744);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+        return false;
     }
 
     public function installUrl()
     {
-        return "https://yt-dl.org/downloads/latest/youtube-dl";
+        return "https://github.com/shiningw/ncdownloader-bin/raw/master/yt-dlp";
     }
 
 }
