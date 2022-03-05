@@ -123,7 +123,6 @@ class Youtube
 
     public function download($url)
     {
-        $this->install();
         if ($this->audioOnly) {
             $this->audioMode();
         } else {
