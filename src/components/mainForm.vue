@@ -2,13 +2,7 @@
   <form class="main-form" id="nc-vue-unified-form" :action="path">
     <div class="options-group">
       <div
-        class="magnet-link http-link option-buttons active-button"
-        @click.prevent="whichType('aria2', $event)"
-      >
-        HTTP/MAGNET
-      </div>
-      <div
-        class="youtube-dl-link option-buttons"
+        class="youtube-dl-link option-buttons active-button"
         @click.prevent="whichType('youtube-dl', $event)"
       >
         Youtube-dl
@@ -18,6 +12,12 @@
         @click.prevent="whichType('search', $event)"
       >
         {{ searchLabel }}
+      </div>
+      <div
+        class="magnet-link http-link option-buttons"
+        @click.prevent="whichType('aria2', $event)"
+      >
+        HTTP/MAGNET
       </div>
     </div>
     <div class="action-group">
@@ -64,12 +64,12 @@ export default {
   data() {
     return {
       checkedValue: false,
-      path: this.uris.aria2_url,
+      path: this.uris.ytd_url,
       inputType: "download",
-      checkboxes: false,
-      downloadType: "aria2",
-      placeholder: t("ncdownloader", "Paste your http/magnet link here"),
-      searchLabel: t("ncdownloader", "Search Torrents"),
+      checkboxes: true,
+      downloadType: "youtube-dl",
+      placeholder: t("ncdownloader", "Paste your video link here"),
+      searchLabel: t("ncdownloader", "Search Music"),
       searchOptions: this.search_sites ? this.search_sites : this.noOptions(),
     };
   },
@@ -92,6 +92,7 @@ export default {
       this.downloadType = type;
       if (type === "aria2") {
         this.path = this.uris.aria2_url;
+        this.placeholder = t("ncdownloader", "Paste your http/magnet link here");
       } else if (type === "youtube-dl") {
         this.placeholder = t("ncdownloader", "Paste your video link here");
         this.path = this.uris.ytd_url;
@@ -208,11 +209,11 @@ export default {
   .magnet-link,
   .choose-file {
     background-color: #a0a0ae;
-    border-radius: 15px 0px 0px 15px;
   }
 
   .youtube-dl-link {
     background-color: #b8b8ca;
+    border-radius: 15px 0px 0px 15px;
   }
   .search-torrents {
     background-color: #d0d0e0;

@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       placeholder: t("ncdownloader", "Enter keyword to search"),
-      selected: "TPB",
+      selected: "sliderkz",
     };
   },
   components: {
