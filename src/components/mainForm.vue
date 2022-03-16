@@ -24,16 +24,37 @@
       <div class="download-input-container" v-if="inputType === 'download'">
         <textInput :placeholder="placeholder" :dataType="downloadType"></textInput>
         <div class="download-controls-container">
-          <div v-if="checkboxes" class="checkboxes">
-            <label for="audio-only" class="checkbox-label"
-              ><input
-                type="checkbox"
-                id="audio-only"
-                v-model="checkedValue"
-                :value="checkedValue"
-                name="audio-only"
-              /><span>Audio Only</span></label
-            >
+          <div v-if="checkboxes" id="select-value-extension-container">
+            <select :value="selectedExt" id="select-value-extension">
+              <option
+                id="defaultext"
+                :value="defaultext"
+              >
+                Default
+              </option>
+              <optgroup label="Video">
+                <option
+                  id="mp4"
+                  :value="mp4"
+                >
+                  mp4
+                </option>
+              </optgroup>
+              <optgroup label="Audio">
+                <option
+                  id="m4a"
+                  :value="m4a"
+                >
+                  m4a
+                </option>
+                <option
+                  id="mp3"
+                  :value="mp3"
+                >
+                  mp3
+                </option>
+              </optgroup>
+            </select>
           </div>
           <actionButton className="download-button" @clicked="download"></actionButton>
           <uploadFile
@@ -71,6 +92,7 @@ export default {
       placeholder: t("ncdownloader", "Paste your video link here"),
       searchLabel: t("ncdownloader", "Search Music"),
       searchOptions: this.search_sites ? this.search_sites : this.noOptions(),
+      selectedExt: "Default",
     };
   },
   components: {

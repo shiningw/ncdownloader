@@ -71,9 +71,11 @@ class Youtube
             $this->addOption('--add-metadata');
             $this->setOption('--metadata-from-title', "%(artist)s-%(title).64s");
             $this->addOption('--extract-audio');
+        } else {
+            $this->audioFormat = "m4a";
         }
         $pos = strrpos($this->outTpl, '.');
-        $this->outTpl = substr($this->outTpl, 0, $pos) . ".m4a";
+        $this->outTpl = substr($this->outTpl, 0, $pos) . "." . $this->audioFormat;
         //$this->outTpl = "/%(id)s-%(title)s.m4a";
         $this->setAudioFormat($this->audioFormat);
         return $this;
@@ -91,7 +93,8 @@ class Youtube
 
     public function setVideoFormat($format)
     {
-        $this->videoFormat = $format;
+        //$this->videoFormat = $format;
+        $this->setOption('--recode-video', $format);
     }
 
     public function GetUrlOnly()
@@ -126,7 +129,12 @@ class Youtube
         if ($this->audioOnly) {
             $this->audioMode();
         } else {
-            $this->setOption('--format', $this->format);
+            if ((Helper::ffmpegInstalled()) && ($this->videoFormat != "")) {
+                $this->setOption('--format', 'bestvideo+bestaudio/best');
+                $this->setVideoFormat($this->videoFormat);
+            } else {
+                $this->setOption('--format', $this->format);
+            }
         }
         $this->helper = YoutubeHelper::create();
         $this->downloadDir = $this->downloadDir ?? $this->defaultDir;
