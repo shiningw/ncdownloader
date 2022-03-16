@@ -39,8 +39,11 @@ class MainController extends Controller
         $this->dbconn = new DbHelper();
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
         $this->youtube = $youtube;
-        $this->settings = new Settings($UserId);
-
+        $this->settings = new Settings($this->uid);
+        $this->isAdmin = \OC_User::isAdminUser($this->uid);
+        $this->hideError = $this->settings->get("ncd_hide_errors", false);
+        $this->disable_bt_nonadmin = $this->settings->setType($this->settings::TYPE['SYSTEM'])->get("ncd_disable_bt", false);
+        $this->accessDenied = $this->l10n->t("Sorry,only admin users can download files via BT!");
     }
     /**
      * @NoAdminRequired
@@ -68,10 +71,11 @@ class MainController extends Controller
         $params['youtube_installed'] = $youtube_installed = $this->youtube->isInstalled();
         $params['youtube_bin'] = $youtube_bin = $this->youtube->getBin();
         $params['youtube_executable'] = $youtube_executable = $this->youtube->isExecutable();
-        $params['ncd_hide_errors'] = $this->settings->get("ncd_hide_errors", false);
+        $params['ncd_hide_errors'] = $this->hideError;
         $params['counter'] = $this->counters->getCounters();
         $params['python_installed'] = Helper::pythonInstalled();
         $params['ffmpeg_installed'] = Helper::ffmpegInstalled();
+        $params['is_admin'] = $this->isAdmin;
         $sites = [];
         foreach (Helper::getSearchSites() as $site) {
             $label = $site['class']::getLabel();
@@ -107,10 +111,11 @@ class MainController extends Controller
         $params['errors'] = $errors;
 
         $params['settings'] = json_encode([
-            'is_admin' => \OC_User::isAdminUser($this->uid),
+            'is_admin' => $this->isAdmin,
             'admin_url' => $this->urlGenerator->linkToRoute("settings.AdminSettings.index", ['section' => 'ncdownloader']),
             'personal_url' => $this->urlGenerator->linkToRoute("settings.PersonalSettings.index", ['section' => 'ncdownloader']),
-            'ncd_hide_errors' => $params['ncd_hide_errors'],
+            'ncd_hide_errors' => $this->hideError,
+            'ncd_disable_bt' => $this->disable_bt_nonadmin,
         ]);
         return $params;
     }
@@ -121,6 +126,11 @@ class MainController extends Controller
     public function Download()
     {
         $url = trim($this->request->getParam('text-input-value'));
+        if (Helper::isMagnet($url)) {
+            if ($this->disable_bt_nonadmin && !($this->isAdmin)) {
+                return new JSONResponse(['error' => $this->accessDenied]);
+            }
+        }
         //$type = trim($this->request->getParam('type'));
         $resp = $this->_download($url);
         return new JSONResponse($resp);
@@ -156,6 +166,9 @@ class MainController extends Controller
      */
     public function Upload()
     {
+        if ($this->disable_bt_nonadmin && !$this->isAdmin) {
+            return new JSONResponse(['error' => $this->l10n->t($this->accessDenied)]);
+        }
         if (is_uploaded_file($file = $_FILES['torrentfile']['tmp_name'])) {
             $file = $this->aria2->getTorrentsDir() . '/' . Helper::cleanString($_FILES['torrentfile']['name']);
 

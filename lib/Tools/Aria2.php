@@ -58,6 +58,10 @@ class Aria2
         $this->startHook = $startHook;
         $this->rpcUrl = sprintf("http://%s:%s/jsonrpc", $host, $port);
         $this->tokenString = $token ?? 'ncdownloader123';
+        $this->rpcPort = $rpcPort ?? 6800;
+        $this->dlSpeed = $dlSpeed ?? 0;
+        $this->upSpeed = $upSpeed ?? "1M";
+        $this->logLevel = $logLevel ?? 'warn';
         $this->setToken($this->tokenString);
         $this->confDir = $conf_dir;
         $this->sessionFile = $this->confDir . "/aria2.session";
@@ -333,17 +337,17 @@ class Aria2
             '--save-session=' . $this->sessionFile,
             '--input-file=' . $this->sessionFile,
             '--log=' . $this->logFile,
-            '--rpc-listen-port=6800',
+            '--rpc-listen-port=' . $this->rpcPort,
             '--follow-torrent=true',
             '--enable-dht=true',
             '--enable-peer-exchange=true',
             '--peer-id-prefix=-TR2770-',
             '--user-agent=Transmission/2.77',
-            '--log-level=notice',
+            '--log-level=' . $this->logLevel,
             '--seed-ratio=1.0',
             '--bt-seed-unverified=true',
-            '--max-overall-upload-limit=1M',
-            '--max-overall-download-limit=0',
+            '--max-overall-upload-limit=' . $this->upSpeed,
+            '--max-overall-download-limit=' . $this->dlSpeed,
             '--max-connection-per-server=4',
             '--max-concurrent-downloads=10',
             '--check-certificate=false',
