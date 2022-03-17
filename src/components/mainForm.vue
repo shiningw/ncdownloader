@@ -39,6 +39,12 @@
                 >
                   mp4
                 </option>
+                <option
+                  id="webm"
+                  :value="webm"
+                >
+                  webm
+                </option>
               </optgroup>
               <optgroup label="Audio">
                 <option
@@ -52,6 +58,12 @@
                   :value="mp3"
                 >
                   mp3
+                </option>
+                <option
+                  id="vorbis"
+                  :value="vorbis"
+                >
+                  vorbis
                 </option>
               </optgroup>
             </select>

@@ -63,7 +63,7 @@ export default {
         formData["extension"] = formData["select-value-extension"];
         if (formData["select-value-extension"] === "Default") {
             formData["extension"] = "";
-        } else if ((formData["select-value-extension"] === "mp3" ) || (formData["select-value-extension"] === "m4a" )) {
+        } else if ((formData["select-value-extension"] === "mp3" ) || (formData["select-value-extension"] === "m4a" ) || (formData["select-value-extension"] === "vorbis" ) ) {
             formData["audio-only"] = "true";
         }
         helper.info(formData["extension"]);
