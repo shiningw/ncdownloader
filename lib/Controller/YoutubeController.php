@@ -80,6 +80,11 @@ class YoutubeController extends Controller
         $url = trim($this->request->getParam('text-input-value'));
         $yt = $this->youtube;
         $yt->audioOnly = (bool) $this->request->getParam('audio-only');
+        if ($yt->audioOnly) {
+            $yt->audioFormat = $this->request->getParam('extension');
+        } else {
+            $yt->videoFormat = $this->request->getParam('extension');
+        }
         if (!$yt->isInstalled()) {
             return new JSONResponse(["error" => "Please install the latest youtube-dl or make the bundled binary file executable in ncdownloader/bin"]);
         }

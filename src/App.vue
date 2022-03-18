@@ -58,9 +58,15 @@ export default {
       let formData = helper.getData(formWrapper);
       let inputValue = formData["text-input-value"];
       let message;
-      //formData.audioOnly = document.getElementById('audio-only').checked;
       if (formData.type === "youtube-dl") {
-        formData["audio-only"] = formData["audio-only"] === "true";
+        formData["audio-only"] = "";
+        formData["extension"] = "";
+        if (formData["select-value-extension"] !== "Default") {
+            formData["extension"] = formData["select-value-extension"];
+            if ((formData["select-value-extension"] === "mp3" ) || (formData["select-value-extension"] === "m4a" ) || (formData["select-value-extension"] === "vorbis" ) ) {
+                formData["audio-only"] = "true";
+            }
+        }
         message = helper.t("Download task started!");
       }
       if (!helper.isURL(inputValue) && !helper.isMagnetURI(inputValue)) {
