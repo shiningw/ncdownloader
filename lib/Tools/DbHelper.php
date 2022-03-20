@@ -124,4 +124,18 @@ class DbHelper
         return $query->execute();
     }
 
+    public function getDBType(): string
+    {
+        return \OC::$server->getConfig()->getSystemValue('dbtype', "mysql");
+    }
+
+    public function getExtra($data)
+    {
+        if ($this->getDBType() == "pgsql" && is_resource($data)) {
+            $extra = pg_unescape_bytea(stream_get_contents($data));
+            return unserialize($extra);
+        }
+        return unserialize($data);
+    }
+
 }

@@ -50,7 +50,7 @@ class YoutubeController extends Controller
         $folderLink = $this->urlGenerator->linkToRoute('files.view.index', $params);
         foreach ($data as $value) {
             $tmp = [];
-            $extra = unserialize($value['data']);
+            $extra = $this->dbconn->getExtra($value["data"]);
             $filename = sprintf('<a class="download-file-folder" href="%s">%s</a>', $folderLink, $value['filename']);
             $fileInfo = sprintf('<div class="ncd-file-info"><button id="icon-clipboard" class="icon-clipboard" data-text="%s"></button> %s | % s</div>', $extra['link'], $value['filesize'], date("Y-m-d H:i:s", $value['timestamp']));
             $tmp['filename'] = array($filename, $fileInfo);
@@ -117,7 +117,7 @@ class YoutubeController extends Controller
         }
 
         $row = $this->dbconn->getByGid($gid);
-        $data = unserialize($row['data']);
+        $data = $this->dbconn->getExtra($value["data"]);;
         if (!isset($data['pid'])) {
             if ($this->dbconn->deleteByGid($gid)) {
                 $msg = sprintf("%s is deleted from database!", $gid);
@@ -152,7 +152,7 @@ class YoutubeController extends Controller
             return new JSONResponse(['error' => "no gid value is received!"]);
         }
         $row = $this->dbconn->getByGid($gid);
-        $data = unserialize($row['data']);
+        $data = $this->dbconn->getExtra($row["data"]);
         if (!empty($data['link'])) {
             //$this->dbconn->deleteByGid($gid);
             $resp = $this->youtube->forceIPV4()->download($data['link']);

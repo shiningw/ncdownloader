@@ -57,6 +57,10 @@ class YoutubeHelper
         $this->gid = Helper::generateGID($extra['link']);
         $file = $this->getFilePath($buffer);
         if ($file) {
+            $extra = serialize($extra);
+            if($this->dbconn->getDBType() == "pgsql"){
+                $extra = pg_escape_bytea($extra);
+            }
             $data = [
                 'uid' => $this->user,
                 'gid' => $this->gid,
@@ -64,7 +68,7 @@ class YoutubeHelper
                 'filename' => basename($file),
                 'status' => Helper::STATUS['ACTIVE'],
                 'timestamp' => time(),
-                'data' => serialize($extra),
+                'data' => $extra,
             ];
             //save the filename as this runs only once
             $this->file = $file;
