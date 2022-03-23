@@ -18,6 +18,7 @@ class YoutubeController extends Controller
     private $settings = null;
     //@config OC\AppConfig
     private $l10n;
+    private $audio_extensions = array("mp3", "m4a", "vorbis");
 
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Youtube $youtube)
     {
@@ -79,10 +80,11 @@ class YoutubeController extends Controller
         $params = array();
         $url = trim($this->request->getParam('text-input-value'));
         $yt = $this->youtube;
-        $yt->audioOnly = (bool) $this->request->getParam('audio-only');
-        if ($yt->audioOnly) {
+        if (in_array($this->request->getParam('extension'), $this->audio_extensions)) {
+            $yt->audioOnly = TRUE;
             $yt->audioFormat = $this->request->getParam('extension');
         } else {
+            $yt->audioOnly = FALSE;
             $yt->videoFormat = $this->request->getParam('extension');
         }
         if (!$yt->isInstalled()) {
@@ -154,6 +156,15 @@ class YoutubeController extends Controller
         $row = $this->dbconn->getByGid($gid);
         $data = $this->dbconn->getExtra($row["data"]);
         if (!empty($data['link'])) {
+            if (isset($data['ext'])) {
+                if (in_array($data['ext'], $this->audio_extensions)) {
+                    $this->youtube->audioOnly = TRUE;
+                    $this->youtube->audioFormat = $data['ext'];
+                } else {
+                    $this->youtube->audioOnly = FALSE;
+                    $this->youtube->videoFormat = $data['ext'];
+                }
+            }
             //$this->dbconn->deleteByGid($gid);
             $resp = $this->youtube->forceIPV4()->download($data['link']);
             folderScan::sync();

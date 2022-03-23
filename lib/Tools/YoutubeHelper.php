@@ -30,7 +30,8 @@ class YoutubeHelper
     }
     public function getFilePath($output)
     {
-        $rules = '#\[download\]\s+Destination:\s+(?<filename>.*\.(?<ext>(mp4|mp3|aac|webm|m4a|ogg|3gp|mkv|wav|flv)))#i';
+        $rules = '#\[(download|ExtractAudio|VideoConvertor|Merger)\]((\s+|\s+Converting.*;\s+)Destination:\s+|\s+Merging formats into\s+\")' .
+        '(?<filename>.*\.(?<ext>(mp4|mp3|aac|webm|m4a|ogg|3gp|mkv|wav|flv)))#i';
 
         preg_match($rules, $output, $matches);
 
@@ -70,9 +71,14 @@ class YoutubeHelper
                 'timestamp' => time(),
                 'data' => $extra,
             ];
+            if (isset($this->file)) {
+                $sql = sprintf("UPDATE %s set filename = ? WHERE gid = ?", $this->tablename);
+                $this->dbconn->executeUpdate($sql, [basename($file), $this->gid]);
+            } else {
+                $this->dbconn->insert($data);
+            }
             //save the filename as this runs only once
-            $this->file = $file;
-            $this->dbconn->insert($data);
+            $this->file = basename($file);
             //$this->dbconn->save($data,[],['gid' => $this->gid]);
         }
         if (preg_match_all(self::PROGRESS_PATTERN, $buffer, $matches, PREG_SET_ORDER) !== false) {

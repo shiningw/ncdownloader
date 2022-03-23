@@ -28,7 +28,7 @@
             <select :value="selectedExt" id="select-value-extension">
               <option
                 id="defaultext"
-                :value="defaultext"
+                value="defaultext"
               >
                 Default
               </option>
@@ -104,7 +104,7 @@ export default {
       placeholder: t("ncdownloader", "Paste your http/magnet link here"),
       searchLabel: t("ncdownloader", "Search Torrents"),
       searchOptions: this.search_sites ? this.search_sites : this.noOptions(),
-      selectedExt: "Default",
+      selectedExt: "defaultext",
     };
   },
   components: {

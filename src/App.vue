@@ -59,13 +59,9 @@ export default {
       let inputValue = formData["text-input-value"];
       let message;
       if (formData.type === "youtube-dl") {
-        formData["audio-only"] = "";
         formData["extension"] = "";
-        if (formData["select-value-extension"] !== "Default") {
+        if (formData["select-value-extension"] !== "defaultext") {
             formData["extension"] = formData["select-value-extension"];
-            if ((formData["select-value-extension"] === "mp3" ) || (formData["select-value-extension"] === "m4a" ) || (formData["select-value-extension"] === "vorbis" ) ) {
-                formData["audio-only"] = "true";
-            }
         }
         message = helper.t("Download task started!");
       }
