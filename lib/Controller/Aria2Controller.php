@@ -186,7 +186,7 @@ class Aria2Controller extends Controller
             if ($row = $this->dbconn->getByGid($gid)) {
                 $filename = $row['filename'];
                 $timestamp = $row['timestamp'];
-                $extra = unserialize($row['data']);
+                $extra = $this->dbconn->getExtra(($row['data']));
             } else if (isset($value['files'][0]['path'])) {
                 $parts = explode("/", ($path = $value['files'][0]['path']));
                 if (count($parts) > 1) {

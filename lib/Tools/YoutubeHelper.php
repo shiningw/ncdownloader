@@ -17,6 +17,7 @@ class YoutubeHelper
     public $file = null;
     public $filesize = null;
     protected $pid = 0;
+    private static $instance = null;
     public function __construct()
     {
         $this->dbconn = new DbHelper();
@@ -26,7 +27,12 @@ class YoutubeHelper
 
     public static function create()
     {
-        return new static();
+
+        if (!self::$instance) {
+            self::$instance = new static();
+        }
+
+        return self::$instance;
     }
     public function getFilePath($output)
     {
