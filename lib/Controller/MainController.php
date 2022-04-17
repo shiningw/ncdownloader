@@ -32,7 +32,6 @@ class MainController extends Controller
         $this->uid = $UserId;
         $this->l10n = $IL10N;
         //$this->rootFolder = $rootFolder;
-        OC_Util::setupFS();
         $this->aria2 = $aria2;
         $this->aria2->init();
         $this->urlGenerator = \OC::$server->getURLGenerator();
