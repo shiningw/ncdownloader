@@ -132,7 +132,12 @@ class DbHelper
     public function getExtra($data)
     {
         if ($this->getDBType() == "pgsql" && is_resource($data)) {
-            $extra = pg_unescape_bytea(stream_get_contents($data));
+            if (function_exists("pg_unescape_bytea")) {
+                $extra = pg_unescape_bytea(stream_get_contents($data));
+            }
+            else {
+                $extra = stream_get_contents($data);
+            }
             return unserialize($extra);
         }
         return unserialize($data);
