@@ -56,7 +56,7 @@ export default {
       let element = event.target;
       let formWrapper = element.closest("form");
       let formData = helper.getData(formWrapper);
-      let inputValue = formData["text-input-value"];
+      let inputValue = formData["text-input-value"].trim();
       let message;
       if (formData.type === "youtube-dl") {
         formData["audio-only"] = "";

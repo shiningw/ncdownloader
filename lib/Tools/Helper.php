@@ -10,7 +10,7 @@ class Helper
 {
     public const DOWNLOADTYPE = ['ARIA2' => 1, 'YOUTUBE-DL' => 2, 'OTHERS' => 3];
     public const STATUS = ['ACTIVE' => 1, 'PAUSED' => 2, 'COMPLETE' => 3, 'WAITING' => 4, 'ERROR' => 5];
-    const MAXLEN = 255;
+    const MAXFILELEN = 255;
 
     public static function isUrl($URL)
     {
@@ -61,8 +61,8 @@ class Helper
     }
     public static function clipFilename($filename)
     {
-        if (($len = strlen($filename)) > 64) {
-            return substr($filename, $len - 64);
+        if (($len = strlen($filename)) > self::MAXFILELEN) {
+            return substr($filename, $len - self::MAXFILELEN);
         }
         return $filename;
     }
@@ -73,7 +73,7 @@ class Helper
         } else {
             $filename = self::getUrlPath($url);
         }
-        return substr($filename, 0, self::MAXLEN);
+        return substr($filename, 0, self::MAXFILELEN);
     }
     public static function formatBytes($size, $precision = 2)
     {
