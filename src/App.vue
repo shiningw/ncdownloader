@@ -62,10 +62,10 @@ export default {
         formData["audio-only"] = "";
         formData["extension"] = "";
         if (formData["select-value-extension"] !== "Default") {
-            formData["extension"] = formData["select-value-extension"];
-            if ((formData["select-value-extension"] === "mp3" ) || (formData["select-value-extension"] === "m4a" ) || (formData["select-value-extension"] === "vorbis" ) ) {
-                formData["audio-only"] = "true";
-            }
+          formData["extension"] = formData["select-value-extension"];
+          if (["mp3", "m4a", "vorbis"].includes(formData["select-value-extension"])) {
+            formData["audio-only"] = "true";
+          }
         }
         message = helper.t("Download task started!");
       }
