@@ -107,6 +107,9 @@ class Aria2
         if ($dir = $this->getTorrentsDir() && !is_dir($dir)) {
             mkdir($dir, 0755, true);
         }
+        if (!is_dir($dir = $this->getTorrentsDir())) {
+            mkdir($dir, 0755, true);
+        }
         $this->followTorrent(true);
     }
     public function setToken($token)
