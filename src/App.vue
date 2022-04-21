@@ -24,10 +24,15 @@ const successCallback = (data, element) => {
   }
   if (data.hasOwnProperty("error")) {
     helper.error(t("ncdownloader", data.error));
-  } else if (data.hasOwnProperty("message")) {
-    helper.message(t("ncdownloader", data.message));
-  } else if (data.hasOwnProperty("file")) {
-    helper.message(t("ncdownloader", "Downloading" + " " + data.file));
+  } else {
+    if (data.hasOwnProperty("message")) {
+      helper.message(t("ncdownloader", data.message));
+    } else if (data.hasOwnProperty("file")) {
+      helper.message(t("ncdownloader", "Downloading" + " " + data.file));
+    }
+
+    document.getElementById("text-input-value").value = "";
+    document.querySelector(".active-downloads a").click();
   }
 };
 
@@ -83,6 +88,10 @@ export default {
           successCallback(data, element);
         })
         .send();
+      if (formData.type === "youtube-dl") {
+        document.getElementById("text-input-value").value = "";
+        document.querySelector(".youtube-dl-downloads a").click();
+      }
     },
     search(event, vm) {
       let element = event.target;
