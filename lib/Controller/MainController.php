@@ -27,6 +27,7 @@ class MainController extends Controller
 
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Youtube $youtube)
     {
+
         parent::__construct($appName, $request);
         $this->appName = $appName;
         $this->uid = $UserId;

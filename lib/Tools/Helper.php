@@ -392,14 +392,16 @@ class Helper
 
     public static function getLocalFolder(string $path): string
     {
-        //without calling this, filesystem::getLocalFolder doesn't work
-        OC_Util::setupFS();
-        return Filesystem::getLocalFolder($path);
+        if (self::getUID()) {
+            OC_Util::setupFS();
+            return Filesystem::getLocalFolder($path);
+        }
+        return "";
     }
 
     public static function getRealDownloadDir($uid = null): string
     {
-        $dlDir = self::getDownloadDir();;
+        $dlDir = self::getDownloadDir();
         return self::getLocalFolder($dlDir);
     }
     public static function getRealTorrentsDir($uid = null): string
@@ -415,7 +417,9 @@ class Helper
 
     public static function getUID(): string
     {
-        return self::getUser()->getUID();
+        $user = self::getUser();
+        $uid = $user ? $user->getUID() : "";
+        return $uid;
     }
 
     public static function getSettings($key, $default = null, int $type = Settings::TYPE['USER'])
