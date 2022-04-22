@@ -7,17 +7,19 @@ use OC\AllConfig;
 class Settings extends AllConfig
 {
     //@config OC\AppConfig
-    private $config;
+    private $appConfig;
 
     //@OC\SystemConfig
     private $sysConfig;
 
     //@OC\AllConfig
     private $allConfig;
-
+    private $user;
+    private $appName;
     //type of settings (system = 1 or app =2)
     private $type;
-    public const TYPE = ['SYSTEM' => 0x001, 'USER' => 0x010, 'APP' => 0x100];
+    private static $instance = null;
+    public const TYPE = ['SYSTEM' => 1, 'USER' => 2, 'APP' => 3];
     public function __construct($user = null)
     {
         $this->appConfig = \OC::$server->getAppConfig();
@@ -28,6 +30,14 @@ class Settings extends AllConfig
         $this->allConfig = new AllConfig($this->sysConfig);
         //$this->connAdapter = \OC::$server->getDatabaseConnection();
         //$this->conn = $this->connAdapter->getInner();
+    }
+    public static function create($user = null)
+    {
+
+        if (!self::$instance) {
+            self::$instance = new static($user);
+        }
+        return self::$instance;
     }
     public function setType($type)
     {
@@ -103,142 +113,5 @@ class Settings extends AllConfig
             $value[$key] = $this->allConfig->getUserValue($this->user, $this->appName, $key);
         }
         return $value;
-    }
-
-}
-
-class customSettings
-{
-    private $name = null;
-    private $dbType = 0;
-    private $table = 'ncdownloader_settings';
-    private $uid = null;
-    const PGSQL = 1, MYSQL = 2, SQL = 3;
-    /* @var OC\DB\ConnectionAdapter */
-    private $connAdapter;
-    /* @var OC\DB\Connection */
-    private $conn;
-    private $type = 2; //personal = 2,admin =1
-
-    public function __construct()
-    {
-        if (\OC::$server->getConfig()->getSystemValue('dbtype') == 'pgsql') {
-            $this->dbType = PGSQL;
-        }
-        $this->connAdapter = \OC::$server->getDatabaseConnection();
-        $this->conn = $this->connAdapter->getInner();
-
-        $this->prefixTable();
-    }
-
-    private function prefixTable()
-    {
-        $this->table = '*PREFIX*' . $this->table;
-        return $this->table;
-    }
-
-    public function set($name, $value)
-    {
-        if ($this->have($name)) {
-            $this->update($name, $value);
-        } else {
-            $this->insert($name, $value);
-        }
-    }
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    public function get($name)
-    {
-
-        if (isset($this->uid)) {
-            $sql = sprintf("SELECT value FROM %s WHERE uid = ? AND name = ? LIMIT 1", $this->table);
-            $query = \OC_DB::prepare($sql);
-            $result = $query->execute(array($this->uid, $name));
-        } else {
-            $sql = sprintf("SELECT value FROM %s WHERE name = ? LIMIT 1", $this->table);
-            $query = \OC_DB::prepare($sql);
-            $result = $query->execute(array($name));
-        }
-        if ($query->rowCount() == 1) {
-            return $result->fetchOne();
-        }
-        return null;
-    }
-
-    public function setUID($uid)
-    {
-        $this->uid = $uid;
-    }
-
-    public function setTable($table)
-    {
-        $this->table = $table;
-    }
-    public function getTable()
-    {
-        return $this->table;
-    }
-
-    public function have($name)
-    {
-        if (isset($this->uid)) {
-            $sql = sprintf("SELECT value FROM %s WHERE uid = ? AND name = ? AND type = ? LIMIT 1", $this->table);
-            $query = \OC_DB::prepare($sql);
-            $query->execute(array($name, $this->uid, $this->type));
-        } else {
-            $sql = sprintf("SELECT value FROM %s WHERE name = ? AND type = ? LIMIT 1", $this->table);
-            $query = \OC_DB::prepare($sql);
-            $query->execute(array($name, $this->type));
-        }
-
-        if ($query->rowCount() == 1) {
-            return true;
-        }
-        return false;
-    }
-
-    public function getAll()
-    {
-        $sql = 'SELECT `name`, `value` FROM `*PREFIX*' . $this->table . '`'
-            . (!is_null($this->uid) ? ' WHERE `UID` = ?' : '');
-        if ($this->DbType == 1) {
-            $sql = 'SELECT "name", "value" FROM *PREFIX*' . $this->table . ''
-                . (!is_null($this->uid) ? ' WHERE "uid" = ?' : '');
-        }
-        $query = \OC_DB::prepare($sql);
-
-        if (!is_null($this->uid)) {
-            return $query->execute(array($this->uid));
-        } else {
-            return $query->execute();
-        }
-    }
-
-    public function update($value)
-    {
-        if (isset($this->uid)) {
-            $sql = sprintf("UPDATE %s SET value = ? WHERE name = ? AND type = ? AND uid = ?", $this->table);
-            //OCP\DB\IPreparedStatement
-            $query = \OC_DB::prepare($sql);
-            $query->execute(array($value, $name, $this->type, $this->uid));
-        } else {
-            $sql = sprintf("UPDATE %s SET value = ? WHERE name = ? AND type = ?", $this->table);
-            //OCP\DB\IPreparedStatement
-            $query = \OC_DB::prepare($sql);
-            $query->execute(array($value, $name, $this->type));
-        }
-
-    }
-
-    public function insert($name, $value)
-    {
-        $sql = sprintf("INSERT INTO %s (name,value,type,uid) VALUES(?,?,?,?)", $this->table);
-        //OCP\DB\IPreparedStatement
-        $query = \OC_DB::prepare($sql);
-        $query->execute(array($name, $value, $this->type, $this->uid));
-
     }
 }
