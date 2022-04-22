@@ -67,6 +67,7 @@ class DbHelper
             ->andWhere('type = :type')
             ->setParameter('uid', $uid)
             ->setParameter('type', Helper::DOWNLOADTYPE['YOUTUBE-DL'])
+            ->orderBy('id', 'DESC')
             ->execute();
         return $qb->fetchAll();
     }
