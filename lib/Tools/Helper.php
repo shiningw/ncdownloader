@@ -399,16 +399,12 @@ class Helper
 
     public static function getRealDownloadDir($uid = null): string
     {
-        $uid = $uid ?? self::getUID();
-        $settings = new Settings($uid);
-        $dlDir = $settings->get('ncd_downloader_dir') ?? "/Downloads";
+        $dlDir = self::getDownloadDir();;
         return self::getLocalFolder($dlDir);
     }
     public static function getRealTorrentsDir($uid = null): string
     {
-        $uid = $uid ?? self::getUID();
-        $settings = new Settings($uid);
-        $dir = $settings->get('ncd_torrents_dir') ?? "/Torrents";
+        $dir = self::getSettings('ncd_torrents_dir', "/Torrents");
         return self::getLocalFolder($dir);
     }
 
@@ -422,14 +418,24 @@ class Helper
         return self::getUser()->getUID();
     }
 
-    public static function getYoutubeConfig($uid = null): array
+    public static function getSettings($key, $default = null, int $type = Settings::TYPE['USER'])
+    {
+        $settings = self::newSettings();
+        return $settings->setType($type)->get($key, $default);
+    }
+
+    public static function newSettings($uid = null)
     {
         $uid = $uid ?? self::getUID();
-        $settings = new Settings($uid);
+        return Settings::create($uid);
+    }
+
+    public static function getYoutubeConfig($uid = null): array
+    {
         $config = [
-            'binary' => $settings->setType(Settings::TYPE['SYSTEM'])->get("ncd_yt_binary"),
+            'binary' => self::getSettings("ncd_yt_binary", null, Settings::TYPE['SYSTEM']),
             'downloadDir' => Helper::getRealDownloadDir(),
-            'settings' => $settings->setType(Settings::TYPE['USER'])->getYoutube(),
+            'settings' => self::newSettings()->getYoutube(),
         ];
         return $config;
     }
@@ -438,7 +444,7 @@ class Helper
     {
         $options = [];
         $uid = $uid ?? self::getUID();
-        $settings = new Settings($uid);
+        $settings = self::newSettings($uid);
         $realDownloadDir = Helper::getRealDownloadDir($uid);
         $torrentsDir = Helper::getRealTorrentsDir($uid);
         $appPath = self::getAppPath();
@@ -467,7 +473,7 @@ class Helper
     {
         return \OC::$server->getAppManager()->getAppPath('ncdownloader');
     }
-    public static function folderUpdated(string $dir):bool
+    public static function folderUpdated(string $dir): bool
     {
         if (!file_exists($dir)) {
             return false;
@@ -485,5 +491,9 @@ class Helper
             return true;
         }
         return false;
+    }
+    public static function getDownloadDir(): string
+    {
+        return self::getSettings('ncd_downloader_dir', "/Downloads");
     }
 }

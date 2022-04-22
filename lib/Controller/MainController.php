@@ -38,10 +38,9 @@ class MainController extends Controller
         $this->dbconn = new DbHelper();
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
         $this->youtube = $youtube;
-        $this->settings = new Settings($this->uid);
         $this->isAdmin = \OC_User::isAdminUser($this->uid);
-        $this->hideError = $this->settings->get("ncd_hide_errors", false);
-        $this->disable_bt_nonadmin = $this->settings->setType($this->settings::TYPE['SYSTEM'])->get("ncd_disable_bt", false);
+        $this->hideError = Helper::getSettings("ncd_hide_errors", false);
+        $this->disable_bt_nonadmin = Helper::getSettings("ncd_disable_bt", false, Settings::TYPE["SYSTEM"]);
         $this->accessDenied = $this->l10n->t("Sorry,only admin users can download files via BT!");
     }
     /**

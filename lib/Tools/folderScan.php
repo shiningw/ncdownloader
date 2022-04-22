@@ -20,8 +20,7 @@ class folderScan
 
     public function getDefaultPath()
     {
-        $settings = new Settings($this->user);
-        return $settings->get('ncd_downloader_dir') ?? "/Downloads";
+        return Helper::getDownloadDir();
     }
     public static function create($path = null, $user = null)
     {

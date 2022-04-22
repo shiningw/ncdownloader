@@ -5,7 +5,6 @@ use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\DbHelper;
 use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\Settings;
 use OCA\NCDownloader\Tools\Youtube;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
@@ -26,8 +25,7 @@ class YoutubeController extends Controller
         $this->uid = $UserId;
         $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->l10n = $IL10N;
-        $this->settings = new Settings($UserId);
-        $this->downloadDir = $this->settings->get('ncd_downloader_dir') ?? "/Downloads";
+        $this->downloadDir = Helper::getDownloadDir();
         $this->dbconn = new DbHelper();
         $this->youtube = $youtube;
         $this->aria2 = $aria2;

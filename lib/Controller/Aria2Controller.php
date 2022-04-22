@@ -32,8 +32,7 @@ class Aria2Controller extends Controller
         $this->l10n = $IL10N;
         $this->rootFolder = $rootFolder;
         $this->urlGenerator = \OC::$server->getURLGenerator();
-        $this->settings = new Settings($UserId);
-        $this->downloadDir = $this->settings->get('ncd_downloader_dir') ?? "/Downloads";
+        $this->downloadDir = Helper::getDownloadDir();
         OC_Util::setupFS();
         //$this->config = \OC::$server->getAppConfig();
         $this->aria2 = $aria2;
