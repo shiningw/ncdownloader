@@ -53,8 +53,10 @@ class folderScan
         try {
             $this->scanner->scan($this->path);
             return ['status' => true, 'path' => $this->path];
-        } catch (ForbiddenException $e) {
+        } catch (\OCP\Files\ForbiddenException $e) {
             $this->logger->warning("Make sure you're running the scan command only as the user the web server runs as");
+        } catch (\OCP\Files\NotFoundException $e) {
+            $this->logger->warning("Path for the scan command not found: " . $e->getMessage());
         } catch (\Exception $e) {
             $this->logger->warning("Exception during scan: " . $e->getMessage() . $e->getTraceAsString());
         }
