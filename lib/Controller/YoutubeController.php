@@ -76,7 +76,10 @@ class YoutubeController extends Controller
      */
     public function Download()
     {
-        $params = array();
+        $dlDir = $this->youtube->getDownloadDir();
+        if (!is_writable($dlDir)) {
+            return new JSONResponse(['error' => sprintf("%s is not writable", $dlDir)]);
+        }
         $url = trim($this->request->getParam('text-input-value'));
         $yt = $this->youtube;
         $yt->audioOnly = (bool) $this->request->getParam('audio-only');
@@ -117,7 +120,7 @@ class YoutubeController extends Controller
         }
 
         $row = $this->dbconn->getByGid($gid);
-        $data = $this->dbconn->getExtra($value["data"]);;
+        $data = $this->dbconn->getExtra($row["data"]);
         if (!isset($data['pid'])) {
             if ($this->dbconn->deleteByGid($gid)) {
                 $msg = sprintf("%s is deleted from database!", $gid);
@@ -193,9 +196,9 @@ class YoutubeController extends Controller
     private function installYTD()
     {
         try {
-            $filename = Helper::getFileName($yt->installUrl());
-            $yt->setDownloadDir($this->dataDir . "/bin");
-            $resp = $this->Save($yt->installUrl(), $filename);
+            $filename = Helper::getFileName($this->installUrl());
+            $this->setDownloadDir($this->dataDir . "/bin");
+            $resp = $this->Save($this->installUrl(), $filename);
             return $resp;
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];

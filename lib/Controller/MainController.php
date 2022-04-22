@@ -11,11 +11,10 @@ use OCA\NCDownloader\Tools\Youtube;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
-//use OCP\Files\IRootFolder;
 use OCP\IL10N;
+//use OCP\Files\IRootFolder;
 use OCP\IRequest;
 use OC_Util;
-use OC\Files\Filesystem;
 
 class MainController extends Controller
 {
@@ -57,7 +56,6 @@ class MainController extends Controller
         // OC_Util::addStyle($this->appName, 'table');
         $params = $this->buildParams();
         $response = new TemplateResponse($this->appName, 'Index', $params);
-
         return $response;
     }
 
@@ -125,6 +123,10 @@ class MainController extends Controller
      */
     public function Download()
     {
+        $dlDir = $this->aria2->getDownloadDir();
+        if (!is_writable($dlDir)) {
+            return new JSONResponse(['error' => sprintf("%s is not writable", $dlDir)]);
+        }
         $url = trim($this->request->getParam('text-input-value'));
         if (Helper::isMagnet($url)) {
             if ($this->disable_bt_nonadmin && !($this->isAdmin)) {

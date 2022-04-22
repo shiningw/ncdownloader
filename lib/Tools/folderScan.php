@@ -10,19 +10,18 @@ class folderScan
 {
     private $user;
     private $path;
+    private $realDir;
     public function __construct($path = null, $user = null)
     {
-        $this->user = $user ?? \OC::$server->getUserSession()->getUser()->getUID();
+        $this->user = $user ?? Helper::getUID();
         $this->path = $path ?? $this->getDefaultPath();
-        $this->realDir = \OC::$server->getSystemConfig()->getValue('datadirectory') . "/" . $this->path;
+        $this->realDir = $realDir ?? Helper::getLocalFolder($this->path);
     }
 
     public function getDefaultPath()
     {
         $settings = new Settings($this->user);
-        $rootFolder = Helper::getUserFolder($this->user);
-        $downloadDir = $settings->get('ncd_downloader_dir') ?? "/Downloads";
-        return $rootFolder . "/" . ltrim($downloadDir, '/\\');
+        return $settings->get('ncd_downloader_dir') ?? "/Downloads";
     }
     public static function create($path = null, $user = null)
     {
@@ -42,7 +41,7 @@ class folderScan
 
     private function update()
     {
-        if (!(self::folderUpdated($this->realDir))) {
+        if (!(Helper::folderUpdated($this->realDir))) {
             return ['message' => "no change"];
         }
         $this->scan();
@@ -65,25 +64,7 @@ class folderScan
         return ['status' => $e->getMessage(), 'path' => $this->path];
 
     }
-    public static function folderUpdated($dir)
-    {
-        if (!file_exists($dir)) {
-            return false;
-        }
-        $checkFile = $dir . "/.lastmodified";
-        if (!file_exists($checkFile)) {
-            $time = \filemtime($dir);
-            file_put_contents($checkFile, $time);
-            return false;
-        }
-        $lastModified = (int) file_get_contents($checkFile);
-        $time = \filemtime($dir);
-        if ($time > $lastModified) {
-            file_put_contents($checkFile, $time);
-            return true;
-        }
-        return false;
-    }
+
 
     //update only folder is modified
     public static function sync($path = null, $user = null)

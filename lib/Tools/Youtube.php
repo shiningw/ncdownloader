@@ -116,7 +116,7 @@ class Youtube
 
     public function getDownloadDir()
     {
-        return $this->getDownloadDir;
+        return $this->downloadDir;
     }
 
     public function prependOption(string $option)
