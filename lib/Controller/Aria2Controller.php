@@ -224,7 +224,7 @@ class Aria2Controller extends Controller
             $tmp = [];
             $actions = [];
             $filename = sprintf('<a class="download-file-folder" href="%s">%s</a>', $folderLink, $filename);
-            $fileInfo = sprintf('<button id="icon-clipboard" class="icon-clipboard" data-text="%s"></button> %s | %s', $extra ? $extra['link'] : 'nolink', $total, date("Y-m-d H:i:s", $timestamp));
+            $fileInfo = sprintf('<button id="icon-clipboard" class="icon-clipboard" data-text="%s"></button> %s | %s', $extra["link"] ?? 'nolink', $total, date("Y-m-d H:i:s", $timestamp));
             $tmp['filename'] = array($filename, $fileInfo);
 
             if ($this->aria2->methodName === "tellStopped") {
