@@ -94,7 +94,7 @@ export default {
         vm.$data.loading = 0;
         return;
       }
-      helper.enabledPolling = 0;
+      helper.disablePolling();
       contentTable.getInstance().loading();
 
       let url = formWrapper.getAttribute("action");
