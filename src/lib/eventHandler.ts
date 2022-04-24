@@ -14,23 +14,26 @@ const eventHandler = {
             });
             return;
         }
-        let el = document.querySelector(target);
-        if (!el) {
+        let items = document.querySelectorAll(target);
+        if (!items) {
             return;
         }
-        el.addEventListener(eventType, function (e) {
-            let element = e.target as HTMLElement;
-            if (element === this && selector === target) {
-                callback.call(element, e);
-                return;
-            }
-            for (; element && element != this; element = element.parentElement) {
-                if (typeof selector === "string" && element.matches(selector)) {
+        items.forEach(el => {
+            el.addEventListener(eventType, function (e) {
+                let element = e.target as HTMLElement;
+                if (element === this && selector === target) {
                     callback.call(element, e);
-                    break;
+                    return;
                 }
-            }
-        });
+                for (; element && element != this; element = element.parentElement) {
+                    if (typeof selector === "string" && element.matches(selector)) {
+                        callback.call(element, e);
+                        break;
+                    }
+                }
+            });
+        })
+
     },
     remove: function (element: target, eventType: string, callback: callback) {
 
