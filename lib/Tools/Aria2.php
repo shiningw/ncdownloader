@@ -101,10 +101,10 @@ class Aria2
             mkdir($this->confDir, 0755, true);
         }
         $dir = "";
-        if ($dir = $this->getDownloadDir() && !is_dir($dir)) {
+        if (($dir = $this->getDownloadDir()) && !is_dir($dir)) {
             mkdir($dir, 0755, true);
         }
-        if ($dir = $this->getTorrentsDir() && !is_dir($dir)) {
+        if (($dir = $this->getTorrentsDir()) && !is_dir($dir)) {
             mkdir($dir, 0755, true);
         }
         $this->followTorrent(true);
@@ -129,7 +129,7 @@ class Aria2
         $this->torrentsDir = $dir;
         return $this;
     }
-    public function getTorrentsDir()
+    public function getTorrentsDir(): string
     {
         return $this->torrentsDir;
     }
@@ -139,7 +139,7 @@ class Aria2
         $this->downloadDir = $dir;
         return $this;
     }
-    public function getDownloadDir()
+    public function getDownloadDir(): string
     {
         return $this->downloadDir;
     }
