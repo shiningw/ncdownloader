@@ -3,7 +3,7 @@ type callback = (...args: any[]) => void
 class Polling {
     private static instance: Polling;
     private timeoutID: number;
-    private delay: number = 1000;
+    private delay: number = 1500;
     private enabled: boolean = false;
     constructor() {
         this.enabled = false;
@@ -24,7 +24,7 @@ class Polling {
     isEnabled() {
         return this.enabled;
     }
-    setDelay(time: number): Polling {
+    setDelay(time: number = 1500): Polling {
         this.delay = time;
         return this;
     }

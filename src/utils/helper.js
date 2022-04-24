@@ -7,7 +7,6 @@ import { translate as t, translatePlural as n } from '@nextcloud/l10n'
 import contentTable from '../lib/contentTable';
 import Http from '../lib/http'
 import Polling from "../lib/polling";
-
 const helper = {
     vue: {},
     addVue(name, object) {
@@ -26,7 +25,7 @@ const helper = {
     disablePolling() {
         Polling.create().disable().clear();
     },
-    polling(delay = 1000, path) {
+    polling(delay = 1500, path) {
         Polling.create().setDelay(delay).run(helper.refresh, path);
     },
     scanFolder(path = "/apps/ncdownloader/scanfolder") {
@@ -37,8 +36,11 @@ const helper = {
             }).send();
         });
     },
-    pollingFolder(delay = 1000) {
+    pollingFolder(delay = 1500) {
         Polling.create().setDelay(delay).run(helper.scanFolder);
+    },
+    pollingYoutube(delay = 1500) {
+        Polling.create().setDelay(delay).run(helper.refresh, "/apps/ncdownloader/youtube/get");
     },
     refresh(path) {
         path = path || "/apps/ncdownloader/status/active";

@@ -11,9 +11,6 @@ export default {
             let container = document.querySelector(tableContainer);
             let currentType = container.getAttribute("type");
             let path = basePath + type;
-            if (type === "youtube-dl") {
-                path = "/apps/ncdownloader/youtube/get";
-            }
             let name = type + "-downloads";
             //avoid repeated click
             if (currentType === name && helper.isPolling()) {
@@ -21,11 +18,15 @@ export default {
             }
             container.setAttribute("type", name);
             container.className = "table " + name;
-            let delay = 15000;
-            if (['active', 'youtube-dl'].includes(type)) {
-                delay = 1500;
+            let delay;
+            if (!['active', 'youtube-dl'].includes(type)) {
+                delay = 15000;
             }
-            helper.polling(delay, path);
+            if (type === "youtube-dl") {
+                helper.pollingYoutube();
+            } else {
+                helper.polling(delay, path);
+            }
         };
         eventHandler.add("click", ".waiting-downloads a", event => clickHandler(event, 'waiting'));
         eventHandler.add("click", ".complete-downloads a", event => clickHandler(event, 'complete'));
