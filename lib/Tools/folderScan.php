@@ -2,7 +2,6 @@
 namespace OCA\NCDownloader\Tools;
 
 use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\Settings;
 use OC\Files\Utils\Scanner;
 use \OCP\EventDispatcher\IEventDispatcher;
 
@@ -20,7 +19,7 @@ class folderScan
 
     public function getDefaultPath()
     {
-        return Helper::getDownloadDir();
+        return Helper::getUserFolder() . Helper::getDownloadDir();
     }
     public static function create($path = null, $user = null)
     {
@@ -53,17 +52,14 @@ class folderScan
         $this->scanner = new Scanner($this->user, \OC::$server->getDatabaseConnection(), \OC::$server->query(IEventDispatcher::class), $this->logger);
         try {
             $this->scanner->scan($this->path);
-            return ['status' => 'OK', 'path' => $this->path];
+            return ['status' => true, 'path' => $this->path];
         } catch (ForbiddenException $e) {
             $this->logger->warning("Make sure you're running the scan command only as the user the web server runs as");
         } catch (\Exception $e) {
-
             $this->logger->warning("Exception during scan: " . $e->getMessage() . $e->getTraceAsString());
         }
-        return ['status' => $e->getMessage(), 'path' => $this->path];
-
+        return ['status' => false, 'path' => $this->path];
     }
-
 
     //update only folder is modified
     public static function sync($path = null, $user = null)
