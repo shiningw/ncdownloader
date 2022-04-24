@@ -15,6 +15,7 @@ use OCP\IL10N;
 //use OCP\Files\IRootFolder;
 use OCP\IRequest;
 use OC_Util;
+use OCA\NCDownloader\Tools\folderScan;
 
 class MainController extends Controller
 {
@@ -192,6 +193,16 @@ class MainController extends Controller
             $this->dbconn->save($data);
             $resp = ['message' => $result['filename'], 'result' => $result['gid'], 'file' => $result['filename']];
         }
+        return new JSONResponse($resp);
+    }
+
+        /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function scanFolder()
+    {
+        $resp = folderScan::create()->scan();
         return new JSONResponse($resp);
     }
 
