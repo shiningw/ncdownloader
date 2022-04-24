@@ -7,7 +7,7 @@ export default {
             event.stopPropagation();
             event.preventDefault();
             let element = event.target;
-            helper.hideDownload();
+            //helper.hideDownload();
             let currentType = helper.getContentTableType();
             let path = element.getAttribute("path");
             let name = element.getAttribute("id");

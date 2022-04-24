@@ -58,6 +58,10 @@ export default {
       let formData = helper.getData(formWrapper);
       let inputValue = formData["text-input-value"].trim();
       let message;
+      if (!helper.isURL(inputValue) && !helper.isMagnetURI(inputValue)) {
+        helper.error(t("ncdownloader", inputValue + " is Invalid"));
+        return;
+      }
       if (formData.type === "youtube-dl") {
         formData["audio-only"] = "";
         formData["extension"] = "";
@@ -68,10 +72,11 @@ export default {
           }
         }
         message = helper.t("Download task started!");
-      }
-      if (!helper.isURL(inputValue) && !helper.isMagnetURI(inputValue)) {
-        helper.error(t("ncdownloader", inputValue + " is Invalid"));
-        return;
+        helper.pollingYoutube();
+        helper.setContentTableType("youtube-dl-downloads");
+      } else {
+        helper.polling();
+        helper.setContentTableType("active-downloads");
       }
       if (message) {
         helper.info(message);
