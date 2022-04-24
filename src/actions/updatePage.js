@@ -1,38 +1,32 @@
 import helper from '../utils/helper'
 import eventHandler from '../lib/eventHandler';
-const basePath = "/apps/ncdownloader/status/";
-const tableContainer = ".table";
 export default {
     run: function () {
 
-        const clickHandler = (event, type) => {
+        const clickHandler = (event) => {
+            event.stopPropagation();
             event.preventDefault();
+            let element = event.target;
             helper.hideDownload();
-            let container = document.querySelector(tableContainer);
-            let currentType = container.getAttribute("type");
-            let path = basePath + type;
-            let name = type + "-downloads";
+            let currentType = helper.getContentTableType();
+            let path = element.getAttribute("path");
+            let name = element.getAttribute("id");
             //avoid repeated click
             if (currentType === name && helper.isPolling()) {
                 return;
             }
-            container.setAttribute("type", name);
-            container.className = "table " + name;
+            helper.setContentTableType(name);
             let delay;
-            if (!['active', 'youtube-dl'].includes(type)) {
+            if (!['active-downloads', 'youtube-dl-downloads'].includes(name)) {
                 delay = 15000;
             }
-            if (type === "youtube-dl") {
+            if (name === "youtube-dl-downloads") {
                 helper.pollingYoutube();
             } else {
                 helper.polling(delay, path);
             }
         };
-        eventHandler.add("click", ".waiting-downloads a", event => clickHandler(event, 'waiting'));
-        eventHandler.add("click", ".complete-downloads a", event => clickHandler(event, 'complete'));
-        eventHandler.add("click", ".active-downloads a", event => clickHandler(event, 'active'));
-        eventHandler.add("click", ".fail-downloads a", event => clickHandler(event, 'fail'));
-        eventHandler.add("click", ".youtube-dl-downloads a", event => clickHandler(event, 'youtube-dl'));
+        eventHandler.add("click", ".download-queue a", event => clickHandler(event));
         eventHandler.add("click", "#ncdownloader-table-wrapper", ".download-file-folder", function (event) {
             event.stopPropagation();
             event.preventDefault();

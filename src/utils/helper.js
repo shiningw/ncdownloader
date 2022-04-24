@@ -267,6 +267,15 @@ const helper = {
     },
     redirect(url) {
         window.location.href = url;
+    },
+    getContentTableType() {
+        let container = document.getElementById("ncdownloader-table-wrapper");
+        return container.getAttribute("type");
+    },
+    setContentTableType(name) {
+        let container = document.getElementById("ncdownloader-table-wrapper");
+        container.setAttribute("type", name);
+        container.className = "table " + name;
     }
 }
 
