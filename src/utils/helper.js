@@ -202,7 +202,7 @@ const helper = {
     showDownload() {
         helper.showElement('download');
         contentTable.getInstance().clear();
-        helper.enabledPolling = 0;
+        //helper.disablePolling();
     },
     hideDownload() {
         helper.hideElement('download');
