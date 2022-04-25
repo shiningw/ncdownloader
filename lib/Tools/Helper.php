@@ -2,15 +2,19 @@
 
 namespace OCA\NCDownloader\Tools;
 
+use Exception;
 use OCA\NCDownloader\Search\Sites\searchInterface;
 use OCA\NCDownloader\Tools\aria2Options;
+use OCA\NCDownloader\Tools\Settings;
+use OCP\IUser;
 use OC\Files\Filesystem;
+use OC_Util;
 
 class Helper
 {
     public const DOWNLOADTYPE = ['ARIA2' => 1, 'YOUTUBE-DL' => 2, 'OTHERS' => 3];
     public const STATUS = ['ACTIVE' => 1, 'PAUSED' => 2, 'COMPLETE' => 3, 'WAITING' => 4, 'ERROR' => 5];
-    const MAXLEN = 255;
+    const MAXFILELEN = 255;
 
     public static function isUrl($URL)
     {
@@ -61,8 +65,8 @@ class Helper
     }
     public static function clipFilename($filename)
     {
-        if (($len = strlen($filename)) > 64) {
-            return substr($filename, $len - 64);
+        if (($len = strlen($filename)) > self::MAXFILELEN) {
+            return substr($filename, $len - self::MAXFILELEN);
         }
         return $filename;
     }
@@ -73,7 +77,7 @@ class Helper
         } else {
             $filename = self::getUrlPath($url);
         }
-        return substr($filename, 0, self::MAXLEN);
+        return substr($filename, 0, self::MAXFILELEN);
     }
     public static function formatBytes($size, $precision = 2)
     {
@@ -135,6 +139,9 @@ class Helper
 
     public static function debug($msg)
     {
+        if (is_array($msg)) {
+            $msg = implode(",", $msg);
+        }
         $logger = \OC::$server->getLogger();
         $logger->error($msg, ['app' => 'ncdownloader']);
     }
@@ -279,14 +286,13 @@ class Helper
         ];
         return $titles[$type];
     }
-    // the relative home folder of a nextcloud user
-    public static function getUserFolder($uid = null)
+    // the relative home folder of a nextcloud user,e.g. /admin/files
+    public static function getUserFolder($uid = null): string
     {
         if (!empty($rootFolder = Filesystem::getRoot())) {
             return $rootFolder;
         } else if (isset($uid)) {
             return "/" . $uid . "/files";
-
         }
         return '';
     }
@@ -374,4 +380,124 @@ class Helper
         return $sites;
     }
 
+    public static function getMountPoints(): ?array
+    {
+        return Filesystem::getMountPoints("/");
+    }
+
+    public static function getDataDir(): string
+    {
+        return \OC::$server->getSystemConfig()->getValue('datadirectory');
+    }
+
+    public static function getLocalFolder(string $path): string
+    {
+        if (self::getUID()) {
+            OC_Util::setupFS();
+            return Filesystem::getLocalFolder($path);
+        }
+        return "";
+    }
+
+    public static function getRealDownloadDir($uid = null): string
+    {
+        $dlDir = self::getDownloadDir();
+        return self::getLocalFolder($dlDir);
+    }
+    public static function getRealTorrentsDir($uid = null): string
+    {
+        $dir = self::getSettings('ncd_torrents_dir', "/Torrents");
+        return self::getLocalFolder($dir);
+    }
+
+    public static function getUser(): ?IUser
+    {
+        return \OC::$server->getUserSession()->getUser();
+    }
+
+    public static function getUID(): string
+    {
+        $user = self::getUser();
+        $uid = $user ? $user->getUID() : "";
+        return $uid;
+    }
+
+    public static function getSettings($key, $default = null, int $type = Settings::TYPE['USER'])
+    {
+        $settings = self::newSettings();
+        return $settings->setType($type)->get($key, $default);
+    }
+
+    public static function newSettings($uid = null)
+    {
+        $uid = $uid ?? self::getUID();
+        return Settings::create($uid);
+    }
+
+    public static function getYoutubeConfig($uid = null): array
+    {
+        $config = [
+            'binary' => self::getSettings("ncd_yt_binary", null, Settings::TYPE['SYSTEM']),
+            'downloadDir' => Helper::getRealDownloadDir(),
+            'settings' => self::newSettings()->getYoutube(),
+        ];
+        return $config;
+    }
+
+    public static function getAria2Config($uid = null): array
+    {
+        $options = [];
+        $uid = $uid ?? self::getUID();
+        $settings = self::newSettings($uid);
+        $realDownloadDir = Helper::getRealDownloadDir($uid);
+        $torrentsDir = Helper::getRealTorrentsDir($uid);
+        $appPath = self::getAppPath();
+        $dataDir = self::getDataDir();
+        $aria2_dir = $dataDir . "/aria2";
+        $options['seed_time'] = $settings->get("ncd_seed_time");
+        $options['seed_ratio'] = $settings->get("ncd_seed_ratio");
+        if (is_array($customSettings = $settings->getAria2())) {
+            $options = array_merge($customSettings, $options);
+        }
+        $token = $settings->setType(Settings::TYPE['SYSTEM'])->get('ncd_rpctoken');
+        $config = [
+            'dir' => $realDownloadDir,
+            'torrents_dir' => $torrentsDir,
+            'conf_dir' => $aria2_dir,
+            'token' => $token,
+            'settings' => $options,
+            'binary' => $settings->setType(Settings::TYPE['SYSTEM'])->get('ncd_aria2_binary'),
+            'startHook' => $appPath . "/hooks/startHook.sh",
+            'completeHook' => $appPath . "/hooks/completeHook.sh",
+        ];
+        return $config;
+    }
+
+    public static function getAppPath(): string
+    {
+        return \OC::$server->getAppManager()->getAppPath('ncdownloader');
+    }
+    public static function folderUpdated(string $dir): bool
+    {
+        if (!file_exists($dir)) {
+            return false;
+        }
+        $checkFile = $dir . "/.lastmodified";
+        if (!file_exists($checkFile)) {
+            $time = \filemtime($dir);
+            file_put_contents($checkFile, $time);
+            return false;
+        }
+        $lastModified = (int) file_get_contents($checkFile);
+        $time = \filemtime($dir);
+        if ($time > $lastModified) {
+            file_put_contents($checkFile, $time);
+            return true;
+        }
+        return false;
+    }
+    public static function getDownloadDir(): string
+    {
+        return self::getSettings('ncd_downloader_dir', "/Downloads");
+    }
 }

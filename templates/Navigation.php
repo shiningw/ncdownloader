@@ -1,5 +1,12 @@
 <?php
 extract($_);
+$downloadsList = [
+    ["name" => "active", "label" => "Active Downloads", "id" => "active-downloads", "path" => "/apps/ncdownloader/status/active"],
+    ["name" => "waiting", "label" => "Waiting Downloads", "id" => "waiting-downloads", "path" => "/apps/ncdownloader/status/waiting"],
+    ["name" => "fail", "label" => "Failed Downloads", "id" => "failed-downloads", "path" => "/apps/ncdownloader/status/fail"],
+    ["name" => "complete", "label" => "Complete Downloads", "id" => "complete-downloads", "path" => "/apps/ncdownloader/status/complete"],
+    ["name" => "youtube-dl", "label" => "Youtube-dl Downloads", "id" => "youtube-dl-downloads", "path" => "/apps/ncdownloader/youtube/get"],
+];
 ?>
 <div id="app-navigation">
     <?php if (!$ncd_hide_errors): ?>
@@ -33,71 +40,21 @@ extract($_);
     </div>
     <?php endif;?>
     <ul>
-        <li class="active-downloads">
+        <?php foreach ($downloadsList as $value): ?>
+        <li class="download-queue <?php print $value["id"];?>">
             <div class="app-navigation-entry-bullet"></div>
-            <a  role="button" tabindex="0" path="/apps/ncdownloader/dl/active">
-                <?php print($l->t('Active Downloads'));?>
+            <a  role="button" tabindex="0" path="<?php print $value["path"];?>"  id="<?php print $value["id"];?>">
+                <?php print($l->t($value["label"]));?>
             </a>
             <div class="app-navigation-entry-utils">
                 <ul>
-                    <li class="app-navigation-entry-utils-counter" id="active-downloads-counter">
-                        <div class="number"><?php print($_['counter']['active']);?></div>
+                    <li class="app-navigation-entry-utils-counter" id="<?php print $value["name"] . "-downloads-counter";?>">
+                        <div class="number"><?php print($_['counter'][$value["name"]]);?></div>
                     </li>
                 </ul>
             </div>
         </li>
-        <li class="waiting-downloads">
-            <div class="app-navigation-entry-bullet"></div>
-            <a  role="button" tabindex="0" path="/apps/ncdownloader/dl/waiting">
-                <?php print($l->t('Waiting Downloads'));?>
-            </a>
-            <div class="app-navigation-entry-utils">
-                <ul>
-                    <li class="app-navigation-entry-utils-counter" id="waiting-downloads-counter">
-                        <div class="number"><?php print($_['counter']['waiting']);?></div>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li class="complete-downloads">
-            <div class="app-navigation-entry-bullet"></div>
-            <a  role="button" tabindex="0" path="/apps/ncdownloader/dl/complete">
-                <?php print($l->t('Complete Downloads'));?>
-            </a>
-            <div class="app-navigation-entry-utils">
-                <ul>
-                    <li class="app-navigation-entry-utils-counter" id="complete-downloads-counter">
-                        <div class="number"><?php print($_['counter']['complete']);?></div>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li class="fail-downloads">
-            <div class="app-navigation-entry-bullet"></div>
-            <a  role="button" tabindex="0" path="/apps/ncdownloader/dl/fail">
-                <?php print($l->t('Failed Downloads'));?>
-            </a>
-            <div class="app-navigation-entry-utils">
-                <ul>
-                    <li class="app-navigation-entry-utils-counter" id="fail-downloads-counter">
-                        <div class="number"><?php print($_['counter']['fail']);?></div>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li class="youtube-dl-downloads">
-            <div class="app-navigation-entry-bullet"></div>
-            <a role="button" tabindex="0">
-                <?php print($l->t('Youtube-dl Downloads'));?>
-            </a>
-            <div class="app-navigation-entry-utils">
-                <ul>
-                    <li class="app-navigation-entry-utils-counter" id="youtube-dl-downloads-counter">
-                        <div class="number"><?php print($_['counter']['youtube-dl']);?></div>
-                    </li>
-                </ul>
-            </div>
-        </li>
+     <?php endforeach;?>
     </ul>
     <div id="app-settings">
       <div id="app-settings-header">

@@ -11,10 +11,11 @@ use OCA\NCDownloader\Tools\Youtube;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
-//use OCP\Files\IRootFolder;
 use OCP\IL10N;
+//use OCP\Files\IRootFolder;
 use OCP\IRequest;
 use OC_Util;
+use OCA\NCDownloader\Tools\folderScan;
 
 class MainController extends Controller
 {
@@ -27,6 +28,7 @@ class MainController extends Controller
 
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Youtube $youtube)
     {
+
         parent::__construct($appName, $request);
         $this->appName = $appName;
         $this->uid = $UserId;
@@ -38,10 +40,9 @@ class MainController extends Controller
         $this->dbconn = new DbHelper();
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
         $this->youtube = $youtube;
-        $this->settings = new Settings($this->uid);
         $this->isAdmin = \OC_User::isAdminUser($this->uid);
-        $this->hideError = $this->settings->get("ncd_hide_errors", false);
-        $this->disable_bt_nonadmin = $this->settings->setType($this->settings::TYPE['SYSTEM'])->get("ncd_disable_bt", false);
+        $this->hideError = Helper::getSettings("ncd_hide_errors", false);
+        $this->disable_bt_nonadmin = Helper::getSettings("ncd_disable_bt", false, Settings::TYPE["SYSTEM"]);
         $this->accessDenied = $this->l10n->t("Sorry,only admin users can download files via BT!");
     }
     /**
@@ -56,7 +57,6 @@ class MainController extends Controller
         // OC_Util::addStyle($this->appName, 'table');
         $params = $this->buildParams();
         $response = new TemplateResponse($this->appName, 'Index', $params);
-
         return $response;
     }
 
@@ -124,6 +124,10 @@ class MainController extends Controller
      */
     public function Download()
     {
+        $dlDir = $this->aria2->getDownloadDir();
+        if (!is_writable($dlDir)) {
+            return new JSONResponse(['error' => sprintf("%s is not writable", $dlDir)]);
+        }
         $url = trim($this->request->getParam('text-input-value'));
         if (Helper::isMagnet($url)) {
             if ($this->disable_bt_nonadmin && !($this->isAdmin)) {
@@ -189,6 +193,16 @@ class MainController extends Controller
             $this->dbconn->save($data);
             $resp = ['message' => $result['filename'], 'result' => $result['gid'], 'file' => $result['filename']];
         }
+        return new JSONResponse($resp);
+    }
+
+        /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function scanFolder()
+    {
+        $resp = folderScan::create()->scan();
         return new JSONResponse($resp);
     }
 

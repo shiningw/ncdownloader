@@ -97,10 +97,14 @@ class Aria2
 
     private function configure()
     {
-        if (!is_dir($this->confDir)) {
+        if ($this->confDir && !is_dir($this->confDir)) {
             mkdir($this->confDir, 0755, true);
         }
-        if (!is_dir($dir = $this->getDownloadDir())) {
+        $dir = "";
+        if (($dir = $this->getDownloadDir()) && !is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+        if (($dir = $this->getTorrentsDir()) && !is_dir($dir)) {
             mkdir($dir, 0755, true);
         }
         $this->followTorrent(true);
@@ -123,12 +127,9 @@ class Aria2
     public function setTorrentsDir($dir)
     {
         $this->torrentsDir = $dir;
-        if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
-        }
         return $this;
     }
-    public function getTorrentsDir()
+    public function getTorrentsDir(): string
     {
         return $this->torrentsDir;
     }
@@ -136,12 +137,9 @@ class Aria2
     {
         $this->setOption('dir', $dir);
         $this->downloadDir = $dir;
-        if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
-        }
         return $this;
     }
-    public function getDownloadDir()
+    public function getDownloadDir(): string
     {
         return $this->downloadDir;
     }

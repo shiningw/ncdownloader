@@ -2,7 +2,6 @@
 namespace OCA\NCDownloader\Tools;
 
 use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\Settings;
 use OC\Files\Utils\Scanner;
 use \OCP\EventDispatcher\IEventDispatcher;
 
@@ -10,19 +9,17 @@ class folderScan
 {
     private $user;
     private $path;
+    private $realDir;
     public function __construct($path = null, $user = null)
     {
-        $this->user = $user ?? \OC::$server->getUserSession()->getUser()->getUID();
+        $this->user = $user ?? Helper::getUID();
         $this->path = $path ?? $this->getDefaultPath();
-        $this->realDir = \OC::$server->getSystemConfig()->getValue('datadirectory') . "/" . $this->path;
+        $this->realDir = $realDir ?? Helper::getLocalFolder($this->path);
     }
 
     public function getDefaultPath()
     {
-        $settings = new Settings($this->user);
-        $rootFolder = Helper::getUserFolder($this->user);
-        $downloadDir = $settings->get('ncd_downloader_dir') ?? "/Downloads";
-        return $rootFolder . "/" . ltrim($downloadDir, '/\\');
+        return Helper::getUserFolder() . Helper::getDownloadDir();
     }
     public static function create($path = null, $user = null)
     {
@@ -42,7 +39,7 @@ class folderScan
 
     private function update()
     {
-        if (!(self::folderUpdated($this->realDir))) {
+        if (!(Helper::folderUpdated($this->realDir))) {
             return ['message' => "no change"];
         }
         $this->scan();
@@ -55,34 +52,15 @@ class folderScan
         $this->scanner = new Scanner($this->user, \OC::$server->getDatabaseConnection(), \OC::$server->query(IEventDispatcher::class), $this->logger);
         try {
             $this->scanner->scan($this->path);
-            return ['status' => 'OK', 'path' => $this->path];
-        } catch (ForbiddenException $e) {
+            return ['status' => true, 'path' => $this->path];
+        } catch (\OCP\Files\ForbiddenException $e) {
             $this->logger->warning("Make sure you're running the scan command only as the user the web server runs as");
+        } catch (\OCP\Files\NotFoundException $e) {
+            $this->logger->warning("Path for the scan command not found: " . $e->getMessage());
         } catch (\Exception $e) {
-
             $this->logger->warning("Exception during scan: " . $e->getMessage() . $e->getTraceAsString());
         }
-        return ['status' => $e->getMessage(), 'path' => $this->path];
-
-    }
-    public static function folderUpdated($dir)
-    {
-        if (!file_exists($dir)) {
-            return false;
-        }
-        $checkFile = $dir . "/.lastmodified";
-        if (!file_exists($checkFile)) {
-            $time = \filemtime($dir);
-            file_put_contents($checkFile, $time);
-            return false;
-        }
-        $lastModified = (int) file_get_contents($checkFile);
-        $time = \filemtime($dir);
-        if ($time > $lastModified) {
-            file_put_contents($checkFile, $time);
-            return true;
-        }
-        return false;
+        return ['status' => false, 'path' => $this->path];
     }
 
     //update only folder is modified

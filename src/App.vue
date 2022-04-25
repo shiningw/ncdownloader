@@ -56,18 +56,24 @@ export default {
       let element = event.target;
       let formWrapper = element.closest("form");
       let formData = helper.getData(formWrapper);
-      let inputValue = formData["text-input-value"];
+      let inputValue = formData["text-input-value"].trim();
       let message;
-      if (formData.type === "youtube-dl") {
-        formData["extension"] = "";
-        if (formData["select-value-extension"] !== "defaultext") {
-            formData["extension"] = formData["select-value-extension"];
-        }
-        message = helper.t("Download task started!");
-      }
       if (!helper.isURL(inputValue) && !helper.isMagnetURI(inputValue)) {
         helper.error(t("ncdownloader", inputValue + " is Invalid"));
         return;
+      }
+      if (formData.type === "youtube-dl") {
+        formData["extension"] = "";
+
+        if (formData["select-value-extension"] !== "defaultext") {
+          formData["extension"] = formData["select-value-extension"];
+        }
+        message = helper.t("Download task started!");
+        helper.pollingYoutube();
+        helper.setContentTableType("youtube-dl-downloads");
+      } else {
+        helper.polling();
+        helper.setContentTableType("active-downloads");
       }
       if (message) {
         helper.info(message);
@@ -90,7 +96,7 @@ export default {
         vm.$data.loading = 0;
         return;
       }
-      helper.enabledPolling = 0;
+      helper.disablePolling();
       contentTable.getInstance().loading();
 
       let url = formWrapper.getAttribute("action");

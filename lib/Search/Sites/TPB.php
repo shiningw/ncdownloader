@@ -33,7 +33,6 @@ class TPB extends searchBase implements searchInterface
         if ($this->content) {
             return $this->content;
         }
-        $content;
         try {
             $response = $this->client->request('GET', $this->searchUrl);
             $content = $response->getContent();

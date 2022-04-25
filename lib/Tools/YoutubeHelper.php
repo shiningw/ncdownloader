@@ -66,7 +66,9 @@ class YoutubeHelper
         if ($file) {
             $extra = serialize($extra);
             if($this->dbconn->getDBType() == "pgsql"){
-                $extra = pg_escape_bytea($extra);
+                if (function_exists("pg_escape_bytea")) {
+                    $extra = pg_escape_bytea($extra);
+                }
             }
             $data = [
                 'uid' => $this->user,

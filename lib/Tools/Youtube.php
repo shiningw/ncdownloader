@@ -104,9 +104,9 @@ class Youtube
         return $this;
     }
 
-    public static function create()
+    public static function create($options)
     {
-        return new self();
+        return new self($options);
     }
 
     public function setDownloadDir($dir)
@@ -116,7 +116,7 @@ class Youtube
 
     public function getDownloadDir()
     {
-        return $this->getDownloadDir;
+        return $this->downloadDir;
     }
 
     public function prependOption(string $option)

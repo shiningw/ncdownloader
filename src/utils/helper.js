@@ -6,7 +6,7 @@ import "toastify-js/src/toastify.css"
 import { translate as t, translatePlural as n } from '@nextcloud/l10n'
 import contentTable from '../lib/contentTable';
 import Http from '../lib/http'
-
+import Polling from "../lib/polling";
 const helper = {
     vue: {},
     addVue(name, object) {
@@ -16,12 +16,45 @@ const helper = {
         return helper.vue[name];
     },
     generateUrl: generateUrl,
-    loop(callback, delay, ...args) {
-        callback(...args);
-        clearTimeout(helper.timeoutID);
-        this.polling(callback, delay, ...args);
+    isPolling() {
+        return Polling.create().isEnabled();
     },
-    enabledPolling: 0,
+    enabePolling() {
+        Polling.create().enable();
+    },
+    disablePolling() {
+        Polling.create().disable().clear();
+    },
+    polling(delay = 1500, path) {
+        Polling.create().setDelay(delay).run(helper.refresh, path);
+    },
+    scanFolder(path = "/apps/ncdownloader/scanfolder") {
+        let url = helper.generateUrl(path);
+        return new Promise((resolve) => {
+            Http.getInstance(url).setMethod('GET').setHandler(function (data) {
+                resolve(data.status);
+            }).send();
+        });
+    },
+    pollingFolder(delay = 1500) {
+        Polling.create().setDelay(delay).run(helper.scanFolder);
+    },
+    pollingYoutube(delay = 1500) {
+        Polling.create().setDelay(delay).run(helper.refresh, "/apps/ncdownloader/youtube/get");
+    },
+    refresh(path) {
+        path = path || "/apps/ncdownloader/status/active";
+        let url = helper.generateUrl(path);
+        Http.getInstance(url).setHandler(function (data) {
+            if (data && data.row) {
+                contentTable.getInstance(data.title, data.row).create();
+            } else {
+                contentTable.getInstance().noData();
+            }
+            if (data.counter)
+                helper.updateCounter(data.counter);
+        }).send();
+    },
     trim(string, char) {
         return string.split(char).filter(Boolean).join(char)
     },
@@ -31,15 +64,6 @@ const helper = {
     },
     ucfirst(string) {
         return string.charAt(0).toUpperCase() + string.slice(1)
-    },
-    polling(callback, delay, ...args) {
-        self = this;
-        helper.timeoutID = setTimeout(function () {
-            if (self.enabledPolling) {
-                callback(...args);
-                self.polling(callback, delay, ...args);
-            }
-        }, delay);
     },
     isURL(url) {
         let regex = '^((https?|ftp)://)([a-z0-9-]+\.)?(?:[-a-zA-Z0-9()@:%_\+.~#?&/=]+)$';
@@ -114,19 +138,6 @@ const helper = {
             const counter = document.getElementById(key + "-downloads-counter")
             counter.innerHTML = '<div class="number">' + data[key] + '</div>';
         }
-    },
-    refresh(path) {
-        path = path || "/apps/ncdownloader/status/active";
-        let url = helper.generateUrl(path);
-        Http.getInstance(url).setHandler(function (data) {
-            if (data && data.row) {
-                contentTable.getInstance(data.title, data.row).create();
-            } else {
-                contentTable.getInstance().noData();
-            }
-            if (data.counter)
-                helper.updateCounter(data.counter);
-        }).send();
     },
     html2DOM: function (htmlString) {
         const parser = new window.DOMParser();
@@ -253,6 +264,18 @@ const helper = {
     resetSearch: function (vm) {
         vm.$data.loading = 0;
         contentTable.getInstance([], []).clear();
+    },
+    redirect(url) {
+        window.location.href = url;
+    },
+    getContentTableType() {
+        let container = document.getElementById("ncdownloader-table-wrapper");
+        return container.getAttribute("type");
+    },
+    setContentTableType(name) {
+        let container = document.getElementById("ncdownloader-table-wrapper");
+        container.setAttribute("type", name);
+        container.className = "table " + name;
     }
 }
 

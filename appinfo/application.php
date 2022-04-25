@@ -19,11 +19,9 @@ class Application extends App
     public function __construct(array $urlParams = array())
     {
         parent::__construct('ncdownloader', $urlParams);
-        $user = \OC::$server->getUserSession()->getUser();
+        $user = Helper::getUser();
         $this->uid = ($user) ? $user->getUID() : '';
         $this->settings = new Settings($this->uid);
-        $this->dataDir = \OC::$server->getSystemConfig()->getValue('datadirectory');
-        $this->appPath = \OC::$server->getAppManager()->getAppPath('ncdownloader');
         $this->userFolder = Helper::getUserFolder($this->uid);
         $container = $this->getContainer();
         $container->registerService('UserId', function (IContainer $container) {
@@ -31,15 +29,11 @@ class Application extends App
         });
 
         $container->registerService('Aria2', function (IContainer $container) {
-            return new Aria2($this->getConfig());
+            return new Aria2(Helper::getAria2Config($this->uid));
         });
 
         $container->registerService('Youtube', function (IContainer $container) {
-            $config = [
-                'binary' => $this->settings->setType(Settings::TYPE['SYSTEM'])->get("ncd_yt_binary"),
-                'downloadDir' => $this->getRealDownloadDir(),
-                'settings' => $this->settings->setType(Settings::TYPE['USER'])->getYoutube(),
-            ];
+            $config = Helper::getYoutubeConfig($this->uid);
             return new Youtube($config);
         });
 
@@ -98,44 +92,6 @@ class Application extends App
                 return $className::create($crawler, $client);
             });
         }
-    }
-
-    private function getRealDownloadDir()
-    {
-
-        //relative nextcloud user path
-        $dir = $this->settings->get('ncd_downloader_dir') ?? "/Downloads";
-        return $this->dataDir . $this->userFolder . $dir;
-    }
-    private function getRealTorrentsDir()
-    {
-        $dir = $this->settings->get('ncd_torrents_dir') ?? "/Torrents";
-        return $this->dataDir . $this->userFolder . $dir;
-    }
-
-    private function getConfig()
-    {
-        //$this->config = \OC::$server->getAppConfig();
-        $realDownloadDir = $this->getRealDownloadDir();
-        $torrentsDir = $this->getRealTorrentsDir();
-        $aria2_dir = $this->dataDir . "/aria2";
-        $settings['seed_time'] = $this->settings->get("ncd_seed_time");
-        $settings['seed_ratio'] = $this->settings->get("ncd_seed_ratio");
-        if (is_array($customSettings = $this->settings->getAria2())) {
-            $settings = array_merge($customSettings, $settings);
-        }
-        $token = $this->settings->setType(Settings::TYPE['SYSTEM'])->get('ncd_rpctoken');
-        $config = [
-            'dir' => $realDownloadDir,
-            'torrents_dir' => $torrentsDir,
-            'conf_dir' => $aria2_dir,
-            'token' => $token,
-            'settings' => $settings,
-            'binary' => $this->settings->setType(Settings::TYPE['SYSTEM'])->get('ncd_aria2_binary'),
-            'startHook' => $this->appPath . "/hooks/startHook.sh",
-            'completeHook' => $this->appPath . "/hooks/completeHook.sh",
-        ];
-        return $config;
     }
 
 }

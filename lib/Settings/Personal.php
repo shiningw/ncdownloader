@@ -34,7 +34,7 @@ class Personal implements ISettings {
 	 */
 	public function getForm() {
 		$parameters = [
-			"ncd_downloader_dir" => $this->settings->get("ncd_downloader_dir"),
+			"ncd_downloader_dir" => Helper::getDownloadDir(),
             "ncd_torrents_dir" => $this->settings->get("ncd_torrents_dir"),
             "ncd_seed_ratio" => $this->settings->get("ncd_seed_ratio"),
 			'ncd_seed_time_unit' => $this->settings->get("ncd_seed_time_unit"),

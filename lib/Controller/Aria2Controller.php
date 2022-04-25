@@ -6,7 +6,6 @@ use OCA\NCDownloader\Tools\Counters;
 use OCA\NCDownloader\Tools\DbHelper;
 use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\Settings;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\Files\IRootFolder;
@@ -32,8 +31,7 @@ class Aria2Controller extends Controller
         $this->l10n = $IL10N;
         $this->rootFolder = $rootFolder;
         $this->urlGenerator = \OC::$server->getURLGenerator();
-        $this->settings = new Settings($UserId);
-        $this->downloadDir = $this->settings->get('ncd_downloader_dir') ?? "/Downloads";
+        $this->downloadDir = Helper::getDownloadDir();
         OC_Util::setupFS();
         //$this->config = \OC::$server->getAppConfig();
         $this->aria2 = $aria2;
@@ -121,15 +119,6 @@ class Aria2Controller extends Controller
         }
         $data = $this->aria2->start();
         return $data;
-    }
-    /**
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     */
-    public function Update()
-    {
-        $resp = folderScan::create()->scan();
-        return new JSONResponse($resp);
     }
 
     private function createActionItem($name, $path)
@@ -235,7 +224,7 @@ class Aria2Controller extends Controller
             $tmp = [];
             $actions = [];
             $filename = sprintf('<a class="download-file-folder" href="%s">%s</a>', $folderLink, $filename);
-            $fileInfo = sprintf('<button id="icon-clipboard" class="icon-clipboard" data-text="%s"></button> %s | %s', $extra ? $extra['link'] : 'nolink', $total, date("Y-m-d H:i:s", $timestamp));
+            $fileInfo = sprintf('<button id="icon-clipboard" class="icon-clipboard" data-text="%s"></button> %s | %s', $extra["link"] ?? 'nolink', $total, date("Y-m-d H:i:s", $timestamp));
             $tmp['filename'] = array($filename, $fileInfo);
 
             if ($this->aria2->methodName === "tellStopped") {

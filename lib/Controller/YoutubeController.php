@@ -5,7 +5,6 @@ use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\DbHelper;
 use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\Settings;
 use OCA\NCDownloader\Tools\Youtube;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
@@ -27,8 +26,7 @@ class YoutubeController extends Controller
         $this->uid = $UserId;
         $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->l10n = $IL10N;
-        $this->settings = new Settings($UserId);
-        $this->downloadDir = $this->settings->get('ncd_downloader_dir') ?? "/Downloads";
+        $this->downloadDir = Helper::getDownloadDir();
         $this->dbconn = new DbHelper();
         $this->youtube = $youtube;
         $this->aria2 = $aria2;
@@ -77,7 +75,10 @@ class YoutubeController extends Controller
      */
     public function Download()
     {
-        $params = array();
+        $dlDir = $this->youtube->getDownloadDir();
+        if (!is_writable($dlDir)) {
+            return new JSONResponse(['error' => sprintf("%s is not writable", $dlDir)]);
+        }
         $url = trim($this->request->getParam('text-input-value'));
         $yt = $this->youtube;
         if (in_array($this->request->getParam('extension'), $this->audio_extensions)) {
@@ -119,7 +120,7 @@ class YoutubeController extends Controller
         }
 
         $row = $this->dbconn->getByGid($gid);
-        $data = $this->dbconn->getExtra($value["data"]);;
+        $data = $this->dbconn->getExtra($row["data"]);
         if (!isset($data['pid'])) {
             if ($this->dbconn->deleteByGid($gid)) {
                 $msg = sprintf("%s is deleted from database!", $gid);
@@ -204,9 +205,9 @@ class YoutubeController extends Controller
     private function installYTD()
     {
         try {
-            $filename = Helper::getFileName($yt->installUrl());
-            $yt->setDownloadDir($this->dataDir . "/bin");
-            $resp = $this->Save($yt->installUrl(), $filename);
+            $filename = Helper::getFileName($this->installUrl());
+            $this->setDownloadDir($this->dataDir . "/bin");
+            $resp = $this->Save($this->installUrl(), $filename);
             return $resp;
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];

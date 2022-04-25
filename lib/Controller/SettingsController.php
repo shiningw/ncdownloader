@@ -111,7 +111,7 @@ class SettingsController extends Controller
     {
         $saved = json_decode($this->settings->get("custom_youtube_dl_settings"), 1);
         $params = $this->request->getParams();
-        foreach ($data as $key => $value) {
+        foreach ($params as $key => $value) {
             unset($saved[$key]);
         }
         $resp = $this->settings->save("custom_youtube_dl_settings", json_encode($saved));
