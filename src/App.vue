@@ -63,13 +63,10 @@ export default {
         return;
       }
       if (formData.type === "youtube-dl") {
-        formData["audio-only"] = "";
         formData["extension"] = "";
-        if (formData["select-value-extension"] !== "Default") {
+
+        if (formData["select-value-extension"] !== "defaultext") {
           formData["extension"] = formData["select-value-extension"];
-          if (["mp3", "m4a", "vorbis"].includes(formData["select-value-extension"])) {
-            formData["audio-only"] = "true";
-          }
         }
         message = helper.t("Download task started!");
         helper.pollingYoutube();

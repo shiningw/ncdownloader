@@ -74,9 +74,9 @@ class Youtube
         } else {
             $this->audioFormat = "m4a";
         }
-        $pos = strrpos($this->outTpl, '.');
+        /*$pos = strrpos($this->outTpl, '.');
         $this->outTpl = substr($this->outTpl, 0, $pos) . "." . $this->audioFormat;
-        //$this->outTpl = "/%(id)s-%(title)s.m4a";
+        $this->outTpl = "/%(id)s-%(title)s.m4a";*/
         $this->setAudioFormat($this->audioFormat);
         return $this;
     }
@@ -145,6 +145,11 @@ class Youtube
         $process = new Process($this->options, null, $this->env);
         $process->setTimeout($this->timeout);
         $data = ['link' => $url];
+        if ($this->audioOnly) {
+           $data['ext'] = $this->audioFormat;
+        } else {
+           $data['ext'] = $this->videoFormat;
+        }
         $process->run(function ($type, $buffer) use ($data, $process) {
             if (Process::ERR === $type) {
                 $this->onError($buffer);
