@@ -4,6 +4,7 @@ return [
     'routes' => [
         ['name' => 'Main#Index', 'url' => '/', 'verb' => 'GET'],
         ['name' => 'Main#Upload', 'url' => '/upload', 'verb' => 'POST'],
+        ['name' => 'Main#getCounters', 'url' => '/counters', 'verb' => 'GET'],
         ['name' => 'main#Download', 'url' => '/new', 'verb' => 'POST'],
         ['name' => 'Aria2#Action', 'url' => '/aria2/{path}', 'verb' => 'POST'],
         ['name' => 'Aria2#getStatus', 'url' => '/status/{path}', 'verb' => 'POST'],

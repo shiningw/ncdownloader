@@ -11,6 +11,9 @@ const buttonHandler = (event, type) => {
     let url = element.getAttribute("path");
     let row, data = {};
     let removeRow = true;
+    if (element.getAttribute("id") == "download-action-button"){
+        helper.getCounters();
+    }
     if (row = element.closest('.table-row-search')) {
         if (element.className == 'icon-clipboard') {
             const clippy = new Clipboard(element, row.dataset.link);

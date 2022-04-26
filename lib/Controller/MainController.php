@@ -5,17 +5,17 @@ namespace OCA\NCDownloader\Controller;
 use OCA\NCDownloader\Tools\Aria2;
 use OCA\NCDownloader\Tools\Counters;
 use OCA\NCDownloader\Tools\DbHelper;
+use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Tools\Settings;
 use OCA\NCDownloader\Tools\Youtube;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\IL10N;
 //use OCP\Files\IRootFolder;
+use OCP\IL10N;
 use OCP\IRequest;
 use OC_Util;
-use OCA\NCDownloader\Tools\folderScan;
 
 class MainController extends Controller
 {
@@ -196,7 +196,7 @@ class MainController extends Controller
         return new JSONResponse($resp);
     }
 
-        /**
+    /**
      * @NoAdminRequired
      * @NoCSRFRequired
      */
@@ -204,6 +204,15 @@ class MainController extends Controller
     {
         $resp = folderScan::create()->scan();
         return new JSONResponse($resp);
+    }
+    /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function getCounters(): JSONResponse
+    {
+        $counter = $this->counters->getCounters();
+        return new JSONResponse(['counter' => $counter]);
     }
 
 }

@@ -51,7 +51,7 @@ class contentTable {
         div.appendChild(document.createTextNode(helper.t('No items')));
         this.table.appendChild(div);
     }
-    createHeading(prefix = "table-heading"):HTMLElement {
+    createHeading(prefix = "table-heading"): HTMLElement {
         let thead = document.createElement("section");
         thead.classList.add(this.headingClass);
         let headRow = document.createElement("header");
@@ -134,16 +134,17 @@ class contentTable {
 
     }
 
-    createActionButton(name: string, path: string, data: string):HTMLElement {
+    createActionButton(name: string, path: string, data: string): HTMLElement {
         let button = document.createElement("button");
         button.classList.add("icon-" + name);
         button.setAttribute("path", path);
-        button.setAttribute("data", data);
+        button.setAttribute("data", data || "nodata");
         if (name == 'refresh') {
             name = helper.t('Redownload');
         }
         button.setAttribute("data-tippy-content", helper.ucfirst(name));
         button.setAttribute("title", helper.ucfirst(name));
+        button.setAttribute("id", name + "-action-button");
         return button;
     }
 

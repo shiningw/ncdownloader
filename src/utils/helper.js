@@ -139,6 +139,13 @@ const helper = {
             counter.innerHTML = '<div class="number">' + data[key] + '</div>';
         }
     },
+    getCounters() {
+        let url = helper.generateUrl("apps/ncdownloader/counters");
+        Http.getInstance(url).setMethod("GET").setHandler(function (data) {
+            if (data["counter"])
+                helper.updateCounter(data["counter"]);
+        }).send();
+    },
     html2DOM: function (htmlString) {
         const parser = new window.DOMParser();
         let doc = parser.parseFromString(htmlString, "text/html")
