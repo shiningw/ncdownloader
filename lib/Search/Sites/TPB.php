@@ -2,6 +2,8 @@
 
 namespace OCA\NCDownloader\Search\Sites;
 
+use OCA\NCDownloader\Tools\tableData;
+
 //The Piratebay
 class TPB extends searchBase implements searchInterface
 {
@@ -14,15 +16,15 @@ class TPB extends searchBase implements searchInterface
         $this->client = $client;
         $this->crawler = $crawler;
     }
-    public function search(string $keyword): array
+    public function search(string $keyword): tableData
     {
         $this->searchUrl = $this->baseUrl . trim($keyword);
         $this->crawler->add($this->getContent());
-        $this->getItems()->addActionLinks(null);
+        $this->getItems()->addActionLinks();
         if ($this->hasErrors()) {
-            return ['error' => $this->getErrors()];
+            return tableData::create()->setEror($this->getErrors());
         }
-        return ['title' => $this->getTableTitles(), 'row' => $this->getRows()];
+        return tableData::create($this->getTableTitles(), $this->getRows());
     }
     public function setContent($content)
     {

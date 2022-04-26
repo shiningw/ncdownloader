@@ -2,6 +2,8 @@
 
 namespace OCA\NCDownloader\Search\Sites;
 
+use OCA\NCDownloader\Tools\tableData;
+
 //bitsearch.to
 class bitSearch extends searchBase implements searchInterface
 {
@@ -16,17 +18,17 @@ class bitSearch extends searchBase implements searchInterface
         $this->client = $client;
         $this->crawler = $crawler;
     }
-    public function search(string $keyword): array
+    public function search(string $keyword): tableData
     {
         $this->query = ['q' => trim($keyword), 'sort' => 'seeders'];
         $this->searchUrl = $this->baseUrl;
         $content = $this->getContent();
         if ($this->hasErrors()) {
-            return ['error' => $this->getErrors()];
+            return tableData::create()->setEror($this->getErrors());
         }
         $this->crawler->add($content);
-        $this->getItems()->addActionLinks(null);
-        return ['title' => $this->getTableTitles(), 'row' => $this->getRows()];
+        $this->getItems()->addActionLinks();
+        return tableData::create($this->getTableTitles(), $this->getRows());
     }
     public function setContent($content)
     {

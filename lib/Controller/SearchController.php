@@ -1,7 +1,7 @@
 <?php
 namespace OCA\NCDownloader\Controller;
 
-use OCA\NCDownloader\Search\torrentSearch;
+use OCA\NCDownloader\Search\siteSearch;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
@@ -20,7 +20,7 @@ class SearchController extends Controller
         $this->appName = $appName;
         $this->uid = $UserId;
         $this->urlGenerator = \OC::$server->getURLGenerator();
-        $this->search = new torrentSearch();
+        $this->search = new siteSearch();
     }
    /**
      * @NoAdminRequired

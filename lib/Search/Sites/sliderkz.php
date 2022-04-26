@@ -3,6 +3,7 @@
 namespace OCA\NCDownloader\Search\Sites;
 
 use OCA\NCDownloader\Tools\Helper;
+use OCA\NCDownloader\Tools\tableData;
 
 //slider.kz
 class sliderkz extends searchBase implements searchInterface
@@ -16,15 +17,15 @@ class sliderkz extends searchBase implements searchInterface
         $this->client = $client;
     }
 
-    public function search(string $keyword): array
+    public function search(string $keyword): tableData
     {
         $this->query = ['q' => trim($keyword)];
         $this->searchUrl = $this->baseUrl;
-        $this->getItems()->setTableTitles(["Title", "Duration", "Actions"])->addActionLinks(null);
+        $this->getItems()->setTableTitles(["Title", "Duration", "Actions"])->addActionLinks();
         if ($this->hasErrors()) {
-            return ['error' => $this->getErrors()];
+            return tableData::create()->setEror($this->getErrors());
         }
-        return ["title" => $this->getTableTitles(), 'row' => $this->getRows()];
+        return tableData::create($this->getTableTitles(), $this->getRows());
     }
 
     public function getItems()

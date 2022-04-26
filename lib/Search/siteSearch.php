@@ -7,7 +7,7 @@ use OCP\AppFramework\QueryException;
 use OCP\IServerContainer;
 use Symfony\Component\HttpClient\Exception\ClientException;
 
-class torrentSearch
+class siteSearch
 {
     public $container;
     private $site = null;
@@ -17,7 +17,7 @@ class torrentSearch
         $this->container = \OC::$server->query(IServerContainer::class);
         $this->site = __NAMESPACE__ . '\Sites\TPB';
     }
-    public function go($keyword)
+    public function go($keyword): array
     {
         try {
             $siteInst = $this->container->query($this->site);
@@ -26,8 +26,11 @@ class torrentSearch
         } catch (ClientException $e) {
             return ['message', $e->getMessage()];
         }
-        $data = $siteInst->search($keyword);
-        return $data;
+        $result = $siteInst->search($keyword);
+        if ($result->hasError()) {
+            return ['error' => $result->getError()];
+        }
+        return $result->getData();
     }
 
     public function setSite($site)
