@@ -13,8 +13,6 @@ use OCP\IRequest;
 
 class YoutubeController extends Controller
 {
-    private $userId;
-    private $settings = null;
     //@config OC\AppConfig
     private $l10n;
     private $audio_extensions = array("mp3", "m4a", "vorbis");
@@ -67,6 +65,7 @@ class YoutubeController extends Controller
 
         $resp['title'] = ['filename', 'speed', 'progress', 'actions'];
         $resp['counter'] = ['youtube-dl' => count($data)];
+        folderScan::sync();
         return new JSONResponse($resp);
     }
     /**

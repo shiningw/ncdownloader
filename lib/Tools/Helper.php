@@ -70,14 +70,15 @@ class Helper
         }
         return $filename;
     }
-    public static function getFilename($url)
+    public static function getFilename($url): string
     {
         if (self::isMagnet($url)) {
-            $filename = self::parseUrl($url)['dn'];
+            $info = self::parseUrl($url);
+            $filename = $info["dn"] ?? "";
         } else {
             $filename = self::getUrlPath($url);
         }
-        return substr($filename, 0, self::MAXFILELEN);
+        return self::clipFilename($filename);
     }
     public static function formatBytes($size, $precision = 2)
     {
@@ -483,6 +484,7 @@ class Helper
             return false;
         }
         $checkFile = $dir . "/.lastmodified";
+
         if (!file_exists($checkFile)) {
             $time = \filemtime($dir);
             file_put_contents($checkFile, $time);

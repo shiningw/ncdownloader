@@ -14,7 +14,7 @@ class folderScan
     {
         $this->user = $user ?? Helper::getUID();
         $this->path = $path ?? $this->getDefaultPath();
-        $this->realDir = $realDir ?? Helper::getLocalFolder($this->path);
+        $this->realDir = Helper::getLocalFolder(Helper::getDownloadDir());
     }
 
     public function getDefaultPath()

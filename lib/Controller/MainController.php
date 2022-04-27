@@ -155,7 +155,7 @@ class MainController extends Controller
             'uid' => $this->uid,
             'gid' => $result,
             'type' => Helper::DOWNLOADTYPE['ARIA2'],
-            'filename' => $filename ?? 'unknown',
+            'filename' => empty($filename) ? "unknown" : $filename,
             'timestamp' => time(),
             'data' => serialize(['link' => $url]),
         ];
@@ -202,7 +202,7 @@ class MainController extends Controller
      */
     public function scanFolder()
     {
-        $resp = folderScan::create()->scan();
+        $resp = folderScan::sync();
         return new JSONResponse($resp);
     }
     /**
