@@ -68,8 +68,8 @@ class Youtube
     {
         if (Helper::ffmpegInstalled()) {
             $this->addOption('--prefer-ffmpeg');
-            $this->addOption('--add-metadata');
-            $this->setOption('--metadata-from-title', "%(artist)s-%(title).64s");
+            // $this->addOption('--add-metadata');
+            // $this->setOption('--metadata-from-title', "%(artist)s-%(title).64s");
             $this->addOption('--extract-audio');
         } else {
             $this->audioFormat = "m4a";
