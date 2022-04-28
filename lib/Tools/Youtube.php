@@ -141,7 +141,6 @@ class Youtube
         $this->setOption("--output", $this->downloadDir . "/" . $this->outTpl);
         $this->setUrl($url);
         $this->prependOption($this->bin);
-        //\OC::$server->getLogger()->error($process->getCommandLine(), ['app' => 'PHP']);
         $process = new Process($this->options, null, $this->env);
         $process->setTimeout($this->timeout);
         $data = ['link' => $url];
