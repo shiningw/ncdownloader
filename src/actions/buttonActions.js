@@ -11,8 +11,9 @@ const buttonHandler = (event, type) => {
     let url = element.getAttribute("path");
     let row, data = {};
     let removeRow = true;
-    if (element.getAttribute("id") == "download-action-button"){
-        helper.getCounters();
+    if (element.getAttribute("id") == "download-action-button") {
+        helper.loop(helper.getCounters);
+        helper.setContentTableType("search-results");
     }
     if (row = element.closest('.table-row-search')) {
         if (element.className == 'icon-clipboard') {

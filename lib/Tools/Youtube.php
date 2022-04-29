@@ -7,9 +7,8 @@ use Symfony\Component\Process\Process;
 
 class Youtube
 {
-    private $ipv4Only;
     public $audioOnly = 0;
-    public $audioFormat = 'm4a', $videoFormat;
+    public $audioFormat = 'm4a', $videoFormat = null;
     private $format = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best';
     private $options = [];
     private $downloadDir;
@@ -129,7 +128,7 @@ class Youtube
         if ($this->audioOnly) {
             $this->audioMode();
         } else {
-            if ((Helper::ffmpegInstalled()) && ($this->videoFormat != "")) {
+            if (Helper::ffmpegInstalled() && $this->videoFormat) {
                 $this->setOption('--format', 'bestvideo+bestaudio/best');
                 $this->setVideoFormat($this->videoFormat);
             } else {
@@ -145,9 +144,9 @@ class Youtube
         $process->setTimeout($this->timeout);
         $data = ['link' => $url];
         if ($this->audioOnly) {
-           $data['ext'] = $this->audioFormat;
+            $data['ext'] = $this->audioFormat;
         } else {
-           $data['ext'] = $this->videoFormat;
+            $data['ext'] = $this->videoFormat;
         }
         $process->run(function ($type, $buffer) use ($data, $process) {
             if (Process::ERR === $type) {

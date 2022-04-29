@@ -202,7 +202,8 @@ class MainController extends Controller
      */
     public function scanFolder()
     {
-        $resp = folderScan::sync();
+        $force = $this->request->getParam('force') ?? false;
+        $resp = $force ? folderScan::create()->scan() : folderScan::sync();
         return new JSONResponse($resp);
     }
     /**

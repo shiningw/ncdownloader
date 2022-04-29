@@ -91,7 +91,7 @@ export default {
       let formWrapper = element.closest("form");
       let formData = helper.getData(formWrapper);
       let inputValue = formData["text-input-value"];
-      if (inputValue && inputValue.length < 2) {
+      if (!inputValue || (inputValue && inputValue.length < 2)) {
         helper.error(t("ncdownloader", "Please enter valid keyword!"));
         vm.$data.loading = 0;
         return;

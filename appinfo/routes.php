@@ -8,7 +8,7 @@ return [
         ['name' => 'main#Download', 'url' => '/new', 'verb' => 'POST'],
         ['name' => 'Aria2#Action', 'url' => '/aria2/{path}', 'verb' => 'POST'],
         ['name' => 'Aria2#getStatus', 'url' => '/status/{path}', 'verb' => 'POST'],
-        ['name' => 'Main#scanFolder', 'url' => '/scanfolder', 'verb' => 'GET'],
+        ['name' => 'Main#scanFolder', 'url' => '/scanfolder', 'verb' => 'POST'],
         ['name' => 'Youtube#Index', 'url' => '/youtube/get', 'verb' => 'POST'],
         ['name' => 'Youtube#Download', 'url' => '/youtube/new', 'verb' => 'POST'],
         ['name' => 'Youtube#Delete', 'url' => '/youtube/delete', 'verb' => 'POST'],

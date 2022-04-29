@@ -81,10 +81,9 @@ class YoutubeController extends Controller
         $url = trim($this->request->getParam('text-input-value'));
         $yt = $this->youtube;
         if (in_array($this->request->getParam('extension'), $this->audio_extensions)) {
-            $yt->audioOnly = TRUE;
+            $yt->audioOnly = true;
             $yt->audioFormat = $this->request->getParam('extension');
         } else {
-            $yt->audioOnly = FALSE;
             $yt->videoFormat = $this->request->getParam('extension');
         }
         if (!$yt->isInstalled()) {
@@ -158,10 +157,10 @@ class YoutubeController extends Controller
         if (!empty($data['link'])) {
             if (isset($data['ext'])) {
                 if (in_array($data['ext'], $this->audio_extensions)) {
-                    $this->youtube->audioOnly = TRUE;
+                    $this->youtube->audioOnly = true;
                     $this->youtube->audioFormat = $data['ext'];
                 } else {
-                    $this->youtube->audioOnly = FALSE;
+                    $this->youtube->audioOnly = false;
                     $this->youtube->videoFormat = $data['ext'];
                 }
             }

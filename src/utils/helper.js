@@ -16,6 +16,9 @@ const helper = {
         return helper.vue[name];
     },
     generateUrl: generateUrl,
+    loop(callback, delay = 3000, ...args) {
+        Polling.create().setDelay(delay).run(callback, ...args);
+    },
     isPolling() {
         return Polling.create().isEnabled();
     },
@@ -28,10 +31,10 @@ const helper = {
     polling(delay = 1500, path) {
         Polling.create().setDelay(delay).run(helper.refresh, path);
     },
-    scanFolder(path = "/apps/ncdownloader/scanfolder") {
+    scanFolder(forceScan = false, path = "/apps/ncdownloader/scanfolder") {
         let url = helper.generateUrl(path);
         return new Promise((resolve) => {
-            Http.getInstance(url).setMethod('GET').setHandler(function (data) {
+            Http.getInstance(url).setData({ "force": forceScan }).setHandler(function (data) {
                 resolve(data.status);
             }).send();
         });

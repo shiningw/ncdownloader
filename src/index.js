@@ -81,8 +81,6 @@ window.addEventListener('DOMContentLoaded', function () {
     delegate('#app-ncdownloader-wrapper',
         { target: '[data-tippy-content]' }
     );
-
-
 });
 
 
