@@ -122,6 +122,7 @@ class youtubedlOptions
             'prefer-insecure' => 'an unencrypted connection to retrieve information about the video (Currently supported only for YouTube)',
             'user-agent' => 'Specify a custom user agent',
             'referer' => 'Specify a custom referer, use if the video access is restricted to one domain',
+            'add-header' => 'Specify a custom HTTP header and its value, separated by a colon \':\'.  You can use this option multiple times'
             'bidi-workaround' => 'around terminals that lack bidirectional text support. Requires bidiv or fribidi executable in PATH',
             'sleep-interval' => 'Number of seconds to sleep before each download. This is the minimum time to sleep when used along with --max-sleep-',
             'max-sleep-interval' => 'Maximum number of seconds to sleep. Can only be used along with --min-sleep-interval',
