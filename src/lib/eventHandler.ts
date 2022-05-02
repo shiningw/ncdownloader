@@ -1,20 +1,22 @@
 type callback = (event: any) => void;
-type target = string | Element | HTMLElement
+type target = string | Element | HTMLElement | Document | Window
 
 const eventHandler = {
-    add: function (eventType: string, target: target, selector: string | callback | Element, callback?: callback) {
+    add: function (eventType: string, target: target, selector: callback | target, callback?: callback) {
         if (typeof selector === 'function' && !callback) {
             callback = selector;
             selector = target;
         }
-        if (typeof target === 'object') {
-
+        if (target instanceof Element) {
             target.addEventListener(eventType, function (e) {
                 callback.call(target, e);
             });
             return;
         }
-        let items = document.querySelectorAll(target);
+        let items: NodeList
+        if (typeof target === "string") {
+            items = document.querySelectorAll(target);
+        }
         if (!items) {
             return;
         }

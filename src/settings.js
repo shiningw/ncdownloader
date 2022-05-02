@@ -7,10 +7,13 @@ import settingsForm from './lib/settingsForm'
 import autoComplete from './lib/autoComplete';
 import eventHandler from './lib/eventHandler';
 import aria2Options from './utils/aria2Options';
-import { names as ytdOptions } from './utils/youtubedlOptions';
+import { options as ytdFullOptions,names as ytdOptions } from './utils/youtubedlOptions';
 import helper from './utils/helper';
 import './css/autoComplete.css'
 'use strict';
+import { delegate } from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+
 window.addEventListener('DOMContentLoaded', function () {
     let customOptions = ['ncd_downloader_dir', 'ncd_torrents_dir', 'ncd_seed_ratio', 'ncd_seed_time', 'ncd_rpctoken', 'ncd_yt_binary', 'ncd_aria2_binary'];
     const saveHandler = (e, name) => {
@@ -74,19 +77,27 @@ window.addEventListener('DOMContentLoaded', function () {
             autoComplete.getInstance({
                 selector: `[id^='${baseName}-key']`,
                 minChars: 1,
-                source: function (term, suggest) {
-                    term = term.toLowerCase();
-                    let suggestions = [], data = options;
-                    for (const item of data) {
-                        if (item.toLowerCase().indexOf(term, 0) !== -1) {
-                            suggestions.push(item);
-                        }
+                sourceHandler: function () {
+                    if (Array.isArray(options)) {
+                        return options;
                     }
-                    suggest(suggestions);
+                    return Object.keys(options);
+                },
+                renderer: (item, search) => {
+                    search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    let tippy;
+                    if (options.hasOwnProperty(item)) {
+                        tippy = options[item];
+                    } else {
+                        tippy = item;
+                    }
+                    var re = new RegExp(`(${search.split(' ').join('|')})`, "gi");
+                    return `<div data-tippy-content="${tippy}" class="suggestion-item" data-val="${item}">${item.replace(re, "<b>$1</b>")}</div>`;
                 }
             }).run();
         } catch (error) {
-            OC_msg.finishedError('#ncdownloader-message-banner', error);;
+            console.log(error)
+            OC_msg.finishedError('#ncdownloader-message-banner', error);
         }
     }
 
@@ -96,7 +107,7 @@ window.addEventListener('DOMContentLoaded', function () {
     eventHandler.add("click", "#custom-youtube-dl-settings-container", "button.save-custom-youtube-dl-settings", (e) => saveHandler(e, 'youtube-dl-settings'))
 
     eventHandler.add('click', '#custom-aria2-settings-container', "button.add-custom-aria2-settings", (e) => addOption(e, 'aria2', aria2Options))
-    eventHandler.add('click', '#custom-youtube-dl-settings-container', "button.add-custom-youtube-dl-settings", (e) => addOption(e, 'youtube-dl', ytdOptions))
+    eventHandler.add('click', '#custom-youtube-dl-settings-container', "button.add-custom-youtube-dl-settings", (e) => addOption(e, 'youtube-dl', ytdFullOptions))
 
 
     eventHandler.add('click', '.ncdownloader-personal-settings', 'button.icon-close', function (e) {
@@ -142,4 +153,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }
     eventHandler.add('click', "#ncd_downloader_dir", filepicker);
     eventHandler.add('click', "#ncd_torrents_dir", filepicker);
+    delegate('#body-settings',
+        { target: '[data-tippy-content]' }
+    );
 });
