@@ -1,7 +1,7 @@
 <template>
   <div
     @click="handler"
-    class="torrent-file-header"
+    class="downloader-folder-settings"
     data-tippy-content="Set Download Folder"
     :data-path="path"
   ></div>
@@ -40,7 +40,7 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "../css/variables.scss";
-.torrent-file-header {
+.downloader-folder-settings {
   width: 45px;
   height: 100%;
   background: $bg-color url("../../img/folder.svg") bottom left no-repeat;
