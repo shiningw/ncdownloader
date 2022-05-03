@@ -29,6 +29,18 @@ class SettingsController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      */
+    public function getSettings()
+    {
+        $name = $this->request->getParam("name");
+        $type = $this->request->getParam("type") ?? Settings::TYPE['USER'];
+        $default = $this->request->getParam("default") ?? null;
+        return new JSONResponse(Helper::getSettings($name, $default, $type));
+    }
+
+    /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
     public function personal()
     {
         $params = $this->request->getParams();
@@ -37,6 +49,7 @@ class SettingsController extends Controller
         }
         return new JSONResponse($resp);
     }
+
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
@@ -128,8 +141,8 @@ class SettingsController extends Controller
         try {
             $this->settings->save($key, $value);
         } catch (\Exception $e) {
-            return ['error' => $e->getMessage()];
+            return ['error' => $e->getMessage(), "status" => false];
         }
-        return ['message' => "Saved!"];
+        return ['message' => "Saved!", "status" => true];
     }
 }

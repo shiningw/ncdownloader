@@ -286,6 +286,23 @@ const helper = {
         let container = document.getElementById("ncdownloader-table-wrapper");
         container.setAttribute("type", name);
         container.className = "table " + name;
+    },
+    filepicker(cb) {
+        OC.dialogs.filepicker(
+            t('ncdownloader', 'Select a directory'),
+            cb,
+            false,
+            'httpd/unix-directory',
+            true
+        );
+    },
+    getSettings(key, defaultValue = null, type = 2) {
+        let url = helper.generateUrl("/apps/ncdownloader/getsettings");
+        return new Promise(resolve => {
+            Http.getInstance(url).setData({ name: key, type: type, default: defaultValue }).setHandler(data => {
+                resolve(data)
+            }).send()
+        })
     }
 }
 

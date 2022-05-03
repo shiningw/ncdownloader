@@ -115,6 +115,7 @@ class MainController extends Controller
             'personal_url' => $this->urlGenerator->linkToRoute("settings.PersonalSettings.index", ['section' => 'ncdownloader']),
             'ncd_hide_errors' => $this->hideError,
             'ncd_disable_bt' => $this->disable_bt_nonadmin,
+            'ncd_downloader_dir' => Helper::getSettings("ncd_downloader_dir"),
         ]);
         return $params;
     }

@@ -24,6 +24,6 @@ return [
         ['name' => 'Settings#youtubeGet', 'url' => '/personal/youtube-dl/get', 'verb' => 'POST'],
         ['name' => 'Settings#youtubeSave', 'url' => '/personal/youtube-dl/save', 'verb' => 'POST'],
         ['name' => 'Settings#youtubeDelete', 'url' => '/personal/youtube-dl/delete', 'verb' => 'POST'],
-
+        ['name' => 'Settings#getSettings', 'url' => '/getsettings', 'verb' => 'POST'],
     ],
 ];

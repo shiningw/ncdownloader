@@ -44,6 +44,7 @@
             @uploadfile="uploadFile"
             :path="uris.upload_url"
           ></uploadFile>
+          <folderSettings :path="dlPath"></folderSettings>
         </div>
       </div>
       <searchInput
@@ -61,6 +62,7 @@ import searchInput from "./searchInput.vue";
 import actionButton from "./actionButton";
 import uploadFile from "./uploadFile";
 import { translate as t } from "@nextcloud/l10n";
+import folderSettings from "./folderSettings.vue";
 
 export default {
   inject: ["settings", "search_sites"],
@@ -68,6 +70,7 @@ export default {
     return {
       checkedValue: false,
       path: this.uris.aria2_url,
+      dlPath: this.settings.settings.ncd_downloader_dir,
       inputType: "download",
       checkboxes: false,
       downloadType: "aria2",
@@ -82,6 +85,7 @@ export default {
     actionButton,
     searchInput,
     uploadFile,
+    folderSettings,
   },
   created() {},
   computed: {},

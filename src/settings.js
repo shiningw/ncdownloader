@@ -7,7 +7,7 @@ import settingsForm from './lib/settingsForm'
 import autoComplete from './lib/autoComplete';
 import eventHandler from './lib/eventHandler';
 import aria2Options from './utils/aria2Options';
-import { options as ytdFullOptions,names as ytdOptions } from './utils/youtubedlOptions';
+import { options as ytdFullOptions, names as ytdOptions } from './utils/youtubedlOptions';
 import helper from './utils/helper';
 import './css/autoComplete.css'
 'use strict';
@@ -137,19 +137,15 @@ window.addEventListener('DOMContentLoaded', function () {
         }
         settingsForm.getInstance().setParent("custom-youtube-dl-settings-container").render(input);
     }).send();
+
     const filepicker = function (event) {
         let element = event.target;
-        OC.dialogs.filepicker(
-            t('ncdownloader', 'Select a directory'),
-            function (path) {
-                if (element.value !== path) {
-                    element.value = path;
-                }
-            },
-            false,
-            'httpd/unix-directory',
-            true
-        );
+        const cb = function (path) {
+            if (this.value !== path) {
+                this.value = path;
+            }
+        }.bind(element);
+        helper.filepicker(cb)
     }
     eventHandler.add('click', "#ncd_downloader_dir", filepicker);
     eventHandler.add('click', "#ncd_torrents_dir", filepicker);
