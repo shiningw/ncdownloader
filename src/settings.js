@@ -44,7 +44,7 @@ window.addEventListener('DOMContentLoaded', function () {
             OC_msg.finishedError('#ncdownloader-message-banner', 'invalid options: ' + badOptions.join(','));
             return;
         }
-        Http.getInstance(url).setData(data).setHandler(function (data) {
+        helper.httpClient(url).setData(data).setHandler(function (data) {
             if (data.hasOwnProperty("error")) {
                 OC_msg.finishedError('#ncdownloader-message-banner', data.error);
             } else if (data.hasOwnProperty("message")) {
@@ -115,7 +115,7 @@ window.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         this.parentNode.remove();
     })
-    Http.getInstance(generateUrl("/apps/ncdownloader/personal/aria2/get")).setHandler(function (data) {
+    helper.httpClient(generateUrl("/apps/ncdownloader/personal/aria2/get")).setHandler(function (data) {
         if (!data) {
             return;
         }
@@ -127,7 +127,7 @@ window.addEventListener('DOMContentLoaded', function () {
         settingsForm.getInstance().render(input);
     }).send();
 
-    Http.getInstance(generateUrl("/apps/ncdownloader/personal/youtube-dl/get")).setHandler(function (data) {
+    helper.httpClient(generateUrl("/apps/ncdownloader/personal/youtube-dl/get")).setHandler(function (data) {
         if (!data) {
             return;
         }

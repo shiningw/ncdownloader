@@ -29,7 +29,7 @@ const buttonHandler = (event, type) => {
             console.log("gid is not set!");
         }
     }
-    Http.getInstance(url).setErrorHandler(function (xhr, textStatus, error) {
+    helper.httpClient(url).setErrorHandler(function (xhr, textStatus, error) {
         console.log(error);
     }).setHandler(function (data) {
         if (data.hasOwnProperty('error')) {

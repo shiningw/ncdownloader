@@ -73,7 +73,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 element.textContent = t("ncdownloader", "Stop Aria2");
             }
         }
-        Http.getInstance(url).setHandler(function (data) {
+        helper.httpClient(url).setHandler(function (data) {
             callback(parent, oldHtml, data);
         }).send();
     })

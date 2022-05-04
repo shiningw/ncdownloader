@@ -79,7 +79,7 @@ export default {
         helper.info(message);
       }
       let url = formWrapper.getAttribute("action");
-      Http.getInstance(url)
+      helper.httpClient(url)
         .setData(formData)
         .setHandler(function (data) {
           successCallback(data, element);
@@ -100,7 +100,7 @@ export default {
       contentTable.getInstance().loading();
 
       let url = formWrapper.getAttribute("action");
-      Http.getInstance(url)
+      helper.httpClient(url)
         .setData(formData)
         .setHandler(function (data) {
           if (data && data.title) {
@@ -123,7 +123,7 @@ export default {
       if (files) {
         let formWrapper = element.closest("form");
         let url = formWrapper.getAttribute("action");
-        return Http.getInstance(url)
+        return helper.httpClient(url)
           .setHandler(function (data) {
             successCallback(data, element);
           })

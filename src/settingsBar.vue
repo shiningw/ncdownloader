@@ -70,7 +70,7 @@ export default {
       data[name] = value ? 1 : 0;
       let path = (name == "ncd_disable_bt") ? "/admin/save" : "/personal/save";
       const url = helper.generateUrl(basePath + path);
-      Http.getInstance(url)
+      helper.httpClient(url)
         .setData(data)
         .setHandler((resp) => {
           if (resp["message"]) {

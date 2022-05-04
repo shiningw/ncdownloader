@@ -34,7 +34,7 @@ const helper = {
     scanFolder(forceScan = false, path = "/apps/ncdownloader/scanfolder") {
         let url = helper.generateUrl(path);
         return new Promise((resolve) => {
-            Http.getInstance(url).setData({ "force": forceScan }).setHandler(function (data) {
+            helper.httpClient(url).setData({ "force": forceScan }).setHandler(function (data) {
                 resolve(data.status);
             }).send();
         });
@@ -48,7 +48,7 @@ const helper = {
     refresh(path) {
         path = path || "/apps/ncdownloader/status/active";
         let url = helper.generateUrl(path);
-        Http.getInstance(url).setHandler(function (data) {
+        helper.httpClient(url).setHandler(function (data) {
             if (data && data.row) {
                 contentTable.getInstance(data.title, data.row).create();
             } else {
@@ -144,7 +144,7 @@ const helper = {
     },
     getCounters() {
         let url = helper.generateUrl("apps/ncdownloader/counters");
-        Http.getInstance(url).setMethod("GET").setHandler(function (data) {
+        helper.httpClient(url).setMethod("GET").setHandler(function (data) {
             if (data["counter"])
                 helper.updateCounter(data["counter"]);
         }).send();
@@ -299,10 +299,13 @@ const helper = {
     getSettings(key, defaultValue = null, type = 2) {
         let url = helper.generateUrl("/apps/ncdownloader/getsettings");
         return new Promise(resolve => {
-            Http.getInstance(url).setData({ name: key, type: type, default: defaultValue }).setHandler(data => {
+            helper.httpClient(url).setData({ name: key, type: type, default: defaultValue }).setHandler(data => {
                 resolve(data)
             }).send()
         })
+    },
+    httpClient(url) {
+        return new Http.create(url, true)
     }
 }
 

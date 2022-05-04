@@ -23,7 +23,7 @@ export default {
         }
         let data = { ncd_downloader_dir: path };
         let url = helper.generateUrl("/apps/ncdownloader/personal/save");
-        Http.getInstance(url)
+        helper.httpClient(url)
           .setData(data)
           .setHandler((data) => {
             if (data.status) {
