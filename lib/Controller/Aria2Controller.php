@@ -21,7 +21,7 @@ class Aria2Controller extends Controller
     //@config OC\AppConfig
     private $config;
     private $l10n;
-    private $minmax = [0, 999];
+    private $minmax = [-1, 999];
 
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, IRootFolder $rootFolder, Aria2 $aria2)
     {
