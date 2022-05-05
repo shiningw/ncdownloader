@@ -1,12 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 
 module.exports = {
- /* experiments: {
-    asset: true
-  },*/
+  /* experiments: {
+     asset: true
+   },*/
   entry: {
     app: './src/index.js',
     appSettings: './src/settings.js'
@@ -31,8 +32,10 @@ module.exports = {
       {
         test: /\.s?[ac]ss$/i,
         use: [
+          //Create standalone css files
+          MiniCssExtractPlugin.loader,
           // Creates `style` nodes from JS strings
-          "style-loader",
+          // "style-loader",
           // Translates CSS into CommonJS
           "css-loader",
           // Compiles Sass to CSS
@@ -49,11 +52,11 @@ module.exports = {
         use: 'vue-loader'
       },
       /*{ test: /\.css$/, use: ['vue-style-loader', 'css-loader'] },*/
-        {
-          test: /\.tsx?$/,
-          use: 'ts-loader',
-          exclude: /node_modules/,
-        },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
     ]
   },
   resolve: {
@@ -76,6 +79,9 @@ module.exports = {
       $: "jquery",
       jquery: "jQuery",
       "window.jQuery": "jquery"
+    }),
+    new MiniCssExtractPlugin({
+      filename: '../css/[name].css',
     }),
   ],
   externals: {

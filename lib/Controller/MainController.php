@@ -54,7 +54,7 @@ class MainController extends Controller
         // $str = \OC::$server->getDatabaseConnection()->getInner()->getPrefix();
         //$config = \OC::$server->getAppConfig();
         OC_Util::addScript($this->appName, 'app');
-        // OC_Util::addStyle($this->appName, 'table');
+        OC_Util::addStyle($this->appName, 'app');
         $params = $this->buildParams();
         $response = new TemplateResponse($this->appName, 'Index', $params);
         return $response;

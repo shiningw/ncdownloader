@@ -7,7 +7,6 @@
   ></div>
 </template>
 <script>
-import Http from "../lib/http";
 import helper from "../utils/helper";
 
 export default {

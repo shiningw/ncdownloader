@@ -1,7 +1,6 @@
 <?php
 script("ncdownloader", 'appSettings');
-style("ncdownloader", "autocomplete");
-style("ncdownloader", "settings");
+style("ncdownloader", 'appSettings');
 extract($_);
 $time_map = array('i' => 'minutes', 'h' => 'hours', 'w' => 'weeks', 'd' => 'days', 'y' => 'years');
 ?>

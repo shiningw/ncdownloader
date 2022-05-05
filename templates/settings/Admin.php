@@ -1,6 +1,6 @@
 <?php
 script("ncdownloader", 'appSettings');
-style("ncdownloader", "settings");
+style("ncdownloader", 'appSettings');
 extract($_);
 ?>
 <div class="ncdownloader-admin-settings">
