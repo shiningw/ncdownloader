@@ -22,7 +22,8 @@ export default {
         }
         let data = { ncd_downloader_dir: path };
         let url = helper.generateUrl("/apps/ncdownloader/personal/save");
-        helper.httpClient(url)
+        helper
+          .httpClient(url)
           .setData(data)
           .setHandler((data) => {
             if (data.status) {
@@ -31,7 +32,10 @@ export default {
           })
           .send();
       };
-      helper.filepicker(cb);
+      let dlPath = element.hasAttribute("data-path")
+        ? element.getAttribute("data-path")
+        : undefined;
+      helper.filepicker(cb, dlPath);
     },
   },
   props: ["path"],

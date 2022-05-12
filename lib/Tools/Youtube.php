@@ -9,6 +9,8 @@ class Youtube
 {
     public $audioOnly = 0;
     public $audioFormat = 'm4a', $videoFormat = null;
+    //path in nextcloud fs
+    public $dbDlPath = null;
     private $format = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best';
     private $options = [];
     private $downloadDir;
@@ -142,7 +144,7 @@ class Youtube
         $this->prependOption($this->bin);
         $process = new Process($this->options, null, $this->env);
         $process->setTimeout($this->timeout);
-        $data = ['link' => $url];
+        $data = ['link' => $url,'path' => $this->dbDlPath];
         if ($this->audioOnly) {
             $data['ext'] = $this->audioFormat;
         } else {

@@ -158,7 +158,7 @@ class MainController extends Controller
             'type' => Helper::DOWNLOADTYPE['ARIA2'],
             'filename' => empty($filename) ? "unknown" : $filename,
             'timestamp' => time(),
-            'data' => serialize(['link' => $url]),
+            'data' => serialize(['link' => $url,'path' => Helper::getDownloadDir()]),
         ];
         $this->dbconn->save($data);
         $resp = ['message' => $filename, 'result' => $result, 'file' => $filename];

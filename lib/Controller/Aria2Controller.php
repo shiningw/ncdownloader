@@ -192,8 +192,9 @@ class Aria2Controller extends Controller
             //internal nextcloud absolute path for nodeExists
             //$file = $this->userFolder . $this->downloadDir . "/" . $filename;
             // $dir = $this->rootFolder->nodeExists($file) ? $this->downloadDir . "/" . $filename : $this->downloadDir;
-            $file = $this->downloadDir . "/" . $filename;
-            $params = ['dir' => $this->downloadDir];
+            $dlDir = $extra['path'] ?? $this->downloadDir;
+            $file = $dlDir. "/" . $filename;
+            $params = ['dir' => $dlDir];
             $fileInfo = Filesystem::getFileInfo($file);
             if ($fileInfo) {
                 $fileType = $fileInfo->getType();

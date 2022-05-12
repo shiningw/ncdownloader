@@ -287,13 +287,15 @@ const helper = {
         container.setAttribute("type", name);
         container.className = "table " + name;
     },
-    filepicker(cb) {
+    filepicker(cb,currentPath) {
         OC.dialogs.filepicker(
             t('ncdownloader', 'Select a directory'),
             cb,
             false,
             'httpd/unix-directory',
-            true
+            true,
+            OC.dialogs.FILEPICKER_TYPE_CHOOSE,
+            currentPath
         );
     },
     getSettings(key, defaultValue = null, type = 2) {

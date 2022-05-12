@@ -10,6 +10,7 @@ import aria2Options from './utils/aria2Options';
 import { options as ytdFullOptions, names as ytdOptions } from './utils/youtubedlOptions';
 import helper from './utils/helper';
 import './css/autoComplete.css'
+import './css/settings.scss'
 'use strict';
 import { delegate } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';

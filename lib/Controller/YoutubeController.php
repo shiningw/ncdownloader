@@ -43,7 +43,7 @@ class YoutubeController extends Controller
         }
         $resp['title'] = [];
         $resp['row'] = [];
-        $params = ['dir' => $this->downloadDir];
+        $params = ['dir' => $data['path'] ?? $this->downloadDir];
         $folderLink = $this->urlGenerator->linkToRoute('files.view.index', $params);
         foreach ($data as $value) {
             $tmp = [];
@@ -92,7 +92,7 @@ class YoutubeController extends Controller
         if (Helper::isGetUrlSite($url)) {
             return new JSONResponse($this->downloadUrlSite($url));
         }
-
+        $yt->dbDlPath = Helper::getDownloadDir();
         $resp = $yt->forceIPV4()->download($url);
         folderScan::sync();
         return new JSONResponse($resp);
@@ -165,6 +165,7 @@ class YoutubeController extends Controller
                 }
             }
             //$this->dbconn->deleteByGid($gid);
+            $this->youtube->dbDlPath = Helper::getDownloadDir();
             $resp = $this->youtube->forceIPV4()->download($data['link']);
             folderScan::sync();
             return new JSONResponse($resp);
