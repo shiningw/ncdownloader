@@ -1,4 +1,5 @@
 <?php
+
 namespace OCA\NCDownloader\Tools;
 
 use OCA\NCDownloader\Tools\Helper;
@@ -31,7 +32,7 @@ class Youtube
         if (isset($binary) && $this->isExecutable($binary)) {
             $this->bin = $binary;
         } else {
-            $this->bin = Helper::findBinaryPath('youtube-dl', __DIR__ . "/../../bin/yt-dlp");
+            $this->bin = __DIR__ . "/../../bin/yt-dlp"; //Helper::findBinaryPath('youtube-dl', __DIR__ . "/../../bin/yt-dlp");
         }
         if ($this->isInstalled() && !$this->isExecutable()) {
             chmod($this->bin, 0744);
@@ -144,7 +145,7 @@ class Youtube
         $this->prependOption($this->bin);
         $process = new Process($this->options, null, $this->env);
         $process->setTimeout($this->timeout);
-        $data = ['link' => $url,'path' => $this->dbDlPath];
+        $data = ['link' => $url, 'path' => $this->dbDlPath];
         if ($this->audioOnly) {
             $data['ext'] = $this->audioFormat;
         } else {
@@ -226,7 +227,6 @@ class Youtube
         foreach ($this->options as $option) {
             $this->cmd .= " " . $option;
         }
-
     }
     public function isInstalled()
     {
@@ -263,5 +263,4 @@ class Youtube
     {
         return "https://github.com/shiningw/ncdownloader-bin/raw/master/yt-dlp";
     }
-
 }
