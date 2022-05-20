@@ -12,17 +12,16 @@ An easy-to-use web interface for Aria2 and youtube-dl
 
 ### How to use
 
-the latest version has included both youtube-dl and aria2c and there is no need for manual installation (*tested it successfully with snap version of nextcloud both in centos7 and ubuntu 20.04*)   
-if for some reason,the builtin binaries don't work for you, then you will need to install them yourself
+NCDownloader has included both yt-dlp(faster version of youtube-dl) and aria2c and there is no need for manual installation under normal circumstances (*tested it successfully with snap version of nextcloud both in centos7 and ubuntu 20.04*)   
+But if for some reason,the builtin binaries don't work for you, then you will need to install them yourself
 
-#### installing aria2 and youtube-dl in ubuntu
+#### installing aria2 and yt-dlp in ubuntu
 ```bash
 sudo apt install aria2
-sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl 4 -o /usr/local/bin/youtube-dl
+sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/download/2022.05.18/yt-dlp 4 -o /usr/local/bin/youtube-dl
 sudo chmod a+rx /usr/local/bin/youtube-dl
 ```
-local versions will be chosen over the builtin ones.
-But you can force the app use a specific version by setting the binary path manually. When the binary is valid, it has the highest priority and all other versions will be ignored
+Also, if you don't want to use the builtin versions, you can always force the app use a specific version by setting the binary path manually. In that case, the app will not try to find youtube-dl binary in your system, and the built-in ones will be ignored as well. 
 
 ### How to build front-end code
 
