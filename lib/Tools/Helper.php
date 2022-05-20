@@ -508,7 +508,7 @@ class Helper
     }
     public static function isLegacyVersion(): bool
     {
-        return (version_compare(implode(".", self::getVersion()), '20.0.0') <= 0);
+        return (version_compare(implode(".", self::getVersion()), '20.0.0') < 0);
     }
     public static function query($key)
     {
@@ -516,7 +516,7 @@ class Helper
     }
     public static function getLogger()
     {
-        return (version_compare(implode(".", self::getVersion()), '24.0.0') <= 0) ? \OC::$server->getLogger() : \OC::$server->get(LoggerInterface::class);
+        return (version_compare(implode(".", self::getVersion()), '24.0.0') < 0) ? \OC::$server->getLogger() : \OC::$server->get(LoggerInterface::class);
     }
     public static function getDatabaseConnection()
     {
