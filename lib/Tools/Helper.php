@@ -9,6 +9,7 @@ use OCA\NCDownloader\Tools\Settings;
 use OCP\IUser;
 use OC\Files\Filesystem;
 use OC_Util;
+use Psr\Log\LoggerInterface;
 
 class Helper
 {
@@ -113,8 +114,7 @@ class Helper
 
     public static function cleanString($string)
     {
-        $replace = array
-            (
+        $replace = array(
             '/[áàâãªä]/u' => 'a',
             '/[ÁÀÂÃÄ]/u' => 'A',
             '/[ÍÌÎÏ]/u' => 'I',
@@ -501,5 +501,25 @@ class Helper
     public static function getDownloadDir(): string
     {
         return self::getSettings('ncd_downloader_dir', "/Downloads");
+    }
+    public static function getVersion(): array
+    {
+        return \OC_Util::getVersion();
+    }
+    public static function isLegacyVersion(): bool
+    {
+        return (version_compare(implode(".", self::getVersion()), '20.0.0') <= 0);
+    }
+    public static function query($key)
+    {
+        return self::isLegacyVersion() ? \OC::$server->query($key) : \OC::$server->get($key);
+    }
+    public static function getLogger()
+    {
+        return (version_compare(implode(".", self::getVersion()), '24.0.0') <= 0) ? \OC::$server->getLogger() : \OC::$server->get(LoggerInterface::class);
+    }
+    public static function getDatabaseConnection()
+    {
+        return self::isLegacyVersion() ? \OC::$server->getDatabaseConnection() : \OC::$server->get(\OCP\IDBConnection::class);
     }
 }

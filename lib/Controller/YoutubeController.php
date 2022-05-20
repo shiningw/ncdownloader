@@ -94,7 +94,7 @@ class YoutubeController extends Controller
         }
         $yt->dbDlPath = Helper::getDownloadDir();
         $resp = $yt->forceIPV4()->download($url);
-        folderScan::sync();
+        folderScan::sync(true);
         return new JSONResponse($resp);
     }
     private function downloadUrlSite($url)

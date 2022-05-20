@@ -1,4 +1,5 @@
 <?php
+
 namespace OCA\NCDownloader\Tools;
 
 use OCA\NCDownloader\Tools\Helper;
@@ -45,11 +46,11 @@ class folderScan
         $this->scan();
         return ['message' => "changed"];
     }
-//force update
+    //force update
     public function scan()
     {
-        $this->logger = \OC::$server->getLogger();
-        $this->scanner = new Scanner($this->user, \OC::$server->getDatabaseConnection(), \OC::$server->query(IEventDispatcher::class), $this->logger);
+        $this->logger = Helper::getLogger();
+        $this->scanner = new Scanner($this->user, Helper::getDatabaseConnection(), Helper::query(IEventDispatcher::class), $this->logger);
         try {
             $this->scanner->scan($this->path);
             return ['status' => true, 'path' => $this->path];
@@ -64,8 +65,9 @@ class folderScan
     }
 
     //update only folder is modified
-    public static function sync($path = null, $user = null)
+    public static function sync($force = false, $path = null, $user = null)
     {
-        return self::create($path, $user)->update();
+        $inst = self::create($path, $user);
+        return $force ? $inst->scan() : $inst->update();
     }
 }
