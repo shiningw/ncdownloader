@@ -24,7 +24,7 @@ class bitSearch extends searchBase implements searchInterface
         $this->searchUrl = $this->baseUrl;
         $content = $this->getContent();
         if ($this->hasErrors()) {
-            return tableData::create()->setEror($this->getErrors());
+            return tableData::create()->setError($this->getErrors());
         }
         $this->crawler->add($content);
         $this->getItems()->addActionLinks();
