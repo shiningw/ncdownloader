@@ -22,7 +22,7 @@ class TPB extends searchBase implements searchInterface
         $this->crawler->add($this->getContent());
         $this->getItems()->addActionLinks();
         if ($this->hasErrors()) {
-            return tableData::create()->setEror($this->getErrors());
+            return tableData::create()->setError($this->getErrors());
         }
         return tableData::create($this->getTableTitles(), $this->getRows());
     }
