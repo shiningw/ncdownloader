@@ -3,6 +3,7 @@
 namespace OCA\NCDownloader\Search;
 
 require __DIR__ . "/../../vendor/autoload.php";
+
 use OCP\AppFramework\QueryException;
 use OCP\IServerContainer;
 use Symfony\Component\HttpClient\Exception\ClientException;
@@ -24,7 +25,7 @@ class siteSearch
         } catch (QueryException $e) {
             $siteInst = $this->container->query($this->defaultSite);
         } catch (ClientException $e) {
-            return ['message', $e->getMessage()];
+            return ['error' => $e->getMessage()];
         }
         $result = $siteInst->search($keyword);
         if ($result->hasError()) {
@@ -41,5 +42,4 @@ class siteSearch
             $this->site = __NAMESPACE__ . '\Sites\\' . $site;
         }
     }
-
 }
