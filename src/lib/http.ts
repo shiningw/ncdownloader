@@ -147,7 +147,10 @@ export const Http = class {
     }
     upload(file: File) {
         const fd = new FormData();
+        this.client = new XMLHttpRequest();
         this.client.open(this.method, this.url, true);
+        this.setHeader('requesttoken', this.getToken())
+        this.setHeader('OCS-APIREQUEST', 'true')
         let callback = this.handler;
         this.client.onload = () => {
             if (typeof callback === 'function')
