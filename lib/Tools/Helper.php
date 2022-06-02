@@ -400,12 +400,12 @@ class Helper
         return "";
     }
 
-    public static function getRealDownloadDir($uid = null): string
+    public static function getRealDownloadDir(): string
     {
         $dlDir = self::getDownloadDir();
         return self::getLocalFolder($dlDir);
     }
-    public static function getRealTorrentsDir($uid = null): string
+    public static function getRealTorrentsDir(): string
     {
         $dir = self::getSettings('ncd_torrents_dir', "/Torrents");
         return self::getLocalFolder($dir);
@@ -450,8 +450,8 @@ class Helper
         $options = [];
         $uid = $uid ?? self::getUID();
         $settings = self::newSettings($uid);
-        $realDownloadDir = Helper::getRealDownloadDir($uid);
-        $torrentsDir = Helper::getRealTorrentsDir($uid);
+        $realDownloadDir = Helper::getRealDownloadDir();
+        $torrentsDir = Helper::getRealTorrentsDir();
         $appPath = self::getAppPath();
         $dataDir = self::getDataDir();
         $aria2_dir = $dataDir . "/aria2";
