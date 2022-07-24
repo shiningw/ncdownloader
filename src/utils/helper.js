@@ -42,8 +42,8 @@ const helper = {
     pollingFolder(delay = 1500) {
         Polling.create().setDelay(delay).run(helper.scanFolder);
     },
-    pollingYoutube(delay = 1500) {
-        Polling.create().setDelay(delay).run(helper.refresh, "/apps/ncdownloader/youtube/get");
+    pollingYtdl(delay = 1500) {
+        Polling.create().setDelay(delay).run(helper.refresh, "/apps/ncdownloader/ytdl/get");
     },
     refresh(path) {
         path = path || "/apps/ncdownloader/status/active";

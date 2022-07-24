@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\NCDownloader\Tools;
+namespace OCA\NCDownloader\Db;
 
 use OC\AllConfig;
 
@@ -60,9 +60,9 @@ class Settings extends AllConfig
         return json_decode($settings, 1);
     }
 
-    public function getYoutube()
+    public function getYtdl()
     {
-        $settings = $this->get("custom_youtube_dl_settings");
+        $settings = $this->get("custom_ytdl_settings");
         return json_decode($settings, 1);
     }
     public function getAll()

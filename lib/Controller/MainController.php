@@ -2,13 +2,13 @@
 
 namespace OCA\NCDownloader\Controller;
 
-use OCA\NCDownloader\Tools\Aria2;
+use OCA\NCDownloader\Aria2\Aria2;
 use OCA\NCDownloader\Tools\Counters;
-use OCA\NCDownloader\Tools\DbHelper;
+use OCA\NCDownloader\Db\Helper as DbHelper;
 use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\Settings;
-use OCA\NCDownloader\Tools\Youtube;
+use OCA\NCDownloader\Db\Settings;
+use OCA\NCDownloader\Ytdl\Ytdl;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -26,7 +26,7 @@ class MainController extends Controller
     private $aria2Opts;
     private $l10n;
 
-    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Youtube $youtube)
+    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Ytdl $ytdl)
     {
 
         parent::__construct($appName, $request);
@@ -39,7 +39,7 @@ class MainController extends Controller
         $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->dbconn = new DbHelper();
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
-        $this->youtube = $youtube;
+        $this->ytdl = $ytdl;
         $this->isAdmin = \OC_User::isAdminUser($this->uid);
         $this->hideError = Helper::getSettings("ncd_hide_errors", false);
         $this->disable_bt_nonadmin = Helper::getSettings("ncd_disable_bt", false, Settings::TYPE["SYSTEM"]);
@@ -67,9 +67,9 @@ class MainController extends Controller
         $params['aria2_installed'] = $aria2_installed = $this->aria2->isInstalled();
         $params['aria2_bin'] = $aria2_bin = $this->aria2->getBin();
         $params['aria2_executable'] = $aria2_executable = $this->aria2->isExecutable();
-        $params['youtube_installed'] = $youtube_installed = $this->youtube->isInstalled();
-        $params['youtube_bin'] = $youtube_bin = $this->youtube->getBin();
-        $params['youtube_executable'] = $youtube_executable = $this->youtube->isExecutable();
+        $params['ytdlinstalled'] = $ytdlinstalled = $this->ytdl->isInstalled();
+        $params['ytdlbin'] = $ytdlbin = $this->ytdl->getBin();
+        $params['ytdlexecutable'] = $ytdlexecutable = $this->ytdl->isExecutable();
         $params['ncd_hide_errors'] = $this->hideError;
         $params['counter'] = $this->counters->getCounters();
         $params['python_installed'] = Helper::pythonInstalled();
@@ -92,8 +92,8 @@ class MainController extends Controller
                 $this->aria2->start();
             }
         }
-        if ($youtube_installed && (!$youtube_executable || !@is_readable($youtube_bin))) {
-            array_push($errors, sprintf("youtube-dl is installed but don't have the right permissions.Please execute command sudo chmod 755 %s", $youtube_bin));
+        if ($ytdlinstalled && (!$ytdlexecutable || !@is_readable($ytdlbin))) {
+            array_push($errors, sprintf("ytdl is installed but don't have the right permissions.Please execute command sudo chmod 755 %s", $ytdlbin));
         }
 
         foreach ($params as $key => $value) {

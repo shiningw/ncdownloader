@@ -1,23 +1,23 @@
 <?php
 namespace OCA\NCDownloader\Controller;
 
-use OCA\NCDownloader\Tools\Aria2;
-use OCA\NCDownloader\Tools\DbHelper;
+use OCA\NCDownloader\Aria2\Aria2;
+use OCA\NCDownloader\Db\Helper as DbHelper;
 use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\Youtube;
+use OCA\NCDownloader\Ytdl\Ytdl;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IL10N;
 use OCP\IRequest;
 
-class YoutubeController extends Controller
+class YtdlController extends Controller
 {
     //@config OC\AppConfig
     private $l10n;
     private $audio_extensions = array("mp3", "m4a", "vorbis");
 
-    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Youtube $youtube)
+    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Ytdl $ytdl)
     {
         parent::__construct($appName, $request);
         $this->appName = $appName;
@@ -26,7 +26,7 @@ class YoutubeController extends Controller
         $this->l10n = $IL10N;
         $this->downloadDir = Helper::getDownloadDir();
         $this->dbconn = new DbHelper();
-        $this->youtube = $youtube;
+        $this->ytdl = $ytdl;
         $this->aria2 = $aria2;
         $this->aria2->init();
         $this->tablename = $this->dbconn->queryBuilder->getTableName("ncdownloader_info");
@@ -37,7 +37,7 @@ class YoutubeController extends Controller
      */
     public function Index()
     {
-        $data = $this->dbconn->getYoutubeByUid($this->uid);
+        $data = $this->dbconn->getYtdlByUid($this->uid);
         if (is_array($data) && count($data) < 1) {
             return [];
         }
@@ -54,9 +54,9 @@ class YoutubeController extends Controller
             $tmp['speed'] = explode("|", $value['speed']);
             $tmp['progress'] = $value['progress'];
 
-            $path = $this->urlGenerator->linkToRoute('ncdownloader.Youtube.Delete');
+            $path = $this->urlGenerator->linkToRoute('ncdownloader.Ytdl.Delete');
             $tmp['actions'][] = ['name' => 'delete', 'path' => $path];
-            $path = $this->urlGenerator->linkToRoute('ncdownloader.Youtube.Redownload');
+            $path = $this->urlGenerator->linkToRoute('ncdownloader.Ytdl.Redownload');
             $tmp['actions'][] = ['name' => 'refresh', 'path' => $path];
 
             $tmp['data_gid'] = $value['gid'] ?? 0;
@@ -64,7 +64,7 @@ class YoutubeController extends Controller
         }
 
         $resp['title'] = ['filename', 'speed', 'progress', 'actions'];
-        $resp['counter'] = ['youtube-dl' => count($data)];
+        $resp['counter'] = ['ytdl' => count($data)];
         folderScan::sync();
         return new JSONResponse($resp);
     }
@@ -74,12 +74,12 @@ class YoutubeController extends Controller
      */
     public function Download()
     {
-        $dlDir = $this->youtube->getDownloadDir();
+        $dlDir = $this->ytdl->getDownloadDir();
         if (!is_writable($dlDir)) {
             return new JSONResponse(['error' => sprintf("%s is not writable", $dlDir)]);
         }
         $url = trim($this->request->getParam('text-input-value'));
-        $yt = $this->youtube;
+        $yt = $this->ytdl;
         if (in_array($this->request->getParam('extension'), $this->audio_extensions)) {
             $yt->audioOnly = true;
             $yt->audioFormat = $this->request->getParam('extension');
@@ -87,7 +87,7 @@ class YoutubeController extends Controller
             $yt->videoFormat = $this->request->getParam('extension');
         }
         if (!$yt->isInstalled()) {
-            return new JSONResponse(["error" => "Please install the latest youtube-dl or make the bundled binary file executable in ncdownloader/bin"]);
+            return new JSONResponse(["error" => "Please install the latest yt-dlp or make the bundled binary file executable in ncdownloader/bin"]);
         }
         if (Helper::isGetUrlSite($url)) {
             return new JSONResponse($this->downloadUrlSite($url));
@@ -99,7 +99,7 @@ class YoutubeController extends Controller
     }
     private function downloadUrlSite($url)
     {
-        $yt = $this->youtube;
+        $yt = $this->ytdl;
         if ($data = $yt->forceIPV4()->getDownloadUrl($url)) {
             return $this->_download($data['url'], $data['filename']);
         } else {
@@ -157,16 +157,16 @@ class YoutubeController extends Controller
         if (!empty($data['link'])) {
             if (isset($data['ext'])) {
                 if (in_array($data['ext'], $this->audio_extensions)) {
-                    $this->youtube->audioOnly = true;
-                    $this->youtube->audioFormat = $data['ext'];
+                    $this->ytdl->audioOnly = true;
+                    $this->ytdl->audioFormat = $data['ext'];
                 } else {
-                    $this->youtube->audioOnly = false;
-                    $this->youtube->videoFormat = $data['ext'];
+                    $this->ytdl->audioOnly = false;
+                    $this->ytdl->videoFormat = $data['ext'];
                 }
             }
             //$this->dbconn->deleteByGid($gid);
-            $this->youtube->dbDlPath = Helper::getDownloadDir();
-            $resp = $this->youtube->forceIPV4()->download($data['link']);
+            $this->ytdl->dbDlPath = Helper::getDownloadDir();
+            $resp = $this->ytdl->forceIPV4()->download($data['link']);
             folderScan::sync();
             return new JSONResponse($resp);
         }

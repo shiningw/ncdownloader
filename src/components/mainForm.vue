@@ -8,8 +8,8 @@
         HTTP/MAGNET
       </div>
       <div
-        class="youtube-dl-link option-buttons"
-        @click.prevent="whichType('youtube-dl', $event)"
+        class="ytdl-link option-buttons"
+        @click.prevent="whichType('ytdl', $event)"
       >
         Youtube-dl
       </div>
@@ -100,13 +100,13 @@ export default {
       this.downloadType = type;
       if (type === "aria2") {
         this.path = this.uris.aria2_url;
-      } else if (type === "youtube-dl") {
+      } else if (type === "ytdl") {
         this.placeholder = t("ncdownloader", "Paste your video link here");
         this.path = this.uris.ytd_url;
       } else {
         this.path = this.uris.search_url;
       }
-      this.checkboxes = type === "youtube-dl" ? true : false;
+      this.checkboxes = type === "ytdl" ? true : false;
       this.inputType = type === "search" ? "search" : "download";
     },
     download(event) {
@@ -219,7 +219,7 @@ export default {
     border-radius: 15px 0px 0px 15px;
   }
 
-  .youtube-dl-link {
+  .ytdl-link {
     background-color: #b8b8ca;
   }
   .search-torrents {
@@ -227,7 +227,7 @@ export default {
   }
 
   .search-torrents,
-  .youtube-dl-link,
+  .ytdl-link,
   .magnet-link,
   .choose-file {
     color: #181616;

@@ -17,11 +17,11 @@ export default {
             }
             helper.setContentTableType(name);
             let delay;
-            if (!['active-downloads', 'youtube-dl-downloads'].includes(name)) {
+            if (!['active-downloads', 'ytdl-downloads'].includes(name)) {
                 delay = 15000;
             }
-            if (name === "youtube-dl-downloads") {
-                helper.pollingYoutube();
+            if (name === "ytdl-downloads") {
+                helper.pollingYtdl();
             } else {
                 helper.polling(delay, path);
             }

@@ -2,7 +2,7 @@
 
 namespace OCA\NCDownloader\Command;
 
-use OCA\NCDownloader\Tools\DbHelper;
+use OCA\NCDownloader\Db\Helper as DbHelper;
 use OCA\NCDownloader\Tools\Helper;
 use OC\Core\Command\Base;
 use Symfony\Component\Console\Input\InputArgument;

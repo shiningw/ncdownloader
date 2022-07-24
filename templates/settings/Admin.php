@@ -21,8 +21,8 @@ extract($_);
                 <?php print($l->t('Youtube-dl Binary Path'));?>
             </label>
             <input type="text" class="ncd_yt_binary" id="ncd_yt_binary" name="ncd_yt_binary"
-                value="<?php print($ncd_yt_binary ?? '/usr/local/bin/youtube-dl');?>"
-                placeholder='/usr/local/bin/youtube-dl' />
+                value="<?php print($ncd_yt_binary ?? '/usr/local/bin/ytdl');?>"
+                placeholder='/usr/local/bin/ytdl' />
             <input type="button" value="<?php print($l->t('Save'));?>" data-rel="ncd_yt_binary_container" />
         </div>
         <div id="ncd_aria2_binary_container" path="<?php print $path;?>">

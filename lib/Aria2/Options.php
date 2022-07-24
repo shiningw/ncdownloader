@@ -1,7 +1,7 @@
 <?php
-namespace OCA\NCDownloader\Tools;
+namespace OCA\NCDownloader\Aria2;
 
-class aria2Options
+class Options
 {
 
     public static function get()

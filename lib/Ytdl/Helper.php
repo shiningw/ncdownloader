@@ -1,10 +1,10 @@
 <?php
-namespace OCA\NCDownloader\Tools;
+namespace OCA\NCDownloader\Ytdl;
 
-use OCA\NCDownloader\Tools\DbHelper;
-use OCA\NCDownloader\Tools\Helper;
+use OCA\NCDownloader\Db\Helper as DbHelper;
+use OCA\NCDownloader\Tools\Helper as ToolsHelper;
 
-class YoutubeHelper
+class Helper
 {
     public $file = null;
     protected $pid = 0;
@@ -67,7 +67,7 @@ class YoutubeHelper
     }
     public function log($message)
     {
-        Helper::debug($message);
+        ToolsHelper::debug($message);
     }
     public function updateStatus($status = null)
     {
@@ -84,10 +84,10 @@ class YoutubeHelper
     {
         $info = $this->getSiteInfo($buffer);
         if (isset($info["id"])) {
-            $this->gid = Helper::generateGID($info["id"]);
+            $this->gid = ToolsHelper::generateGID($info["id"]);
         }
         if (!$this->gid) {
-            $this->gid = Helper::generateGID($extra["link"]);
+            $this->gid = ToolsHelper::generateGID($extra["link"]);
         }
         $downloadInfo = $this->getDownloadInfo($buffer);
         if ($downloadInfo) {
@@ -116,9 +116,9 @@ class YoutubeHelper
         $data = [
             'uid' => $this->user,
             'gid' => $this->gid,
-            'type' => Helper::DOWNLOADTYPE['YOUTUBE-DL'],
+            'type' => ToolsHelper::DOWNLOADTYPE['YOUTUBE-DL'],
             'filename' => basename($file),
-            'status' => Helper::STATUS['ACTIVE'],
+            'status' => ToolsHelper::STATUS['ACTIVE'],
             'timestamp' => time(),
             'data' => $extra,
         ];

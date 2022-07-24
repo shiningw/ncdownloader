@@ -1,12 +1,12 @@
 <?php
 
-namespace OCA\NCDownloader\Tools;
+namespace OCA\NCDownloader\Ytdl;
 
 use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\YoutubeHelper;
+use OCA\NCDownloader\Ytdl\Helper as YtdHelper;
 use Symfony\Component\Process\Process;
 
-class Youtube
+class Ytdl
 {
     public $audioOnly = 0;
     public $audioFormat = 'm4a', $videoFormat = null;
@@ -32,7 +32,7 @@ class Youtube
         if (isset($binary) && $this->isExecutable($binary)) {
             $this->bin = $binary;
         } else {
-            $this->bin = __DIR__ . "/../../bin/yt-dlp"; //Helper::findBinaryPath('youtube-dl', __DIR__ . "/../../bin/yt-dlp");
+            $this->bin = __DIR__ . "/../../bin/yt-dlp"; //Helper::findBinaryPath('ytdl', __DIR__ . "/../../bin/yt-dlp");
         }
         if ($this->isInstalled() && !$this->isExecutable()) {
             chmod($this->bin, 0744);
@@ -138,7 +138,7 @@ class Youtube
                 $this->setOption('--format', $this->format);
             }
         }
-        $this->helper = YoutubeHelper::create();
+        $this->helper = YtdHelper::create();
         $this->downloadDir = $this->downloadDir ?? $this->defaultDir;
         $this->setOption("--output", $this->downloadDir . "/" . $this->outTpl);
         $this->setUrl($url);

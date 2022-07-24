@@ -7,7 +7,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Settings\ISettings;
-use OCA\NCDownloader\Tools\Settings;
+use OCA\NCDownloader\Db\Settings;
 use OCA\NCDownloader\Tools\Helper;
 
 class Personal implements ISettings {

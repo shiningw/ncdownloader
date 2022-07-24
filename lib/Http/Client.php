@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\NCDownloader\Tools;
+namespace OCA\NCDownloader\http;
 
 //require __DIR__ . "/../../vendor/autoload.php";
 use Symfony\Component\HttpClient\HttpClient;

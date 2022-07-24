@@ -1,10 +1,11 @@
 <?php
 
-namespace OCA\NCDownloader\Tools;
+namespace OCA\NCDownloader\Aria2;
 
 //use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use OCA\NCDownloader\Tools\Helper;
 
 class Aria2
 {

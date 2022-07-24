@@ -5,7 +5,7 @@ $downloadsList = [
     ["name" => "waiting", "label" => "Waiting Downloads", "id" => "waiting-downloads", "path" => "/apps/ncdownloader/status/waiting"],
     ["name" => "fail", "label" => "Failed Downloads", "id" => "failed-downloads", "path" => "/apps/ncdownloader/status/fail"],
     ["name" => "complete", "label" => "Complete Downloads", "id" => "complete-downloads", "path" => "/apps/ncdownloader/status/complete"],
-    ["name" => "youtube-dl", "label" => "Youtube-dl Downloads", "id" => "youtube-dl-downloads", "path" => "/apps/ncdownloader/youtube/get"],
+    ["name" => "ytdl", "label" => "Youtube-dl Downloads", "id" => "ytdl-downloads", "path" => "/apps/ncdownloader/ytdl/get"],
 ];
 ?>
 <div id="app-navigation">

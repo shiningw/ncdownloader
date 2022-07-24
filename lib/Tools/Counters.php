@@ -2,8 +2,8 @@
 
 namespace OCA\NCDownloader\Tools;
 
-use OCA\NCDownloader\Tools\Aria2;
-use OCA\NCDownloader\Tools\DbHelper;
+use OCA\NCDownloader\Aria2\Aria2;
+use OCA\NCDownloader\Db\Helper as DbHelper;
 
 class Counters
 {
@@ -22,13 +22,13 @@ class Counters
             'waiting' => $this->getCounter('tellWaiting'),
             'complete' => $this->getCounter('tellStopped'),
             'fail' => $this->getCounter('tellFail'),
-            'youtube-dl' => $this->getCounter('youtube-dl'),
+            'ytdl' => $this->getCounter('ytdl'),
         ];
     }
     private function getCounter($action = 'tellActive')
     {
-        if ($action === 'youtube-dl') {
-            $data = $this->dbconn->getYoutubeByUid($this->uid);
+        if ($action === 'ytdl') {
+            $data = $this->dbconn->getYtdlByUid($this->uid);
         } else if ($action === 'tellActive') {
             $data = $this->aria2->{$action}([]);
         } else {
@@ -38,7 +38,7 @@ class Counters
         if (!is_array($data) && count($data) < 1) {
             return 0;
         }
-        if ($action !== 'youtube-dl') {
+        if ($action !== 'ytdl') {
             $data = $this->filterData($data);
         }
         return count($data);

@@ -1,9 +1,9 @@
 <?php
 namespace OCA\NCDownloader\Controller;
 
-use OCA\NCDownloader\Tools\Aria2;
+use OCA\NCDownloader\Aria2\Aria2;
 use OCA\NCDownloader\Tools\Counters;
-use OCA\NCDownloader\Tools\DbHelper;
+use OCA\NCDownloader\Db\Helper as DbHelper;
 use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
 use OCP\AppFramework\Controller;

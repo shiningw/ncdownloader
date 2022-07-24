@@ -1,7 +1,8 @@
 <?php
-namespace OCA\NCDownloader\Tools;
+namespace OCA\NCDownloader\Db;
+use OCA\NCDownloader\Tools\Helper as ToolsHelper;
 
-class DbHelper
+class Helper
 {
     //@var OC\DB\ConnectionAdapter
     private $conn;
@@ -13,7 +14,7 @@ class DbHelper
         $this->queryBuilder = $this->conn->getQueryBuilder();
         $this->prefixedTable = $this->queryBuilder->getTableName($this->table);
         //$container = \OC::$server->query(\OCP\IServerContainer::class);
-        //Helper::debug(get_class($container->query(\OCP\RichObjectStrings\IValidator::class)));
+        //ToolsHelper::debug(get_class($container->query(\OCP\RichObjectStrings\IValidator::class)));
         //$this->conn = \OC::$server->query(Connection::class);//working only with 22
         //$this->connAdapter = \OC::$server->getDatabaseConnection();
         //$this->conn = $this->connAdapter->getInner();
@@ -58,7 +59,7 @@ class DbHelper
         return $queryBuilder->fetchColumn();
     }
 
-    public function getYoutubeByUid($uid)
+    public function getYtdlByUid($uid)
     {
         $qb = $this->queryBuilder
             ->select('*')
@@ -66,7 +67,7 @@ class DbHelper
             ->where('uid = :uid')
             ->andWhere('type = :type')
             ->setParameter('uid', $uid)
-            ->setParameter('type', Helper::DOWNLOADTYPE['YOUTUBE-DL'])
+            ->setParameter('type', ToolsHelper::DOWNLOADTYPE['YOUTUBE-DL'])
             ->orderBy('id', 'DESC')
             ->execute();
         return $qb->fetchAll();

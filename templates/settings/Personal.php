@@ -74,17 +74,17 @@ $time_map = array('i' => 'minutes', 'h' => 'hours', 'w' => 'weeks', 'd' => 'days
                     </button>
                 </div>
             </div>
-            <div class="ncdownloader-youtube-dl-settings">
+            <div class="ncdownloader-ytdl-settings">
                 <h3 class="title">
                     <?php print($l->t('Custom Youtube-dl Settings'));?>
                 </h3>
-                <div classs="section" id="custom-youtube-dl-settings-container"
-                    path="/apps/ncdownloader/personal/youtube-dl/save">
-                    <button class="add-custom-youtube-dl-settings">
+                <div classs="section" id="custom-ytdl-settings-container"
+                    path="/apps/ncdownloader/personal/ytdl/save">
+                    <button class="add-custom-ytdl-settings">
                         <?php print $l->t('Add Options');?>
                     </button>
-                    <button class="save-custom-youtube-dl-settings" data-tippy-content=''
-                        data-rel="custom-youtube-dl-settings-container">
+                    <button class="save-custom-ytdl-settings" data-tippy-content=''
+                        data-rel="custom-ytdl-settings-container">
                         <?php print $l->t('Save');?>
                     </button>
                 </div>

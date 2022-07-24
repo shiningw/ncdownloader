@@ -1,7 +1,7 @@
 <?php
-namespace OCA\NCDownloader\Tools;
+namespace OCA\NCDownloader\Ytdl;
 
-class youtubedlOptions
+class Options
 {
 
     public static function get()
@@ -65,7 +65,7 @@ class youtubedlOptions
             'http-chunk-size' => 'Size of a chunk for chunk-based HTTP downloading (e.g. 10485760 or 10M) (default is disabled). May be useful for',
             'playlist-reverse' => 'playlist videos in reverse order',
             'playlist-random' => 'playlist videos in random order',
-            'xattr-set-filesize' => 'file xattribute ytdl.filesize with expected file size',
+            'xattr-set-filesize' => 'file xattribute youtube-dl.filesize with expected file size',
             'hls-prefer-native' => 'the native HLS downloader instead of ffmpeg',
             'hls-prefer-ffmpeg' => 'ffmpeg instead of the native HLS downloader',
             'hls-use-mpegts' => 'the mpegts container for HLS videos; allowing some players to play the video while downloading, and reducing the',
@@ -130,7 +130,7 @@ class youtubedlOptions
             'all-formats' => 'all available video formats',
             'prefer-free-formats' => 'video formats with free containers over non-free ones of same quality. Use with "-S ext" to strictly prefer',
             'list-formats' => 'available formats of each video. Simulate unless --no-simulate is used',
-            'youtube-skip-dash-manifest' => 'not download the DASH manifests and related data on YouTube videos',
+            'youtube-dl-skip-dash-manifest' => 'not download the DASH manifests and related data on YouTube videos',
             'merge-output-format' => 'If a merge is required (e.g. bestvideo+bestaudio), output to given container format. One of mkv, mp4, ogg, webm,',
             'write-sub' => 'subtitle file',
             'write-auto-sub' => 'automatically generated subtitle file (YouTube only)',
@@ -173,7 +173,7 @@ class youtubedlOptions
             'no-live-from-start' => 'livestreams from the current time (default)',
             'no-wait-for-video' => 'not wait for scheduled streams (default)',
             'no-colors' => 'not emit color codes in output',
-            'compat-options' => 'Options that can help keep compatibility with youtube-dl or youtube-dlc configurations by reverting some of the',
+            'compat-options' => 'Options that can help keep compatibility with youtube-dl or youtube-dl-dlc configurations by reverting some of the',
             'no-match-filter' => 'not use generic video filter (default)',
             'no-download-archive' => 'not use archive file (default)',
             'break-on-existing' => 'the download process when encountering a file that is in the archive',

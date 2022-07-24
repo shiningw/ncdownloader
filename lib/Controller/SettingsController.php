@@ -3,7 +3,7 @@
 namespace OCA\NCDownloader\Controller;
 
 use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\Settings;
+use OCA\NCDownloader\Db\Settings;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
@@ -101,33 +101,33 @@ class SettingsController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function youtubeGet()
+    public function ytdlGet()
     {
-        $data = json_decode($this->settings->get("custom_youtube_dl_settings"));
+        $data = json_decode($this->settings->get("custom_ytdl_settings"));
         return new JSONResponse($data);
     }
 
-    public function youtubeSave()
+    public function ytdlSave()
     {
         $params = $this->request->getParams();
         $data = array_filter($params, function ($key) {
             return (bool) (!in_array(substr($key, 0, 1), ['_']));
         }, ARRAY_FILTER_USE_KEY);
-        $resp = $this->settings->save("custom_youtube_dl_settings", json_encode($data));
+        $resp = $this->settings->save("custom_ytdl_settings", json_encode($data));
         return new JSONResponse($resp);
     }
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function youtubeDelete()
+    public function ytdlDelete()
     {
-        $saved = json_decode($this->settings->get("custom_youtube_dl_settings"), 1);
+        $saved = json_decode($this->settings->get("custom_ytdl_settings"), 1);
         $params = $this->request->getParams();
         foreach ($params as $key => $value) {
             unset($saved[$key]);
         }
-        $resp = $this->settings->save("custom_youtube_dl_settings", json_encode($saved));
+        $resp = $this->settings->save("custom_ytdl_settings", json_encode($saved));
         return new JSONResponse($resp);
     }
     public function save($key, $value)

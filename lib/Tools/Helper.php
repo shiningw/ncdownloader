@@ -4,8 +4,8 @@ namespace OCA\NCDownloader\Tools;
 
 use Exception;
 use OCA\NCDownloader\Search\Sites\searchInterface;
-use OCA\NCDownloader\Tools\aria2Options;
-use OCA\NCDownloader\Tools\Settings;
+use OCA\NCDownloader\Aria2\Options as aria2Options;
+use OCA\NCDownloader\Db\Settings;
 use OCP\IUser;
 use OC\Files\Filesystem;
 use OC_Util;
@@ -108,7 +108,7 @@ class Helper
 
     public static function isYoutubeType($url)
     {
-        $regex = '%^(?:(?:https?)://)(?:[a-z0-9_]*\.)?(?:twitter|youtube)\.com/%i';
+        $regex = '%^(?:(?:https?)://)(?:[a-z0-9_]*\.)?(?:twitter|ytdl)\.com/%i';
         return (bool) preg_match($regex, $url);
     }
 
@@ -435,12 +435,12 @@ class Helper
         return Settings::create($uid);
     }
 
-    public static function getYoutubeConfig($uid = null): array
+    public static function getYtdlConfig($uid = null): array
     {
         $config = [
             'binary' => self::getSettings("ncd_yt_binary", null, Settings::TYPE['SYSTEM']),
             'downloadDir' => Helper::getRealDownloadDir(),
-            'settings' => self::newSettings()->getYoutube(),
+            'settings' => self::newSettings()->getYtdl(),
         ];
         return $config;
     }

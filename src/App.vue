@@ -43,7 +43,7 @@ export default {
     return {
       display: { download: true, search: false },
       uris: {
-        ytd_url: helper.generateUrl("/apps/ncdownloader/youtube/new"),
+        ytd_url: helper.generateUrl("/apps/ncdownloader/ytdl/new"),
         aria2_url: helper.generateUrl("/apps/ncdownloader/new"),
         search_url: helper.generateUrl("/apps/ncdownloader/search"),
         upload_url: helper.generateUrl("/apps/ncdownloader/upload"),
@@ -62,15 +62,15 @@ export default {
         helper.error(t("ncdownloader", inputValue + " is Invalid"));
         return;
       }
-      if (formData.type === "youtube-dl") {
+      if (formData.type === "ytdl") {
         formData["extension"] = "";
 
         if (formData["select-value-extension"] !== "defaultext") {
           formData["extension"] = formData["select-value-extension"];
         }
         message = helper.t("Download task started!");
-        helper.pollingYoutube();
-        helper.setContentTableType("youtube-dl-downloads");
+        helper.pollingYtdl();
+        helper.setContentTableType("ytdl-downloads");
       } else {
         helper.polling();
         helper.setContentTableType("active-downloads");

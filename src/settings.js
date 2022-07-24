@@ -7,7 +7,7 @@ import settingsForm from './lib/settingsForm'
 import autoComplete from './lib/autoComplete';
 import eventHandler from './lib/eventHandler';
 import aria2Options from './utils/aria2Options';
-import { options as ytdFullOptions, names as ytdOptions } from './utils/youtubedlOptions';
+import { options as ytdlFullOptions, names as ytdlOptions } from './utils/ytdlOptions';
 import helper from './utils/helper';
 import './css/autoComplete.css'
 import './css/settings.scss'
@@ -26,9 +26,9 @@ window.addEventListener('DOMContentLoaded', function () {
         OC_msg.startSaving('#ncdownloader-message-banner');
         helper.makePair(data, name);
         let badOptions = [];
-        if (name === 'youtube-dl-settings') {
+        if (name === 'ytdl-settings') {
             for (let key in data) {
-                if (!ytdOptions.includes(key) && !customOptions.includes(key)) {
+                if (!ytdlOptions.includes(key) && !customOptions.includes(key)) {
                     delete data[key];
                     badOptions.push(key)
                 }
@@ -105,10 +105,10 @@ window.addEventListener('DOMContentLoaded', function () {
     eventHandler.add('click', '.ncdownloader-admin-settings', 'input[type="button"]', (e) => saveHandler(e));
     eventHandler.add('click', '.ncdownloader-personal-settings', 'input[type="button"]', (e) => saveHandler(e));
     eventHandler.add("click", "#custom-aria2-settings-container", "button.save-custom-aria2-settings", (e) => saveHandler(e))
-    eventHandler.add("click", "#custom-youtube-dl-settings-container", "button.save-custom-youtube-dl-settings", (e) => saveHandler(e, 'youtube-dl-settings'))
+    eventHandler.add("click", "#custom-ytdl-settings-container", "button.save-custom-ytdl-settings", (e) => saveHandler(e, 'ytdl-settings'))
 
     eventHandler.add('click', '#custom-aria2-settings-container', "button.add-custom-aria2-settings", (e) => addOption(e, 'aria2', aria2Options))
-    eventHandler.add('click', '#custom-youtube-dl-settings-container', "button.add-custom-youtube-dl-settings", (e) => addOption(e, 'youtube-dl', ytdFullOptions))
+    eventHandler.add('click', '#custom-ytdl-settings-container', "button.add-custom-ytdl-settings", (e) => addOption(e, 'ytdl', ytdlFullOptions))
 
 
     eventHandler.add('click', '.ncdownloader-personal-settings', 'button.icon-close', function (e) {
@@ -128,7 +128,7 @@ window.addEventListener('DOMContentLoaded', function () {
         settingsForm.getInstance().render(input);
     }).send();
 
-    helper.httpClient(generateUrl("/apps/ncdownloader/personal/youtube-dl/get")).setHandler(function (data) {
+    helper.httpClient(generateUrl("/apps/ncdownloader/personal/ytdl/get")).setHandler(function (data) {
         if (!data) {
             return;
         }
@@ -136,7 +136,7 @@ window.addEventListener('DOMContentLoaded', function () {
         for (let key in data) {
             input.push({ name: key, value: data[key], id: key });
         }
-        settingsForm.getInstance().setParent("custom-youtube-dl-settings-container").render(input);
+        settingsForm.getInstance().setParent("custom-ytdl-settings-container").render(input);
     }).send();
 
     const filepicker = function (event) {
