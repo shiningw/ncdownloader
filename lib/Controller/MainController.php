@@ -88,7 +88,8 @@ class MainController extends Controller
                 array_push($errors, sprintf("aria2 is installed but don't have the right permissions.Please execute command sudo chmod 755 %s", $aria2_bin));
             }
             if (!$params['aria2_running']) {
-                array_push($errors, $this->l10n->t("Aria2c is not running!"));
+                //array_push($errors, $this->l10n->t("Aria2c is not running!"));
+                $this->aria2->start();
             }
         }
         if ($youtube_installed && (!$youtube_executable || !@is_readable($youtube_bin))) {
