@@ -281,7 +281,7 @@ class autoComplete {
         if (!key || (key < 35 || key > 40) && ![autoComplete.ENTER, autoComplete.ESC].includes(key)) {
             let val = entity.element.value;
             entity.lastValue = val;
-            if (val.length >= options.minChars) {
+            if (val && val.length >= options.minChars) {
                 this.showResult(val, entity);
             } else {
                 this.hideBox(sgBox.box);;
