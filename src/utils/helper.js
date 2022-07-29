@@ -7,6 +7,8 @@ import { translate as t, translatePlural as n } from '@nextcloud/l10n'
 import contentTable from '../lib/contentTable';
 import Http from '../lib/http'
 import Polling from "../lib/polling";
+import autoComplete from '../lib/autoComplete';
+
 const helper = {
     vue: {},
     addVue(name, object) {
@@ -69,9 +71,13 @@ const helper = {
         return string.charAt(0).toUpperCase() + string.slice(1)
     },
     isURL(url) {
-        let regex = '^((https?|ftp)://)([a-z0-9-]+\.)?(?:[-a-zA-Z0-9()@:%_\+.~#?&/=]+)$';
-        const pattern = new RegExp(regex, 'i');
-        return pattern.test(url);
+        try {
+            new URL(url.trim());
+            return true;
+        } catch (e) {
+            console.log(e.message);
+            return false;
+        }
     },
     isMagnetURI(url) {
         const magnetURI = /^magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32,40}(&dn=.+&tr=.+)?$/i;
@@ -154,23 +160,10 @@ const helper = {
         let doc = parser.parseFromString(htmlString, "text/html")
         return doc.querySelector("div");
     },
-    makePair: function (data, prefix = "aria2-settings") {
-        for (let key in data) {
-            let index;
-            if ((index = key.indexOf(prefix + "-key-")) !== -1) {
-                let valueKey = prefix + "-value-" + key.substring(key.lastIndexOf('-') + 1);
-                if (data[valueKey] === undefined) continue;
-                let newkey = data[key];
-                data[newkey] = data[valueKey];
-                delete data[key];
-                delete data[valueKey];
-            }
-        }
-    },
     getData(selector) {
         const element = typeof selector === "object" ? selector : document.getElementById(selector)
         const data = {}
-        data['path'] = element.getAttribute('path') || '';
+        data['_path'] = element.getAttribute('path') || '';
         //if the targeted element is not of input or select type, search for such elements below it
         if (!['SELECT', 'INPUT'].includes(element.nodeName.toUpperCase())) {
             const nodeList = element.querySelectorAll('input,select')
@@ -183,11 +176,17 @@ const helper = {
                 const key = element.getAttribute('id')
                 data[key] = element.value
                 for (let prop in element.dataset) {
+                    if (prop == "rel") {
+                        continue;
+                    }
                     data[prop] = element.dataset[prop];
                 }
             }
         } else {
             for (let prop in element.dataset) {
+                if (prop == "rel") {
+                    continue;
+                }
                 data[prop] = element.dataset[prop];
             }
             const key = element.getAttribute('id')
@@ -287,7 +286,7 @@ const helper = {
         container.setAttribute("type", name);
         container.className = "table " + name;
     },
-    filepicker(cb,currentPath) {
+    filepicker(cb, currentPath) {
         OC.dialogs.filepicker(
             t('ncdownloader', 'Select a directory'),
             cb,
@@ -308,6 +307,55 @@ const helper = {
     },
     httpClient(url) {
         return new Http.create(url, true)
+    },
+    autoComplete(selector, options) {
+        try {
+            autoComplete.getInstance({
+                selector: selector,
+                minChars: 1,
+                sourceHandler: function () {
+                    if (Array.isArray(options)) {
+                        return options;
+                    }
+                    return Object.keys(options);
+                },
+                renderer: (item, search) => {
+                    if (!item || !search) {
+                        return;
+                    }
+                    search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    let tippy;
+                    if (options.hasOwnProperty(item)) {
+                        tippy = options[item];
+                    } else {
+                        tippy = item;
+                    }
+                    var re = new RegExp(`(${search.split(' ').join('|')})`, "gi");
+                    return `<div data-tippy-content="${tippy}" class="suggestion-item" data-val="${item}">${item.replace(re, "<b>$1</b>")}</div>`;
+                }
+            }).run();
+        } catch (error) {
+            console.log(error)
+            helper.error(error);
+        }
+    },
+    transformParams(data, prefix = "aria2-settings") {
+        let index
+        for (let key in data) {
+            if (key.charAt(0) == "_") {
+                delete data[key]
+                continue
+            }
+            if ((index = key.indexOf(prefix + "-key-")) !== -1) {
+                let valueKey = prefix + "-value-" + key.substring(key.lastIndexOf('-') + 1);
+                if (data[valueKey] === undefined) continue;
+                let newkey = data[key];
+                data[newkey] = data[valueKey];
+                delete data[key];
+                delete data[valueKey];
+            }
+        }
+        return data
     }
 }
 

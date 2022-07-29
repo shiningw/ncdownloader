@@ -9,7 +9,8 @@ use OCP\IDBConnection;
 use OCP\Settings\ISettings;
 use OCA\NCDownloader\Db\Settings;
 
-class Admin implements ISettings {
+class Admin implements ISettings
+{
 
 	/** @var IDBConnection */
 	private $connection;
@@ -18,9 +19,11 @@ class Admin implements ISettings {
 	/** @var IConfig */
 	private $config;
 
-	public function __construct(IDBConnection $connection,
-								ITimeFactory $timeFactory,
-								IConfig $config) {
+	public function __construct(
+		IDBConnection $connection,
+		ITimeFactory $timeFactory,
+		IConfig $config
+	) {
 		$this->connection = $connection;
 		$this->timeFactory = $timeFactory;
 		$this->config = $config;
@@ -31,13 +34,18 @@ class Admin implements ISettings {
 	/**
 	 * @return TemplateResponse
 	 */
-	public function getForm() {
+	public function getForm()
+	{
 		$this->settings->setType($this->settings::TYPE['SYSTEM']);
 		$parameters = [
-			"path" => "/apps/ncdownloader/admin/save",
-			"ncd_yt_binary" => $this->settings->get("ncd_yt_binary"),
-			"ncd_aria2_binary" => $this->settings->get("ncd_aria2_binary"),
-			"ncd_rpctoken" => $this->settings->get("ncd_rpctoken"),
+			'settings' => [
+				"path" => "/apps/ncdownloader/admin/save",
+				"ncd_yt_binary" => $this->settings->get("ncd_yt_binary"),
+				"ncd_aria2_binary" => $this->settings->get("ncd_aria2_binary"),
+				"ncd_rpctoken" => $this->settings->get("ncd_rpctoken"),
+				"ncd_aria2_rpc_host" => $this->settings->get("ncd_aria2_rpc_host"),
+				"ncd_aria2_rpc_port" => $this->settings->get("ncd_aria2_rpc_port"),
+			]
 		];
 		return new TemplateResponse('ncdownloader', 'settings/Admin', $parameters, '');
 	}
@@ -45,7 +53,8 @@ class Admin implements ISettings {
 	/**
 	 * @return string the section ID, e.g. 'sharing'
 	 */
-	public function getSection(): string {
+	public function getSection(): string
+	{
 		return 'ncdownloader';
 	}
 
@@ -56,7 +65,8 @@ class Admin implements ISettings {
 	 *
 	 * E.g.: 70
 	 */
-	public function getPriority(): int {
+	public function getPriority(): int
+	{
 		return 0;
 	}
 }

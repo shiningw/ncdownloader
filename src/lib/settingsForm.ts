@@ -8,31 +8,30 @@ type dataItems = {
 type data = Array<dataItems>
 
 class settingsForm {
-    parent = "custom-aria2-settings-container";
-    constructor() {
-
+    container;
+    constructor(containerId?: string) {
+        this.container = containerId
     }
-    static getInstance() {
-        return new this();
+    static getInstance(containerId?: string) {
+        return new this(containerId);
     }
-    setParent(selector: string): settingsForm {
-        this.parent = selector;
+    setContainer(selector: string): settingsForm {
+        this.container = selector;
         return this;
     }
-    create(parent: HTMLElement, element: dataItems) {
+    create(containerEle: HTMLElement, element: dataItems) {
         let label = this._createLabel(element.name, element.id)
         let input = this._createInput(element);
         //let saveBtn = this._createSaveBtn(element.id);
         let cancelBtn = this._createCancelBtn("has-content");
-        let container = this._createContainer(element.id);
+        let wrapper = this._createContainer(element.id);
         [label, input, cancelBtn].forEach(ele => {
-            container.appendChild(ele);
+            wrapper.appendChild(ele);
         })
-
-        return parent.prepend(container);
+        return containerEle.prepend(wrapper);
     }
 
-    createCustomInput(keyId: string, valueId: string): HTMLElement {
+    createInputGroup(keyId: string, valueId: string): HTMLElement {
         let div = this._createContainer(keyId + "-container")
         let items: dataItems = {
             id: keyId,
@@ -48,7 +47,8 @@ class settingsForm {
 
     _createContainer(id: string): HTMLElement {
         let div = document.createElement("div");
-        div.classList.add(id);
+        div.setAttribute("id",id);
+        div.classList.add("autocomplete-container")
         return div;
     }
     _createCancelBtn(className = ''): HTMLElement {
@@ -57,6 +57,10 @@ class settingsForm {
             button.classList.add(className);
         //button.setAttribute("type",'button')
         button.classList.add("icon-close");
+        button.addEventListener("click", function () {
+            let container = this.parentNode as HTMLElement
+            container.remove()
+        })
         return button;
     }
     _createSaveBtn(id: string): HTMLElement {
@@ -68,7 +72,7 @@ class settingsForm {
     }
     _createLabel(name: string, id: string): HTMLElement {
         name = name.replace('_', '-');
-        let label = document.createElement("lable");
+        let label = document.createElement("label");
         label.setAttribute("for", id);
         let text = document.createTextNode(name);
         label.appendChild(text);
@@ -90,9 +94,12 @@ class settingsForm {
         return input;
     }
     render(data: data) {
-        let parent = document.getElementById(this.parent)
+        let container = document.getElementById(this.container)
+        if (!container) {
+            throw this.container + " is not found"
+        }
         for (const element of data) {
-            this.create(parent, element)
+            this.create(container, element)
         }
     }
 }

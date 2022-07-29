@@ -1,6 +1,5 @@
 import helper from './utils/helper'
 import eventHandler from './lib/eventHandler'
-import Http from './lib/http'
 import { translate as t, translatePlural as n } from '@nextcloud/l10n'
 import updatePage from './actions/updatePage'
 import buttonActions from './actions/buttonActions'
@@ -10,7 +9,6 @@ import { createApp } from 'vue'
 import App from './App';
 import tippy, { delegate } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
-'use strict'
 import settingsBar from './settingsBar';
 const basePath = "/apps/ncdownloader";
 
