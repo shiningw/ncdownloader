@@ -16,6 +16,8 @@ return [
         ['name' => 'Search#Execute', 'url' => '/search', 'verb' => 'POST'],
         // AdminSettings
         ['name' => 'Settings#Admin', 'url' => '/admin/save', 'verb' => 'POST'],
+        ['name' => 'Settings#saveAria2Admin', 'url' => '/admin/aria2/save', 'verb' => 'POST'],
+        ['name' => 'Settings#getAria2Admin', 'url' => '/admin/aria2/get', 'verb' => 'GET'],
         // PersonalSettings
         ['name' => 'Settings#Personal', 'url' => '/personal/save', 'verb' => 'POST'],
         ['name' => 'Settings#aria2Get', 'url' => '/personal/aria2/get', 'verb' => 'POST'],

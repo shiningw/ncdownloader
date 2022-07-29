@@ -70,6 +70,26 @@ class SettingsController extends Controller
         }
         return new JSONResponse($resp);
     }
+
+    public function saveAria2Admin()
+    {
+        $this->settings->setType($this->settings::TYPE['SYSTEM']);
+        $params = $this->request->getParams();
+
+        $data = Helper::filterData($params, Helper::aria2Options());
+        Helper::log($data);
+        $resp = $this->settings->save("admin_aria2_settings", $data);
+
+        return new JSONResponse($resp);
+    }
+    /**
+     *
+     * @NoCSRFRequired
+     */
+    public function getAria2Admin()
+    {
+        return new JSONResponse(Helper::getSettings("admin_aria2_settings", "", $this->settings::TYPE['SYSTEM']));
+    }
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
