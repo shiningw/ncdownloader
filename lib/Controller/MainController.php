@@ -42,7 +42,7 @@ class MainController extends Controller
         $this->ytdl = $ytdl;
         $this->isAdmin = \OC_User::isAdminUser($this->uid);
         $this->hideError = Helper::getSettings("ncd_hide_errors", false);
-        $this->disable_bt_nonadmin = Helper::getSettings("ncd_disable_bt", false, Settings::TYPE["SYSTEM"]);
+        $this->disable_bt_nonadmin = Helper::getAdminSettings("ncd_disable_bt");
         $this->accessDenied = $this->l10n->t("Sorry,only admin users can download files via BT!");
     }
     /**
@@ -117,6 +117,7 @@ class MainController extends Controller
             'ncd_hide_errors' => $this->hideError,
             'ncd_disable_bt' => $this->disable_bt_nonadmin,
             'ncd_downloader_dir' => Helper::getSettings("ncd_downloader_dir"),
+            'disallow_aria2_settings' => Helper::getAdminSettings('disallow_aria2_settings'),
         ]);
         return $params;
     }
@@ -159,7 +160,7 @@ class MainController extends Controller
             'type' => Helper::DOWNLOADTYPE['ARIA2'],
             'filename' => empty($filename) ? "unknown" : $filename,
             'timestamp' => time(),
-            'data' => serialize(['link' => $url,'path' => Helper::getDownloadDir()]),
+            'data' => serialize(['link' => $url, 'path' => Helper::getDownloadDir()]),
         ];
         $this->dbconn->save($data);
         $resp = ['message' => $filename, 'result' => $result, 'file' => $filename];
@@ -217,5 +218,4 @@ class MainController extends Controller
         $counter = $this->counters->getCounters();
         return new JSONResponse(['counter' => $counter]);
     }
-
 }

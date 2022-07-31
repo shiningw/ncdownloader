@@ -356,6 +356,9 @@ const helper = {
             }
         }
         return data
+    },
+    isEmptyObject(obj) {
+        return Object.keys(obj).length === 0
     }
 }
 

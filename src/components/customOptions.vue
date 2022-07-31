@@ -18,7 +18,7 @@
       </button>
       <button
         class="custom-settings-save-btn"
-        @click.prevent="saveOptions($event)"
+        @click.prevent="saveOptions"
         :data-rel="id"
       >
         <slot name="save">Save</slot>

@@ -9,6 +9,8 @@ use OCA\NCDownloader\Tools\Helper;
 
 class Aria2
 {
+    //global Aria2 Config
+    private $config = [];
     //extra Aria2 download options
     private $options = array();
     //optional token for authenticating with Aria2
@@ -25,18 +27,33 @@ class Aria2
     private $filterResponse = true;
     //absolute download path
     private $downloadDir;
+    //top-level aria2 configuration dir
+    private $confDir;
+    //aria2 session file
+    private $sessionFile;
+    //aria2 rpc url
+    private $rpcUrl;
+    //php binary path;
+    private $php;
     public function __construct($options = array())
     {
-        $options += array(
-            'host' => '127.0.0.1',
-            'port' => 6800,
+        $options += [
+            'rpcHost' => '127.0.0.1',
+            'rpcPort' => 6800,
             'dir' => '/tmp/Downloads',
-            'torrents_dir' => '/tmp/Torrents',
-            'token' => null,
-            'conf_dir' => '/tmp/aria2',
-            'completeHook' => $_SERVER['DOCUMENT_ROOT'] . "/apps/ncdownloader/hooks/completeHook.sh",
+            'torrentsDir' => '/tmp/Torrents',
+            'token' => 'ncdownloader123',
+            'confDir' => '/tmp/aria2',
+            //settings for each aria2 downloads
             'settings' => [],
-        );
+            //options wich which aria2c starts
+            'aria2Conf' => []
+        ];
+        //set the hooks if no user-defined equivalents
+        $options["aria2Conf"] += [
+            'on-download-complete' => $_SERVER['DOCUMENT_ROOT'] . "/apps/ncdownloader/hooks/completeHook.sh",
+            'on-download-start' => $_SERVER['DOCUMENT_ROOT'] . "/apps/ncdownloader/hooks/startHook.sh",
+        ];
         //turn keys in $options into variables
         extract($options);
         if (isset($binary) && $this->isExecutable($binary)) {
@@ -47,27 +64,12 @@ class Aria2
         if ($this->isInstalled() && !$this->isExecutable()) {
             chmod($this->bin, 0744);
         }
-        $this->setDownloadDir($dir);
-        $this->setTorrentsDir($torrents_dir);
-        if (!empty($settings)) {
-            foreach ($settings as $key => $value) {
-                $this->setOption($key, $value);
-            }
-        }
+        $this->confDir = $confDir;
         $this->php = Helper::findBinaryPath('php');
-        $this->completeHook = $completeHook;
-        $this->startHook = $startHook;
-        $this->rpcUrl = sprintf("http://%s:%s/jsonrpc", $host, $port);
-        $this->tokenString = $token ?? 'ncdownloader123';
-        $this->rpcPort = $rpcPort ?? 6800;
-        $this->dlSpeed = $dlSpeed ?? 0;
-        $this->upSpeed = $upSpeed ?? "1M";
-        $this->logLevel = $logLevel ?? 'warn';
-        $this->setToken($this->tokenString);
-        $this->confDir = $conf_dir;
-        $this->sessionFile = $this->confDir . "/aria2.session";
-        //$this->confFile = $this->confDir . "/aria2.conf";
-        $this->logFile = $this->confDir . "/aria2.log";
+        $this->rpcUrl = sprintf("http://%s:%s/jsonrpc", $rpcHost, $rpcPort);
+        $this->sessionFile = $sessionFile ?? $this->confDir . "/aria2.session";
+        $this->configureGlobalAria2($options);
+        $this->configureLocalAria2($options);
     }
     public function init()
     {
@@ -79,6 +81,32 @@ class Aria2
             CURLOPT_SSL_VERIFYPEER => false,
         ));
         $this->configure();
+    }
+
+    private function configureLocalAria2(array $options)
+    {
+        $this->setDownloadDir($options["dir"]);
+        $this->setTorrentsDir($options["torrentsDir"]);
+        $this->setToken($options["token"]);
+        if (!empty($options["settings"])) {
+            foreach ($options["settings"] as $key => $value) {
+                $this->setOption($key, $value);
+            }
+        }
+    }
+
+    private function configureGlobalAria2(array $options)
+    {
+        $runOptions = new RunOptions($options["aria2Conf"]);
+
+        $runOptions->add("--rpc-secret=" . $options["token"]);
+        $runOptions->add("--rpc-listen-port=" . $options["rpcPort"]);
+        $runOptions->add("--save-session=" . $this->sessionFile);
+        $runOptions->add("--input-file=" . $this->sessionFile);
+        $runOptions->add("--log=" . $this->confDir . "/aria2.log");
+
+        //$this->logFile = $this->confDir . "/aria2.log";
+        $this->config = $runOptions->getOptions();
     }
 
     public function setonDownloadStart($path)
@@ -284,11 +312,6 @@ class Aria2
     {
         return $this->tellStatus($gid);
     }
-    public function restart()
-    {
-        $this->stop();
-        $this->start();
-    }
 
     public function download(String $url)
     {
@@ -325,35 +348,19 @@ class Aria2
         return false;
     }
 
-    public function getDefaults()
+    public function restart()
     {
-        return [
-            '--continue',
-            '--daemon=true',
-            '--enable-rpc=true',
-            '--rpc-secret=' . $this->tokenString,
-            '--listen-port=51413',
-            '--save-session=' . $this->sessionFile,
-            '--input-file=' . $this->sessionFile,
-            '--log=' . $this->logFile,
-            '--rpc-listen-port=' . $this->rpcPort,
-            '--follow-torrent=true',
-            '--enable-dht=true',
-            '--enable-peer-exchange=true',
-            '--peer-id-prefix=-TR2770-',
-            '--user-agent=Transmission/2.77',
-            '--log-level=' . $this->logLevel,
-            '--seed-ratio=1.0',
-            '--bt-seed-unverified=true',
-            '--max-overall-upload-limit=' . $this->upSpeed,
-            '--max-overall-download-limit=' . $this->dlSpeed,
-            '--max-connection-per-server=4',
-            '--max-concurrent-downloads=10',
-            '--check-certificate=false',
-            '--on-download-complete=' . $this->completeHook,
-            '--on-download-start=' . $this->startHook,
-        ];
+        $this->stop();
+        $this->start();
     }
+
+    public function stop()
+    {
+        $resp = $this->shutdown();
+        sleep(3);
+        return $resp ?? null;
+    }
+
     public function start($bin = null)
     {
         //aria2c refuses to start with no errors when input-file is set but missing
@@ -362,9 +369,8 @@ class Aria2
         }
 
         //$process = new Process([$this->bin, "--conf-path=" . $this->confFile]);
-        $defaults = $this->getDefaults();
-        array_unshift($defaults, $this->bin);
-        $process = new Process($defaults);
+        array_unshift($this->config, $this->bin);
+        $process = new Process($this->config);
         try {
             $process->mustRun();
             $output = $process->getOutput();
@@ -398,11 +404,5 @@ class Aria2
     public function getBin()
     {
         return $this->bin;
-    }
-    public function stop()
-    {
-        $resp = $this->shutdown();
-        sleep(3);
-        return $resp ?? null;
     }
 }

@@ -29,7 +29,8 @@ class Application extends App
         });
 
         $container->registerService('Aria2', function (IContainer $container) {
-            return new Aria2(Helper::getAria2Config($this->uid));
+            $config = Helper::getAria2Config($this->uid);
+            return new Aria2($config);
         });
 
         $container->registerService('Ytdl', function (IContainer $container) {
@@ -93,5 +94,4 @@ class Application extends App
             });
         }
     }
-
 }

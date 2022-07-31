@@ -8,7 +8,7 @@
       :name="id"
       :value="value"
       :placeholder="placeholder"
-      @blur="saveHandler($event)"
+      @change="saveHandler"
       :data-rel="container"
     />
     <input
@@ -16,7 +16,7 @@
       type="button"
       value="save"
       :data-rel="container"
-      @click.prevent="saveHandler($event)"
+      @click.prevent="saveHandler"
     />
   </div>
 </template>
@@ -36,14 +36,15 @@ export default {
     },
   },
   data() {
+    let id = this.id.replaceAll("_", "-");
     return {
-      classes: this.id.replace("_", "-") + "-input",
-      container: this.id.replace("_", "-") + "-container",
+      classes: id + "-input",
+      container: id + "-container",
     };
   },
   methods: {
     saveHandler(e) {
-      if (e.type == "blur" && this.useBtn) {
+      if (e.type == "change" && this.useBtn) {
         return;
       }
       e.stopPropagation();
@@ -56,6 +57,9 @@ export default {
         .httpClient(url)
         .setData(data)
         .setHandler(function (resp) {
+          if (!resp) {
+            return;
+          }
           if (resp.error) {
             helper.error(resp.error);
             return;

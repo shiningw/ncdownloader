@@ -45,6 +45,7 @@ class Personal implements ISettings
 				'ncd_seed_time_unit' => $this->settings->get("ncd_seed_time_unit"),
 				'ncd_seed_time' => $this->settings->get("ncd_seed_time"),
 				"path" => '/apps/ncdownloader/personal/save',
+				"disallow_aria2_settings" => Helper::getAdminSettings("disallow_aria2_settings"),
 			]
 		];
 

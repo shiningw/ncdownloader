@@ -9,7 +9,7 @@
       placeholder="Leave empty if no value needed"
       class="form-input-text"
     />
-    <button class="has-content icon-close" @click="remove($event)"></button>
+    <button class="has-content icon-close" @click="remove"></button>
   </div>
 </template>
 <script>

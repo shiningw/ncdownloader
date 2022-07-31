@@ -454,22 +454,28 @@ class Helper
         $torrentsDir = Helper::getRealTorrentsDir();
         $appPath = self::getAppPath();
         $dataDir = self::getDataDir();
-        $aria2_dir = $dataDir . "/aria2";
+        $aria2Dir = $dataDir . "/aria2";
         $options['seed_time'] = $settings->get("ncd_seed_time");
         $options['seed_ratio'] = $settings->get("ncd_seed_ratio");
         if (is_array($customSettings = $settings->getAria2())) {
             $options = array_merge($customSettings, $options);
         }
-        $token = $settings->setType(Settings::TYPE['SYSTEM'])->get('ncd_rpctoken');
+        $token = Helper::getAdminSettings("ncd_aria2_rpc_token");
+        $rpcHost = Helper::getAdminSettings("ncd_aria2_rpc_host");
+        $rpcPort = Helper::getAdminSettings("ncd_aria2_rpc_port");
+        $binary = Helper::getAdminSettings("ncd_aria2_binary");
         $config = [
             'dir' => $realDownloadDir,
-            'torrents_dir' => $torrentsDir,
-            'conf_dir' => $aria2_dir,
-            'token' => $token,
+            'torrentsDir' => $torrentsDir,
+            'confDir' => $aria2Dir,
+            'token' =>  $token ? $token : "ncdownloader123",
             'settings' => $options,
-            'binary' => $settings->setType(Settings::TYPE['SYSTEM'])->get('ncd_aria2_binary'),
+            'rpcHost' => $rpcHost ? $rpcHost : "127.0.0.1",
+            'rpcPort' => $rpcPort ? $rpcPort : "6800",
+            'binary' => $binary,
             'startHook' => $appPath . "/hooks/startHook.sh",
             'completeHook' => $appPath . "/hooks/completeHook.sh",
+            'aria2Conf' => Helper::getSettings("global_aria2_config", [], $settings::TYPE['SYSTEM'])
         ];
         return $config;
     }
@@ -521,5 +527,14 @@ class Helper
     public static function getDatabaseConnection()
     {
         return self::isLegacyVersion() ? \OC::$server->getDatabaseConnection() : \OC::$server->get(\OCP\IDBConnection::class);
+    }
+    public static function getAdminSettings($key): string
+    {
+        $settings = self::getAllAdminSettings();
+        return $settings[$key] ?? "";
+    }
+    public static function getAllAdminSettings(): array
+    {
+        return Helper::getSettings("ncd_admin_settings", [], Settings::TYPE["SYSTEM"]);
     }
 }

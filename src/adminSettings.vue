@@ -10,6 +10,15 @@
       :path="option.path"
     />
   </div>
+  <div class="section">
+    <toggleButton
+      :defaultStatus="pStatus"
+      disabledText="No Aria2 Settings for non-admin Users"
+      enabledText="No Aria2 Settings for non-admin Users"
+      @changed="toggle"
+      name="disallow_aria2_settings"
+    ></toggleButton>
+  </div>
   <customOptions
     name="admin-aria2-settings"
     @mounted="render"
@@ -25,6 +34,7 @@ import customOptions from "./components/customOptions";
 import helper from "./utils/helper";
 import aria2Options from "./utils/aria2Options";
 import settingsRow from "./components/settingsRow";
+import toggleButton from "./components/toggleButton";
 
 export default {
   name: "adminSettings",
@@ -32,13 +42,31 @@ export default {
     return {
       options: [],
       validOptions: aria2Options,
+      settings: [],
+      pStatus: false,
     };
   },
   components: {
     customOptions,
     settingsRow,
+    toggleButton,
   },
   methods: {
+    toggle(name, value) {
+      let data = {};
+      data[name] = value ? 1 : 0;
+      let path = "/apps/ncdownloader/admin/save";
+      const url = helper.generateUrl(path);
+      helper
+        .httpClient(url)
+        .setData(data)
+        .setHandler((resp) => {
+          if (resp["message"]) {
+            helper.message(helper.t(resp["message"]), 1000);
+          }
+        })
+        .send();
+    },
     render(event, $vm) {
       helper
         .httpClient(helper.generateUrl("/apps/ncdownloader/admin/aria2/get"))
@@ -67,6 +95,8 @@ export default {
     try {
       let data = this.$el.parentElement.getAttribute("data-settings");
       data = JSON.parse(data);
+      this.settings = data;
+      this.pStatus = helper.str2Boolean(data["disallow_aria2_settings"]);
       let path = "/apps/ncdownloader/admin/save";
       this.options = [
         {
@@ -87,7 +117,9 @@ export default {
           label: "Aria2 RPC Token",
           id: "ncd_aria2_rpc_token",
           value: data.ncd_aria2_rpc_token,
-          placeholder: data.ncd_aria2_rpc_token ? data.ncd_aria2_rpc_token : "ncdownloader123",
+          placeholder: data.ncd_aria2_rpc_token
+            ? data.ncd_aria2_rpc_token
+            : "ncdownloader123",
           path: path,
         },
         {

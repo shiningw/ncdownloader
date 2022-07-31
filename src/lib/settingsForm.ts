@@ -36,10 +36,12 @@ class settingsForm {
         let items: dataItems = {
             id: keyId,
             name: '',
-            value: ''
+            value: '',
+            placeholder: ""
         }
         div.appendChild(this._createInput(items));
         items.id = valueId
+        items.placeholder = 'Leave empty if no value needed'
         div.appendChild(this._createInput(items));
         div.appendChild(this._createCancelBtn());
         return div;
@@ -47,7 +49,7 @@ class settingsForm {
 
     _createContainer(id: string): HTMLElement {
         let div = document.createElement("div");
-        div.setAttribute("id",id);
+        div.setAttribute("id", id);
         div.classList.add("autocomplete-container")
         return div;
     }
@@ -81,7 +83,7 @@ class settingsForm {
     _createInput(data: dataItems): HTMLElement {
         let input = document.createElement('input');
         let type = data.type || "text";
-        let placeholder = data.placeholder || 'Leave empty if no value needed';
+        let placeholder = data.placeholder;
         let value = data.value || '';
         input.setAttribute('type', type);
         input.setAttribute('id', data.id);

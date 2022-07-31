@@ -8,6 +8,8 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Settings\ISettings;
 use OCA\NCDownloader\Db\Settings;
+use OCA\NCDownloader\Tools\Helper;
+
 
 class Admin implements ISettings
 {
@@ -36,16 +38,13 @@ class Admin implements ISettings
 	 */
 	public function getForm()
 	{
-		$this->settings->setType($this->settings::TYPE['SYSTEM']);
+		$settings = Helper::getAllAdminSettings();
+		$settings +=  [
+			"path" => "/apps/ncdownloader/admin/save",
+
+		];
 		$parameters = [
-			'settings' => [
-				"path" => "/apps/ncdownloader/admin/save",
-				"ncd_yt_binary" => $this->settings->get("ncd_yt_binary"),
-				"ncd_aria2_binary" => $this->settings->get("ncd_aria2_binary"),
-				"ncd_rpctoken" => $this->settings->get("ncd_rpctoken"),
-				"ncd_aria2_rpc_host" => $this->settings->get("ncd_aria2_rpc_host"),
-				"ncd_aria2_rpc_port" => $this->settings->get("ncd_aria2_rpc_port"),
-			]
+			'settings' => $settings,
 		];
 		return new TemplateResponse('ncdownloader', 'settings/Admin', $parameters, '');
 	}
