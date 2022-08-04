@@ -13,7 +13,7 @@
     />
   </div>
   <customOptions
-    v-if="!disallowAria2Settings"
+    v-if="!disallowAria2Settings || isAdmin"
     name="custom-aria2-settings"
     title="Personal Aria2 Settings"
     @mounted="renderAria2"
@@ -47,6 +47,7 @@ export default {
       aria2Options: aria2Options,
       ytdlOptions: ytdlOptions,
       disallowAria2Settings: false,
+      isAdmin: false,
     };
   },
   components: {
@@ -102,6 +103,7 @@ export default {
       data = JSON.parse(data);
       let path = "/apps/ncdownloader/personal/save";
       this.disallowAria2Settings = helper.str2Boolean(data["disallow_aria2_settings"]);
+      this.isAdmin = data["is_admin"];
       this.options = [
         {
           label: "Downloads Folder ",

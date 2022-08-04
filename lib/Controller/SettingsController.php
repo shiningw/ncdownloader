@@ -99,7 +99,7 @@ class SettingsController extends Controller
     public function saveCustomAria2()
     {
         $noAria2Settings = (bool) Helper::getAdminSettings("disallow_aria2_settings");
-        if (!$noAria2Settings) {
+        if ($noAria2Settings && !\OC_User::isAdminUser($this->UserId)) {
             $resp = ["error" => "forbidden", "status" => false];
             return new JSONResponse($resp);
         }
