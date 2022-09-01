@@ -171,6 +171,7 @@ class Options
             'no-flat-playlist' => 'the videos of a playlist',
             'live-from-start' => 'livestreams from the start. Currently only supported for YouTube (Experimental)',
             'no-live-from-start' => 'livestreams from the current time (default)',
+            'wait-for-video' => 'Wait for scheduled streams to become available. Pass the minimum number of seconds (or range) to wait between retries',
             'no-wait-for-video' => 'not wait for scheduled streams (default)',
             'no-colors' => 'not emit color codes in output',
             'compat-options' => 'Options that can help keep compatibility with youtube-dl or youtube-dl-dlc configurations by reverting some of the',
