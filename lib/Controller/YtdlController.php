@@ -70,7 +70,6 @@ class YtdlController extends Controller
     }
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function Download()
     {
@@ -108,7 +107,6 @@ class YtdlController extends Controller
     }
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function Delete()
     {
@@ -144,7 +142,6 @@ class YtdlController extends Controller
     }
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function Redownload()
     {

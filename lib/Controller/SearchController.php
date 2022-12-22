@@ -24,7 +24,6 @@ class SearchController extends Controller
     }
    /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function execute()
     {

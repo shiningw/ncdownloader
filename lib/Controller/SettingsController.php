@@ -27,7 +27,6 @@ class SettingsController extends Controller
 
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function getSettings()
     {
@@ -39,7 +38,6 @@ class SettingsController extends Controller
 
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function saveCustom()
     {
@@ -52,7 +50,6 @@ class SettingsController extends Controller
 
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function getCustomAria2()
     {
@@ -86,7 +83,6 @@ class SettingsController extends Controller
     }
     /**
      *
-     * @NoCSRFRequired
      */
     public function getGlobalAria2()
     {
@@ -94,7 +90,6 @@ class SettingsController extends Controller
     }
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function saveCustomAria2()
     {
@@ -110,7 +105,6 @@ class SettingsController extends Controller
     }
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function deleteCustomAria2()
     {
@@ -126,7 +120,6 @@ class SettingsController extends Controller
 
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function getYtdl()
     {
@@ -145,7 +138,6 @@ class SettingsController extends Controller
     }
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function deleteYtdl()
     {

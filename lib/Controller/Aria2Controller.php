@@ -38,11 +38,10 @@ class Aria2Controller extends Controller
         $this->aria2->init();
         $this->dbconn = new DbHelper();
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
-
+       
     }
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function Action($path)
     {
@@ -130,7 +129,6 @@ class Aria2Controller extends Controller
     }
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function getStatus($path)
     {

@@ -55,8 +55,10 @@ class MainController extends Controller
         //$config = \OC::$server->getAppConfig();
         OC_Util::addScript($this->appName, 'app');
         OC_Util::addStyle($this->appName, 'app');
+       
         $params = $this->buildParams();
         $response = new TemplateResponse($this->appName, 'Index', $params);
+
         return $response;
     }
 
@@ -123,7 +125,6 @@ class MainController extends Controller
     }
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function Download()
     {
@@ -168,7 +169,6 @@ class MainController extends Controller
     }
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function Upload()
     {
@@ -201,7 +201,6 @@ class MainController extends Controller
 
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function scanFolder()
     {
@@ -211,7 +210,6 @@ class MainController extends Controller
     }
     /**
      * @NoAdminRequired
-     * @NoCSRFRequired
      */
     public function getCounters(): JSONResponse
     {
