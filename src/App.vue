@@ -79,6 +79,8 @@ export default {
         helper.info(message);
       }
       let url = formWrapper.getAttribute("action");
+      formData['url'] = formData["text-input-value"]
+      delete formData["text-input-value"]
       helper.httpClient(url)
         .setData(formData)
         .setHandler(function (data) {
@@ -100,6 +102,11 @@ export default {
       contentTable.getInstance().loading();
 
       let url = formWrapper.getAttribute("action");
+      formData['keyword'] = formData["text-input-value"]
+      formData['site'] = formData["select-value-search"]
+      delete formData["text-input-value"]
+      delete formData['select-value-search']
+      
       helper.httpClient(url)
         .setData(formData)
         .setHandler(function (data) {

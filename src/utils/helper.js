@@ -173,7 +173,7 @@ const helper = {
                 if (element.hasAttribute('type') && element.getAttribute('type') === 'button') {
                     continue
                 }
-                const key = element.getAttribute('id')
+                const key = element.getAttribute('id') || element.getAttribute('name')
                 data[key] = element.value
                 for (let prop in element.dataset) {
                     if (prop == "rel") {
@@ -189,7 +189,7 @@ const helper = {
                 }
                 data[prop] = element.dataset[prop];
             }
-            const key = element.getAttribute('id')
+            const key = element.getAttribute('id') || element.getAttribute('name')
             data[key] = element.value
         }
         return data;

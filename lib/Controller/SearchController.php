@@ -1,4 +1,5 @@
 <?php
+
 namespace OCA\NCDownloader\Controller;
 
 use OCA\NCDownloader\Search\siteSearch;
@@ -22,16 +23,15 @@ class SearchController extends Controller
         $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->search = new siteSearch();
     }
-   /**
+    /**
      * @NoAdminRequired
      */
-    public function execute()
+    public function execute(string $keyword,string $site = "TPB")
     {
-        $keyword = Helper::sanitize($this->request->getParam('text-input-value'));
-        $site = Helper::sanitize($this->request->getParam('select-value-search'));
+        $keyword = Helper::sanitize($keyword);
+        $site = Helper::sanitize($site);
         $this->search->setSite($site);
         $data = $this->search->go($keyword);
         return new JSONResponse($data);
     }
-
 }

@@ -29,6 +29,8 @@ const buttonHandler = (event, type) => {
             console.log("gid is not set!");
         }
     }
+    data['url'] = data["text-input-value"]
+    delete data["text-input-value"]
     helper.httpClient(url).setErrorHandler(function (xhr, textStatus, error) {
         console.log(error);
     }).setHandler(function (data) {

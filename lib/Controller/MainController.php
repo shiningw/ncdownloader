@@ -126,13 +126,13 @@ class MainController extends Controller
     /**
      * @NoAdminRequired
      */
-    public function Download()
+    public function Download(string $url)
     {
         $dlDir = $this->aria2->getDownloadDir();
         if (!is_writable($dlDir)) {
             return new JSONResponse(['error' => sprintf("%s is not writable", $dlDir)]);
         }
-        $url = trim($this->request->getParam('text-input-value'));
+        //$url = trim($this->request->getParam('text-input-value'));
         if (Helper::isMagnet($url)) {
             if ($this->disable_bt_nonadmin && !($this->isAdmin)) {
                 return new JSONResponse(['error' => $this->accessDenied]);

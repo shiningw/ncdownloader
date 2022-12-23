@@ -1,4 +1,5 @@
 <?php
+
 namespace OCA\NCDownloader\Controller;
 
 use OCA\NCDownloader\Aria2\Aria2;
@@ -71,19 +72,20 @@ class YtdlController extends Controller
     /**
      * @NoAdminRequired
      */
-    public function Download()
+    public function Download(string $url, ?string $extension = "mp4")
     {
         $dlDir = $this->ytdl->getDownloadDir();
         if (!is_writable($dlDir)) {
             return new JSONResponse(['error' => sprintf("%s is not writable", $dlDir)]);
         }
-        $url = trim($this->request->getParam('text-input-value'));
+        //$url = trim($this->request->getParam('text-input-value'));
+        $url = trim($url);
         $yt = $this->ytdl;
-        if (in_array($this->request->getParam('extension'), $this->audio_extensions)) {
+        if (in_array($extension, $this->audio_extensions)) {
             $yt->audioOnly = true;
-            $yt->audioFormat = $this->request->getParam('extension');
+            $yt->audioFormat = $extension;
         } else {
-            $yt->videoFormat = $this->request->getParam('extension');
+            $yt->videoFormat = $extension;
         }
         if (!$yt->isInstalled()) {
             return new JSONResponse(["error" => "Please install the latest yt-dlp or make the bundled binary file executable in ncdownloader/bin"]);
@@ -108,9 +110,9 @@ class YtdlController extends Controller
     /**
      * @NoAdminRequired
      */
-    public function Delete()
+    public function Delete(string $gid)
     {
-        $gid = $this->request->getParam('gid');
+        //$gid = $this->request->getParam('gid');
         if (!$gid) {
             return new JSONResponse(['error' => "no gid value is received!"]);
         }
@@ -143,9 +145,9 @@ class YtdlController extends Controller
     /**
      * @NoAdminRequired
      */
-    public function Redownload()
+    public function Redownload(string $gid)
     {
-        $gid = $this->request->getParam('gid');
+        //$gid = $this->request->getParam('gid');
         if (!$gid) {
             return new JSONResponse(['error' => "no gid value is received!"]);
         }
@@ -211,5 +213,4 @@ class YtdlController extends Controller
 
         return ['error' => $this->l10n->t("Youtube-dl NOT installed!")];
     }
-
 }

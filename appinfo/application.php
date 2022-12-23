@@ -63,7 +63,7 @@ class Application extends App implements IBootstrap
         $context->registerService(Settings::class, function (ContainerInterface $c) use ($uid){
             return new Settings($uid);
         });
-
+        
         //$context->injectFn([$this, 'registerSearchProviders']);
     }
 }

@@ -27,5 +27,8 @@ return [
         ['name' => 'Settings#saveYtdl', 'url' => '/personal/ytdl/save', 'verb' => 'POST'],
         ['name' => 'Settings#deleteYtdl', 'url' => '/personal/ytdl/delete', 'verb' => 'POST'],
         ['name' => 'Settings#getSettings', 'url' => '/getsettings', 'verb' => 'POST'],
+        //api routes
+        ['name' => 'Api#download', 'url' => '/api/v1/download', 'verb' => 'POST'],
+        ['name' => 'Api#search', 'url' => '/api/v1/search', 'verb' => 'POST'],
     ],
 ];
