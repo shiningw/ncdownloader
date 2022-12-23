@@ -126,7 +126,9 @@ class SettingsController extends Controller
         $data = json_decode($this->settings->get("custom_ytdl_settings"));
         return new JSONResponse($data);
     }
-
+    /**
+     * @NoAdminRequired
+     */
     public function saveYtdl()
     {
         $params = $this->request->getParams();
