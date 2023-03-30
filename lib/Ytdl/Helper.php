@@ -44,7 +44,7 @@ class Helper
     {
         $progressRegex = '#\[download\]\s+' .
         '(?<percentage>\d+(?:\.\d+)?%)' . //progress
-        '\s+of\s+[~]?' .
+        '\s+of\s+[~]?\s*' .
         '(?<filesize>\d+(?:\.\d+)?(?:K|M|G)iB)' . //file size
         '(?:\s+at\s+' .
         '(?<speed>(\d+(?:\.\d+)?(?:K|M|G)iB/s)|Unknown speed))' . //speed
