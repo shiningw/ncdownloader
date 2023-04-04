@@ -8,7 +8,7 @@ Search for torrents within the app from mutiple BT sites;
 Control Aria2 and manage download tasks from the web;
 download videos from 700+ video sites(youtube,youku,vimo,dailymotion,twitter,facebook and the likes
     </description>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <licence>agpl</licence>
     <author mail="freefallbenson@gmail.com" homepage="https://github.com/shiningw">jiaxinhuang</author>
     <namespace>NCDownloader</namespace>
