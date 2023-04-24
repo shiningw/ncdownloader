@@ -438,7 +438,7 @@ class Helper
     public static function getYtdlConfig($uid = null): array
     {
         $config = [
-            'binary' => self::getSettings("ncd_yt_binary", null, Settings::TYPE['SYSTEM']),
+            'binary' => self::getAdminSettings("ncd_yt_binary"),
             'downloadDir' => Helper::getRealDownloadDir(),
             'settings' => self::newSettings()->getYtdl(),
         ];
