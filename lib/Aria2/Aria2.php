@@ -56,7 +56,7 @@ class Aria2
         ];
         //turn keys in $options into variables
         extract($options);
-        if (isset($binary) && $this->isExecutable($binary)) {
+        if (!empty($binary)) {
             $this->bin = $binary;
         } else {
             $this->bin = Helper::findBinaryPath('aria2c', __DIR__ . "/../../bin/aria2c");
