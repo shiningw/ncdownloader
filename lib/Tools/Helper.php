@@ -354,7 +354,7 @@ class Helper
         $files = $filetool->scandir();
         $sites = [];
         foreach ($files as $file) {
-            $basename = $filetool->getBasename($file);
+            $basename = File::getBasename($file);
             $namespace = 'OCA\\NCDownloader\\Search\\Sites\\';
             $className = $namespace . $basename;
             if (in_array(searchInterface::class, class_implements($className))) {
