@@ -29,7 +29,7 @@ class Ytdl
     public function init(array $options)
     {
         extract($options);
-        if (isset($binary) && @is_executable($binary)) {
+        if (!empty($binary)) {
             $this->bin = $binary;
         } else {
             $this->bin = __DIR__ . "/../../bin/yt-dlp"; //Helper::findBinaryPath('ytdl', __DIR__ . "/../../bin/yt-dlp");
