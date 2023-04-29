@@ -10,10 +10,13 @@ use OCA\NCDownloader\Tools\Helper;
 
 class SearchController extends Controller
 {
-    private $userId;
+    private $uid;
     private $settings = null;
     //@config OC\AppConfig
     private $l10n;
+    private $urlGenerator;
+    private $search;
+
 
     public function __construct($appName, IRequest $request, $UserId)
     {

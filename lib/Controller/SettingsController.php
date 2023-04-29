@@ -15,13 +15,15 @@ class SettingsController extends Controller
 
     //@config OC\AppConfig
     private $config;
-    public function __construct($AppName, IRequest $Request, $UserId) //, IL10N $L10N)
+    private $uid;
+    private $settings;
+    public function __construct($AppName, IRequest $Request, $uid) //, IL10N $L10N)
 
     {
         parent::__construct($AppName, $Request);
-        $this->UserId = $UserId;
+        $this->uid = $uid;
         //$this->L10N = $L10N;
-        $this->settings = new Settings($UserId);
+        $this->settings = new Settings($uid);
         //$this->config = \OC::$server->getAppConfig();
     }
 
@@ -94,7 +96,7 @@ class SettingsController extends Controller
     public function saveCustomAria2()
     {
         $noAria2Settings = (bool) Helper::getAdminSettings("disallow_aria2_settings");
-        if ($noAria2Settings && !\OC_User::isAdminUser($this->UserId)) {
+        if ($noAria2Settings && !\OC_User::isAdminUser($this->uid)) {
             $resp = ["error" => "forbidden", "status" => false];
             return new JSONResponse($resp);
         }

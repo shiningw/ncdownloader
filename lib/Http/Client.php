@@ -7,6 +7,7 @@ use Symfony\Component\HttpClient\HttpClient;
 
 final class Client
 {
+    private $client;
     public function __construct(?array $options = null)
     {
         $this->client = HttpClient::create($this->configure($options));

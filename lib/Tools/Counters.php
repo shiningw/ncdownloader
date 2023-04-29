@@ -8,6 +8,9 @@ use OCA\NCDownloader\Db\Helper as DbHelper;
 class Counters
 {
     private $minmax = [0, 999];
+    private $aria2;
+    private $dbconn;
+    private $uid;
 
     public function __construct(Aria2 $aria2, DbHelper $dbconn, $uid)
     {

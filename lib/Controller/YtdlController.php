@@ -17,6 +17,15 @@ class YtdlController extends Controller
     //@config OC\AppConfig
     private $l10n;
     private $audio_extensions = array("mp3", "m4a", "vorbis");
+    private $video_extensions = array("mp4", "webm", "mkv");
+    private $uid;
+    private $downloadDir;
+    private $dbconn;
+    private $ytdl;
+    private $aria2;
+    private $urlGenerator;
+    private $tablename;
+    private $dataDir;
 
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Ytdl $ytdl)
     {

@@ -16,7 +16,7 @@ class Aria2
     //optional token for authenticating with Aria2
     private $token = null;
     //the aria2 method being invoked
-    private $method = null;
+    public $methodName = null;
     //the aria2c binary path
     private $bin = null;
     // return the following items when getting downloads info by default
@@ -35,6 +35,13 @@ class Aria2
     private $rpcUrl;
     //php binary path;
     private $php;
+    //curl handle
+    private $ch;
+    //aria2 global options
+    private $onDownloadStart;
+
+    private $content;
+    private $torrentsDir;
     public function __construct($options = array())
     {
         $options += [

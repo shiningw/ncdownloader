@@ -25,6 +25,16 @@ class MainController extends Controller
     private $config;
     private $aria2Opts;
     private $l10n;
+    private $urlGenerator;
+    private $uid;
+    private $isAdmin;
+    private $hideError;
+    private $disable_bt_nonadmin;
+    private $aria2;
+    private $dbconn;
+    private $counters;
+    private $ytdl;
+    private $accessDenied;
 
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Ytdl $ytdl)
     {
@@ -55,7 +65,7 @@ class MainController extends Controller
         //$config = \OC::$server->getAppConfig();
         OC_Util::addScript($this->appName, 'app');
         OC_Util::addStyle($this->appName, 'app');
-       
+
         $params = $this->buildParams();
         $response = new TemplateResponse($this->appName, 'Index', $params);
 

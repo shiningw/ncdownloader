@@ -19,6 +19,8 @@ class Personal implements ISettings
 	private $timeFactory;
 	/** @var IConfig */
 	private $config;
+	private $uid;
+	private $settings;
 
 	public function __construct(
 		IDBConnection $connection,
@@ -28,8 +30,8 @@ class Personal implements ISettings
 		$this->connection = $connection;
 		$this->timeFactory = $timeFactory;
 		$this->config = $config;
-		$this->UserId = \OC::$server->getUserSession()->getUser()->getUID();
-		$this->settings = new Settings($this->UserId);
+		$this->uid = \OC::$server->getUserSession()->getUser()->getUID();
+		$this->settings = new Settings($this->uid);
 	}
 
 	/**
@@ -46,7 +48,7 @@ class Personal implements ISettings
 				'ncd_seed_time' => $this->settings->get("ncd_seed_time"),
 				"path" => '/apps/ncdownloader/personal/save',
 				"disallow_aria2_settings" => Helper::getAdminSettings("disallow_aria2_settings"),
-				"is_admin" => \OC_User::isAdminUser($this->UserId),
+				"is_admin" => \OC_User::isAdminUser($this->uid),
 			]
 		];
 

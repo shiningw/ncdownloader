@@ -29,8 +29,6 @@ class Admin implements ISettings
 		$this->connection = $connection;
 		$this->timeFactory = $timeFactory;
 		$this->config = $config;
-		$this->UserId = \OC::$server->getUserSession()->getUser()->getUID();
-		$this->settings = new Settings($this->UserId);
 	}
 
 	/**

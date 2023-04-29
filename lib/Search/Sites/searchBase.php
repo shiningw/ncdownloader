@@ -8,6 +8,9 @@ abstract class searchBase
     protected $tableTitles = [];
     protected $rows = [];
     protected $errors = [];
+    protected $searchUrl;
+    protected $crawler;
+    protected $client;
     protected $actionLinks = [["name" => 'download', 'path' => '/index.php/apps/ncdownloader/new'], ['name' => 'clipboard']];
 
     public function getTableTitles(): array

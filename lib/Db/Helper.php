@@ -7,6 +7,8 @@ class Helper
     //@var OC\DB\ConnectionAdapter
     private $conn;
     private $table = "ncdownloader_info";
+    private $prefixedTable;
+    public $queryBuilder;
 
     public function __construct()
     {

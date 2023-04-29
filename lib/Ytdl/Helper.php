@@ -8,6 +8,13 @@ class Helper
 {
     public $file = null;
     protected $pid = 0;
+    protected $dbconn;
+    protected $tablename;
+    protected $user;
+    protected $tools;
+    protected $gid;
+    protected $ytdl;
+    protected $status;
     public function __construct()
     {
         $this->dbconn = new DbHelper();

@@ -86,7 +86,7 @@ class Settings extends AllConfig
                 $this->allConfig->setAppValue($this->appName, $key, $value);
             }
         } catch (\Exception $e) {
-            return ['error' => $e->getMessage];
+            return ['error' => $e->getMessage()];
         }
         return ['message' => "Saved!"];
 

@@ -11,6 +11,8 @@ class folderScan
     private $user;
     private $path;
     private $realDir;
+    private $logger;
+    private $scanner;
     public function __construct($path = null, $user = null)
     {
         $this->user = $user ?? Helper::getUID();

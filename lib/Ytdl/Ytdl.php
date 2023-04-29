@@ -20,6 +20,8 @@ class Ytdl
     private $defaultDir = "/tmp/downloads";
     private $env = [];
     private $bin;
+    private $cmd;
+    public $helper;
 
     public function __construct(array $options)
     {
