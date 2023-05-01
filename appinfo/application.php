@@ -59,11 +59,13 @@ class Application extends App implements IBootstrap
             $config = Helper::getYtdlConfig($uid);
             return new Ytdl($config);
         });
-    
-        $context->registerService(Settings::class, function (ContainerInterface $c) use ($uid){
+
+        $context->registerService(Settings::class, function (ContainerInterface $c) use ($uid) {
             return new Settings($uid);
         });
-        
+        $context->registerService('uid', function (ContainerInterface $c) use ($uid) {
+            return $uid;
+        });
         //$context->injectFn([$this, 'registerSearchProviders']);
     }
 }
