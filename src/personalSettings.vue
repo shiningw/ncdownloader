@@ -1,36 +1,30 @@
 <template>
   <div class="section ncdownloader-general-settings">
     <h3>General Settings</h3>
-    <settingsRow
-      v-for="(option, key) in optionRows"
-      v-bind:key="key"
-      :value="option.value"
-      :id="option.id"
-      :label="option.label"
-      :placeholder="option.placeholder"
-      :path="option.path"
-      :useBtn="true"
-    />
+    <settingsRow v-for="(option, key) in optionRows" v-bind:key="key" :value="option.value" :id="option.id"
+      :label="option.label" :placeholder="option.placeholder" :path="option.path" :useBtn="true" />
   </div>
-  <customOptions
-    v-if="!disallowAria2Settings || isAdmin"
-    name="custom-aria2-settings"
-    title="Personal Aria2 Settings"
-    @mounted="renderAria2"
-    path="/apps/ncdownloader/personal/aria2/save"
-    :validOptions="aria2Options"
-  >
+  <customOptions v-if="!disallowAria2Settings || isAdmin" name="custom-aria2-settings" title="Personal Aria2 Settings"
+    @mounted="renderAria2" path="/apps/ncdownloader/personal/aria2/save" :validOptions="aria2Options">
     <template #save>Save Aria2 Settings</template>
   </customOptions>
-  <customOptions
-    name="custom-ytdl-settings"
-    title="Personal Youtbue-dl Settings"
-    @mounted="renderYtdl"
-    path="/apps/ncdownloader/personal/ytdl/save"
-    :validOptions="ytdlOptions"
-  >
+  <customOptions name="custom-ytdl-settings" title="Personal Youtbue-dl Settings" @mounted="renderYtdl"
+    path="/apps/ncdownloader/personal/ytdl/save" :validOptions="ytdlOptions">
     <template #save>Save Youtube-dl Settings</template>
   </customOptions>
+  <div class="system-info-wrapper section">
+    <h2 class="section-title">System Info</h2>
+    <div class="system-info">
+      <div class="system-info-item">
+        <div class="system-info-item-label">Aria2 Version: </div>
+        <div class="system-info-item-value">{{ aria2Version }}</div>
+      </div>
+      <div class="system-info-item">
+        <div class="system-info-item-label">yt-dlp Version: </div>
+        <div class="system-info-item-value">{{ ytdVersion }}</div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import customOptions from "./components/customOptions";
@@ -48,6 +42,9 @@ export default {
       ytdlOptions: ytdlOptions,
       disallowAria2Settings: false,
       isAdmin: false,
+      aria2Version: "",
+      ytdVersion: "",
+
     };
   },
   components: {
@@ -104,6 +101,8 @@ export default {
       let path = "/apps/ncdownloader/personal/save";
       this.disallowAria2Settings = helper.str2Boolean(data["disallow_aria2_settings"]);
       this.isAdmin = data["is_admin"];
+      this.aria2Version = data["aria2_version"];
+      this.ytdVersion = data["ytdl_version"];
       this.options = [
         {
           label: "Downloads Folder ",
@@ -126,3 +125,26 @@ export default {
   },
 };
 </script>
+<style scoped>
+
+.system-info {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.system-info-item {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+.system-info-item-label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.system-info-item-value {
+  font-weight: normal;
+}
+</style>

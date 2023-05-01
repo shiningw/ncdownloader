@@ -412,4 +412,8 @@ class Aria2
     {
         return $this->bin;
     }
+    public function version(){
+        $resp = $this->getVersion();
+        return $resp['result']['version'] ?? null;
+    }
 }

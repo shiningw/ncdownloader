@@ -10,6 +10,8 @@ use OCP\IUser;
 use OC\Files\Filesystem;
 use OC_Util;
 use Psr\Log\LoggerInterface;
+use OCA\NCDownloader\Aria2\Aria2;
+use OCA\NCDownloader\Ytdl\Ytdl;
 
 class Helper
 {
@@ -536,5 +538,16 @@ class Helper
     public static function getAllAdminSettings(): array
     {
         return Helper::getSettings("ncd_admin_settings", [], Settings::TYPE["SYSTEM"]);
+    }
+    public static function getAria2Version(): ?string
+    {
+        //get aria2 instance 
+        $aria2 = self::query(Aria2::class);
+        return $aria2->version();
+    }
+    public static function getYtdlVersion(): ?string
+    {
+        $ytdl = self::query(Ytdl::class);
+        return $ytdl->version();
     }
 }

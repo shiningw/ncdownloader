@@ -265,4 +265,14 @@ class Ytdl
     {
         return "https://github.com/shiningw/ncdownloader-bin/raw/master/yt-dlp";
     }
+
+    public function version()
+    {
+        $process = new Process([$this->bin, '--version']);
+        $process->run();
+        if ($process->isSuccessful()) {
+            return $process->getOutput();
+        }
+        return false;
+    }
 }
