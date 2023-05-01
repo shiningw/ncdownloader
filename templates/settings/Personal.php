@@ -4,6 +4,5 @@ style("ncdownloader", 'appSettings');
 extract($_);
 
 ?>
-<div class="ncdownloader-personal-settings" id="ncdownloader-personal-settings" data-settings='<?php print json_encode($settings); ?>'>
-
+<div class="ncdownloader-personal-settings" id="ncdownloader-personal-settings" data-settings='<?php print json_encode($settings); ?>' data-options='<?php print json_encode($options); ?>'>
 </div>

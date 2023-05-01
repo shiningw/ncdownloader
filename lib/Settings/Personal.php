@@ -39,6 +39,7 @@ class Personal implements ISettings
 	 */
 	public function getForm()
 	{
+		$path = '/apps/ncdownloader/personal/save';
 		$parameters = [
 			"settings" => [
 				"ncd_downloader_dir" => Helper::getDownloadDir(),
@@ -46,11 +47,27 @@ class Personal implements ISettings
 				"ncd_seed_ratio" => $this->settings->get("ncd_seed_ratio"),
 				'ncd_seed_time_unit' => $this->settings->get("ncd_seed_time_unit"),
 				'ncd_seed_time' => $this->settings->get("ncd_seed_time"),
-				"path" => '/apps/ncdownloader/personal/save',
+				"path" => $path,
 				"disallow_aria2_settings" => Helper::getAdminSettings("disallow_aria2_settings"),
 				"is_admin" => \OC_User::isAdminUser($this->uid),
 				"aria2_version" => Helper::getAria2Version(),
 				"ytdl_version" => Helper::getYtdlVersion(),
+			],
+			"options" => [
+				[
+					"label" => "Downloads Folder ",
+					"id" => "ncd_downloader_dir",
+					"value" => Helper::getDownloadDir(),
+					"placeholder" => Helper::getDownloadDir() ?? "/downloads",
+					"path"    => $path,
+				],
+				[
+					"label" => "Torrents Folder",
+					"id" => "ncd_torrents_dir",
+					"value" => $this->settings->get("ncd_torrents_dir"),
+					"placeholder" => $this->settings->get("ncd_torrents_dir") ?? "/torrents",
+					"path" => $path,
+				]
 			]
 		];
 

@@ -43,6 +43,7 @@ class Admin implements ISettings
 		];
 		$parameters = [
 			'settings' => $settings,
+			'options' => Helper::getAdminOptions($settings),
 		];
 		return new TemplateResponse('ncdownloader', 'settings/Admin', $parameters, '');
 	}

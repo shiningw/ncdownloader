@@ -28,7 +28,6 @@ class Aria2Controller extends Controller
     private $rootFolder;
     private $downloadDir;
     private $urlGenerator;
-
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, IRootFolder $rootFolder, Aria2 $aria2)
     {
         parent::__construct($appName, $request);

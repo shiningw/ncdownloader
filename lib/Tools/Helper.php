@@ -550,4 +550,46 @@ class Helper
         $ytdl = self::query(Ytdl::class);
         return $ytdl->version();
     }
+
+    public static function getAdminOptions($data)
+    {
+        $options = [
+            [
+                "label" => "Aria2 RPC Host",
+                "id" => "ncd_aria2_rpc_host",
+                "value" => $data['ncd_aria2_rpc_host'] ?? "",
+                "placeholder" => $data['ncd_aria2_rpc_host'] ?? "127.0.0.1",
+                "path" => $data['path'],
+            ],
+            [
+                "label" => "Aria2 RPC Port",
+                "id" => "ncd_aria2_rpc_port",
+                "value" => $data['ncd_aria2_rpc_port'] ?? "",
+                "placeholder" => $data['ncd_aria2_rpc_port'] ?? 6800,
+                "path" => $data['path'],
+            ],
+            [
+                "label" => "Aria2 RPC Token",
+                "id" => "ncd_aria2_rpc_token",
+                "value" => $data['ncd_aria2_rpc_token'] ?? "",
+                "placeholder" => $data['ncd_aria2_rpc_token'] ?? "ncdownloader123",
+                "path" => $data['path'],
+            ],
+            [
+                "label" => "Youtube-dl binary",
+                "id" => "ncd_yt_binary",
+                "value" => $data['ncd_yt_binary'] ?? "",
+                "placeholder" => $data['ncd_yt_binary'] ?? "/usr/bin/youtube-dl",
+                "path" => $data['path'],
+            ],
+            [
+                "label" => "Aria2c binary",
+                "id" => "ncd_aria2_binary",
+                "value" => $data['ncd_aria2_binary'] ?? "",
+                "placeholder" => $data['ncd_aria2_binary'] ?? "/usr/bin/aria2c",
+                "path" => $data['path'],
+            ]
+        ];
+        return $options;
+    }
 }

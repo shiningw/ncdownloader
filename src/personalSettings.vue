@@ -98,27 +98,13 @@ export default {
     try {
       let data = this.$el.parentElement.getAttribute("data-settings");
       data = JSON.parse(data);
-      let path = "/apps/ncdownloader/personal/save";
+      let options = this.$el.parentElement.getAttribute("data-options");
+      options = JSON.parse(options);
       this.disallowAria2Settings = helper.str2Boolean(data["disallow_aria2_settings"]);
       this.isAdmin = data["is_admin"];
       this.aria2Version = data["aria2_version"];
       this.ytdVersion = data["ytdl_version"];
-      this.options = [
-        {
-          label: "Downloads Folder ",
-          id: "ncd_downloader_dir",
-          value: data.ncd_downloader_dir,
-          placeholder: data.ncd_downloader_dir ? data.ncd_downloader_dir : "/downloads",
-          path: path,
-        },
-        {
-          label: "Torrents Folder",
-          id: "ncd_torrents_dir",
-          value: data.ncd_torrents_dir,
-          placeholder: data.ncd_torrents_dir ? data.ncd_torrents_dir : "/torrents",
-          path: path,
-        },
-      ];
+      this.options = options
     } catch (e) {
       helper.error(e);
     }
@@ -126,7 +112,6 @@ export default {
 };
 </script>
 <style scoped>
-
 .system-info {
   display: flex;
   flex-direction: column;
