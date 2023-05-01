@@ -22,11 +22,16 @@ class Aria2Controller extends Controller
     private $config;
     private $l10n;
     private $minmax = [-1, 999];
+    private $aria2;
+    private $dbconn;
+    private $counters;
+    private $rootFolder;
+    private $downloadDir;
+    private $urlGenerator;
 
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, IRootFolder $rootFolder, Aria2 $aria2)
     {
         parent::__construct($appName, $request);
-        $this->appName = $appName;
         $this->uid = $UserId;
         $this->l10n = $IL10N;
         $this->rootFolder = $rootFolder;
