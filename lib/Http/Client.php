@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\NCDownloader\http;
+namespace OCA\NCDownloader\Http;
 
 //require __DIR__ . "/../../vendor/autoload.php";
 use Symfony\Component\HttpClient\HttpClient;
@@ -8,12 +8,12 @@ use Symfony\Component\HttpClient\HttpClient;
 final class Client
 {
     private $client;
-    public function __construct(?array $options = null)
+    public function __construct(?array $options = [])
     {
         $this->client = HttpClient::create($this->configure($options));
     }
 
-    public static function create(?array $options = null)
+    public static function create(?array $options =[])
     {
         return new self($options);
     }
@@ -26,8 +26,7 @@ final class Client
     private function defaultOptions(): array
     {
         $settings = [
-            'headers' => [
-            ],
+            'headers' => [],
             'extra' => ['curl' => null],
         ];
         return $settings;

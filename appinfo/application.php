@@ -22,13 +22,13 @@ class Application extends App implements IBootstrap
     }
     public function register(IRegistrationContext $context): void
     {
-        $context->registerService('httpClient', function () {
+        $context->registerService(Client::class, function () {
             $options = [
                 'ipv4' => true,
             ];
             return Client::create($options);
         });
-        $context->registerService('crawler', function () {
+        $context->registerService(Crawler::class, function () {
             return new Crawler();
         });
         $sites = Helper::getSearchSites();
@@ -36,8 +36,8 @@ class Application extends App implements IBootstrap
             //fully qualified class name
             $className = $site['class'];
             $context->registerService($className, function (ContainerInterface $container) use ($className) {
-                $crawler = $container->get('crawler');
-                $client = $container->get('httpClient');
+                $crawler = $container->get(Crawler::class);
+                $client = $container->get(Client::class);
                 return $className::create($crawler, $client);
             });
         }

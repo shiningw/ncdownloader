@@ -199,18 +199,16 @@ export default {
   .checkboxes {
     border-radius: 0%;
   }
-  .download-button,
-  .search-button {
-    height: $column-height;
-    .btn-primary {
+  .download-button.btn-primary,
+  .search-button.btn-primary {
       color: #fff;
       background-color: #2d3f59;
       border-color: #1e324f;
       border-radius: 0%;
-    }
-    .btn-primary:hover {
+  }
+  .download-button.btn-primary:hover,
+  .search-button.btn-primary:hover {
       background-color: #191a16;
-    }
   }
 
   .magnet-link,

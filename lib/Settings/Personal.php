@@ -50,8 +50,6 @@ class Personal implements ISettings
 				"path" => $path,
 				"disallow_aria2_settings" => Helper::getAdminSettings("disallow_aria2_settings"),
 				"is_admin" => \OC_User::isAdminUser($this->uid),
-				"aria2_version" => Helper::getAria2Version(),
-				"ytdl_version" => Helper::getYtdlVersion(),
 			],
 			"options" => [
 				[

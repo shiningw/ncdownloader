@@ -30,5 +30,8 @@ return [
         //api routes
         ['name' => 'Api#download', 'url' => '/api/v1/download', 'verb' => 'POST'],
         ['name' => 'Api#search', 'url' => '/api/v1/search', 'verb' => 'POST'],
+        //binary updates
+        ['name' => 'Main#ytdlCheck', 'url' => '/ytdl/release/check', 'verb' => 'GET'],
+        ['name' => 'Main#ytdlUpdate', 'url' => '/ytdl/release/update', 'verb' => 'GET'],
     ],
 ];

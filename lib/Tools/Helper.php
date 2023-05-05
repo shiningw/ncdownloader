@@ -12,6 +12,9 @@ use OC_Util;
 use Psr\Log\LoggerInterface;
 use OCA\NCDownloader\Aria2\Aria2;
 use OCA\NCDownloader\Ytdl\Ytdl;
+use OCA\NCDownloader\Http\Client;
+
+require __DIR__ . "/../../vendor/autoload.php";
 
 class Helper
 {
@@ -591,5 +594,53 @@ class Helper
             ]
         ];
         return $options;
+    }
+    public static function getLatestRelease($owner, $repo)
+    {
+        $client = Client::create();
+        $response = $client->request('GET', "https://api.github.com/repos/$owner/$repo/releases/latest", [
+            'headers' => [
+                'User-Agent' => 'PHP'
+            ]
+        ]);
+        $data = json_decode($response->getContent(), true);
+        if (isset($data['tag_name'])) {
+            return $data['tag_name'];
+        }
+        return null;
+    }
+
+    public static function downloadLatestRelease($owner, $repo, $file)
+    {
+        $client = Client::create(['max_redirects' => 10]);
+        $response = $client->request('GET', "https://api.github.com/repos/$owner/$repo/releases/latest", [
+            'headers' => [
+                'User-Agent' => 'PHP'
+            ]
+        ]);
+        $data = json_decode($response->getContent(), true);
+        $downloadUrl = null;
+        foreach ($data['assets'] as $asset) {
+            if ($asset['name'] == $repo) {
+                $downloadUrl = $asset['browser_download_url'];
+                break;
+            }
+        }
+        if ($downloadUrl) {
+            if (!is_writable(dirname($file))) {
+                throw new \Exception(dirname($file) . " is not writable");
+            }
+            $response = $client->request('GET', $downloadUrl);
+            if ($byte = file_put_contents($file, $response->getContent())) {
+                return $byte;
+            }else {
+            throw new \Exception("Failed to download $downloadUrl");
+            }
+        }
+        return false;
+    }
+    public static function removeLetters($str)
+    {
+        return preg_replace('/[^0-9.]+/', '', $str);
     }
 }

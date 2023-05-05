@@ -226,4 +226,14 @@ class MainController extends Controller
         $counter = $this->counters->getCounters();
         return new JSONResponse(['counter' => $counter]);
     }
+
+    public function ytdlCheck()
+    {
+        $resp = $this->ytdl->check();
+        return new JSONResponse($resp);
+    }
+    public function ytdlUPdate(){
+        $resp = $this->ytdl->update();
+        return new JSONResponse($resp);
+    }
 }

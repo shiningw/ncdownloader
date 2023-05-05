@@ -39,7 +39,8 @@ class Admin implements ISettings
 		$settings = Helper::getAllAdminSettings();
 		$settings +=  [
 			"path" => "/apps/ncdownloader/admin/save",
-
+			"aria2_version" => Helper::getAria2Version(),
+			"ytdl_version" => Helper::getYtdlVersion(),
 		];
 		$parameters = [
 			'settings' => $settings,

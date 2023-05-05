@@ -12,6 +12,7 @@
     path="/apps/ncdownloader/admin/aria2/save" :validOptions="validOptions">
     <template #save>Save Settings</template>
   </customOptions>
+  <systemInfo :aria2Version="aria2Version" :ytdVersion="ytdVersion" />
 </template>
 <script>
 import customOptions from "./components/customOptions";
@@ -19,6 +20,7 @@ import helper from "./utils/helper";
 import aria2Options from "./utils/aria2Options";
 import settingsRow from "./components/settingsRow";
 import toggleButton from "./components/toggleButton";
+import systemInfo from "./components/systemInfo";
 
 export default {
   name: "adminSettings",
@@ -28,12 +30,15 @@ export default {
       validOptions: aria2Options,
       settings: [],
       pStatus: false,
+      aria2Version: "",
+      ytdVersion: "",
     };
   },
   components: {
     customOptions,
     settingsRow,
     toggleButton,
+    systemInfo,
   },
   methods: {
     toggle(name, value) {
@@ -83,10 +88,13 @@ export default {
       options = JSON.parse(options);
       this.settings = data;
       this.pStatus = helper.str2Boolean(data["disallow_aria2_settings"]);
+      this.aria2Version = data["aria2_version"];
+      this.ytdVersion = data["ytdl_version"];
       this.options = options;
     } catch (e) {
       helper.error(e);
     }
   },
+
 };
 </script>

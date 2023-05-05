@@ -412,8 +412,14 @@ class Aria2
     {
         return $this->bin;
     }
-    public function version(){
+    public function version()
+    {
         $resp = $this->getVersion();
         return $resp['result']['version'] ?? null;
+    }
+    public function install()
+    {
+        $url = "https://github.com/shiningw/ncdownloader-bin/raw/master/aria2c";
+        Helper::Download($url, $this->bin);
     }
 }

@@ -271,8 +271,31 @@ class Ytdl
         $process = new Process([$this->bin, '--version']);
         $process->run();
         if ($process->isSuccessful()) {
-            return $process->getOutput();
+            //remove any new line
+            return trim($process->getOutput());
         }
         return false;
+    }
+    public function check()
+    {
+        if ($tagName = Helper::getLatestRelease('yt-dlp', 'yt-dlp')) {
+            $tagName = Helper::removeLetters($tagName);
+            $version = $this->version();
+            if ($version && version_compare($version, $tagName, '<')) {
+                return ['status' => true, 'message' => $tagName];
+            }
+        }
+        return ['status' => false, 'message' => 'No update available'];
+    }
+    public function update()
+    {
+        $file = __DIR__ . "/../../bin/yt-dlp";
+        try {
+            Helper::downloadLatestRelease('yt-dlp', 'yt-dlp', $file);
+            chmod($file, 0744);
+        } catch (\Exception $e) {
+            return ['status' => false,'message' => $e->getMessage()];
+        }
+        return ['status' => true, 'message' => 'Updated to latest version','data' => $this->version()];
     }
 }
