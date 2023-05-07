@@ -26,6 +26,7 @@ class Options
             'no-flat-playlist' => 'the videos of a playlist',
             'live-from-start' => 'livestreams from the start.',
             'no-live-from-start' => 'livestreams from the current time',
+            'wait-for-video' => 'wait for scheduled streams',
             'no-wait-for-video' => 'not wait for scheduled streams (default)',
             'mark-watched' => 'videos watched (even with --simulate)',
             'no-mark-watched' => 'not mark videos watched (default)',
