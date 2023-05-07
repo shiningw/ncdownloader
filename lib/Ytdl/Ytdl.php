@@ -16,7 +16,7 @@ class Ytdl
     private $options = [];
     private $downloadDir;
     private $timeout = 60 * 60 * 10; //10 hours
-    private $outTpl = "%(id)s-%(title).64s.%(ext)s";
+    private $outTpl = "%(title).32s.%(ext)s";
     private $defaultDir = "/tmp/downloads";
     private $env = [];
     private $bin;
