@@ -1,5 +1,5 @@
 <template>
-  <button ref="button" :class="className" v-if="loading ^ 1" @click.prevent="handler">
+  <button ref="button" class="button-vue" :class="className" v-if="loading ^ 1" @click.prevent="handler">
     <slot>Download</slot>
   </button>
   <button class="bs-spinner" v-if="loading">
@@ -38,11 +38,13 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../css/bootstrap.scss";
 @import "../css/btn.scss";
 
-.check-button {
+.button-vue {
   @extend .btn;
+  @include button-variant(#212529,#212529, #fff);
+  border-radius: 0em;
 }
 </style>

@@ -31,6 +31,7 @@ export default {
     background-color: $bg-color;
     font-size: medium;
     color: #181616;
+    border-radius: 0em;
   }
 }
 @media only screen and (max-width: 1024px) {
