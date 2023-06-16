@@ -400,7 +400,8 @@ class Helper
     {
         if (self::getUID()) {
             OC_Util::setupFS();
-            return Filesystem::getLocalFolder($path);
+            //get the real path of the file in the filesystem
+            return \OC\Files\Filesystem::getLocalFile($path);
         }
         return "";
     }
