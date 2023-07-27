@@ -8,7 +8,7 @@
     @mounted="renderAria2" path="/apps/ncdownloader/personal/aria2/save" :validOptions="aria2Options">
     <template #save>Save Aria2 Settings</template>
   </customOptions>
-  <customOptions name="custom-ytdl-settings" title="Personal Youtbue-dl Settings" @mounted="renderYtdl"
+  <customOptions name="custom-ytdl-settings" title="Personal YouTube-dl Settings" @mounted="renderYtdl"
     path="/apps/ncdownloader/personal/ytdl/save" :validOptions="ytdlOptions">
     <template #save>Save Youtube-dl Settings</template>
   </customOptions>
