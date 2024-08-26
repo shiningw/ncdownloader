@@ -8,7 +8,7 @@ use OCA\NCDownloader\Tools\tableData;
 //slider.kz
 class sliderkz extends searchBase implements searchInterface
 {
-    public $baseUrl = "https://slider.kz/vk_auth.php";
+    public $baseUrl = "https://hayqbhgr.slider.kz/vk_auth.php";
     protected $query = null;
     protected $tableTitles = [];
 
@@ -37,7 +37,7 @@ class sliderkz extends searchBase implements searchInterface
     protected function getDownloadUrl(array $item): string
     {
         extract($item);
-        return sprintf("https://slider.kz/%s/%s/%s/%s.mp3?extra=null",$id,$duration, $durl, urlencode($tit_art));
+        return sprintf("https://hayqbhgr.slider.kz/%s/%s/%s/%s.mp3?extra=null",$id,$duration, $durl, urlencode($tit_art));
     }
 
     private function transformResp($data): array
