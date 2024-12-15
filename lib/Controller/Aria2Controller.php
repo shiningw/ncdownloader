@@ -207,7 +207,7 @@ class Aria2Controller extends Controller
             $folderLink = $this->urlGenerator->linkToRoute('files.view.index', $params);
             //$peers = ($this->getPeers($info['gid']));
             $completed = Helper::formatBytes($value['completedLength']);
-            $percentage = $value['completedLength'] ? 100 * ($value['completedLength'] / $value['totalLength']) : 0;
+            $percentage = $value['completedLength'] && $value['totalLength'] != 0 ? 100 * ($value['completedLength'] / $value['totalLength']) : 0;
             $completed = Helper::formatBytes($value['completedLength']);
 
             $total = Helper::formatBytes($value['totalLength']);
