@@ -9,7 +9,7 @@ class bitSearch extends searchBase implements searchInterface
 {
     //html content
     private $content = null;
-    public $baseUrl = "https://bitsearch.to/search";
+    public $baseUrl = "https://btdig.com/search";
     protected $query = null;
     protected $tableTitles = [];
 
