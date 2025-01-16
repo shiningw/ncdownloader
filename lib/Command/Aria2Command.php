@@ -10,7 +10,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Aria2Command {
-    // Füge diese Zeile hinzu, um die Eigenschaft zu deklarieren
     protected $dbconn;
 
     public function __construct($dbconn) {
