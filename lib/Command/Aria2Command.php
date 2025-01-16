@@ -9,12 +9,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Aria2Command extends Base
-{
-    public function __construct()
-    {
-        $this->dbconn = new DbHelper();
-        parent::__construct();
+class Aria2Command {
+    // Füge diese Zeile hinzu, um die Eigenschaft zu deklarieren
+    protected $dbconn;
+
+    public function __construct($dbconn) {
+        $this->dbconn = $dbconn;
     }
     protected function configure()
     {
