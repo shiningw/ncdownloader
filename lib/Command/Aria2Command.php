@@ -11,6 +11,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Aria2Command extends Base
 {
+    // Eigenschaften deklarieren
+    protected $dbconn;
+
     public function __construct()
     {
         $this->dbconn = new DbHelper();

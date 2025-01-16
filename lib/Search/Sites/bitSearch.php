@@ -4,12 +4,12 @@ namespace OCA\NCDownloader\Search\Sites;
 
 use OCA\NCDownloader\Tools\tableData;
 
-//bitsearch.to
-class bitSearch extends searchBase implements searchInterface
+//https://btdig.com
+class btdig extends searchBase implements searchInterface
 {
     //html content
     private $content = null;
-    public $baseUrl = "https://bitsearch.to/search";
+    public $baseUrl = "https://btdig.com/search";
     protected $query = null;
     protected $tableTitles = [];
 
@@ -83,6 +83,6 @@ class bitSearch extends searchBase implements searchInterface
     }
     public static function getLabel(): string
     {
-        return 'bitsearch';
+        return 'bdtig';
     }
 }
