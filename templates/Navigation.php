@@ -8,6 +8,43 @@ $downloadsList = [
     ["name" => "ytdl", "label" => "Youtube-dl Downloads", "id" => "ytdl-downloads", "path" => "/apps/ncdownloader/ytdl/get"],
 ];
 ?>
+<style>
+    #app-navigation ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .download-queue {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .app-navigation-entry-bullet {
+        width: 10px;
+        height: 10px;
+        background-color: #00679e !important; /* Force this color */
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .download-queue a {
+        color: inherit; /* Inherit text color */
+        text-decoration: none; /* Remove underline */
+    }
+
+    .app-navigation-entry-utils {
+        margin-left: auto; /* Push the counter to the right */
+    }
+
+    .app-navigation-entry-utils-counter .number {
+        font-weight: bold;
+        color: #333;
+    }
+</style>
 <div id="app-navigation">
     <?php if (!$ncd_hide_errors): ?>
         <?php foreach ($errors as $error): ?>
@@ -15,7 +52,7 @@ $downloadsList = [
         <?php endforeach;?>
     <?php endif;?>
 
-    <div class="app-navigation-new" id="search-download"  data-inputbox="form-input-wrapper">
+    <div class="app-navigation-new" id="search-download" data-inputbox="form-input-wrapper">
         <button type="button" class="icon-add">
             <?php print($l->t('Download & Search'));?>
         </button>
@@ -27,9 +64,8 @@ $downloadsList = [
             data-aria2="<?php $aria2_running ? print $l->t('on') : print $l->t('off');?>">
             <?php $aria2_running ? print $l->t('Stop Aria2') : print $l->t('Start Aria2');?>
         </button>
-    </button>
         <?php elseif ($aria2_installed && !$aria2_executable): ?>
-        <button type="button" class="icon-power notinstalled" >
+        <button type="button" class="icon-power notinstalled">
             <?php print $l->t("aria2c is installed but not executable");?>
         </button>
         <?php else: ?>
@@ -43,7 +79,7 @@ $downloadsList = [
         <?php foreach ($downloadsList as $value): ?>
         <li class="download-queue <?php print $value["id"];?>">
             <div class="app-navigation-entry-bullet"></div>
-            <a  role="button" tabindex="0" path="<?php print $value["path"];?>"  id="<?php print $value["id"];?>">
+            <a role="button" tabindex="0" path="<?php print $value["path"];?>" id="<?php print $value["id"];?>">
                 <?php print($l->t($value["label"]));?>
             </a>
             <div class="app-navigation-entry-utils">
@@ -54,18 +90,14 @@ $downloadsList = [
                 </ul>
             </div>
         </li>
-     <?php endforeach;?>
+        <?php endforeach;?>
     </ul>
     <div id="app-settings">
-      <div id="app-settings-header">
-        <button
-          name="app settings"
-          class="settings-button"
-          data-apps-slide-toggle="#app-settings-content"
-        >
-        <?php p($l->t('Settings'));?>
-        </button>
-      </div>
-      <div id="app-settings-content" ></div>
+        <div id="app-settings-header">
+            <button name="app settings" class="settings-button" data-apps-slide-toggle="#app-settings-content">
+                <?php p($l->t('Settings'));?>
+            </button>
+        </div>
+        <div id="app-settings-content"></div>
     </div>
 </div>
