@@ -516,7 +516,9 @@ class Helper
     }
     public static function getVersion(): array
     {
-        return \OC_Util::getVersion();
+        $config = \OC::$server->get(\OCP\IConfig::class);
+        $version = $config->getSystemValue('version');
+        return explode(".", $version);
     }
     public static function isLegacyVersion(): bool
     {
@@ -634,8 +636,8 @@ class Helper
             $response = $client->request('GET', $downloadUrl);
             if ($byte = file_put_contents($file, $response->getContent())) {
                 return $byte;
-            }else {
-            throw new \Exception("Failed to download $downloadUrl");
+            } else {
+                throw new \Exception("Failed to download $downloadUrl");
             }
         }
         return false;
