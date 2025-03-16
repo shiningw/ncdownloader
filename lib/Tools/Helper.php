@@ -148,7 +148,6 @@ class Helper
         if (is_array($msg)) {
             $msg = implode(",", $msg);
         }
-        \OCP\Util::writeLog('ncdownloader', $msg, \OCP\Util::DEBUG);
         $logger = \OC::$server->get(\Psr\Log\LoggerInterface::class);
         $logger->debug($msg, ['app' => 'ncdownloader']);
     }
