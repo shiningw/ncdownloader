@@ -16,8 +16,8 @@ class Aria2Command extends Base
 
     public function __construct()
     {
-        $this->dbconn = new DbHelper();
-        parent::__construct();
+        parent::__construct(); // Erst den Elternkonstruktor aufrufen
+        $this->dbconn = new DbHelper(); // Dann die Eigenschaft setzen
     }
     protected function configure()
     {
