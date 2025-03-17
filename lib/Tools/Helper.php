@@ -148,8 +148,8 @@ class Helper
         if (is_array($msg)) {
             $msg = implode(",", $msg);
         }
-        $logger = \OC::$server->getLogger();
-        $logger->error($msg, ['app' => 'ncdownloader']);
+        $logger = \OC::$server->get(\Psr\Log\LoggerInterface::class);
+        $logger->debug($msg, ['app' => 'ncdownloader']);
     }
 
     public static function log($msg, $file = "/tmp/nc.log")
