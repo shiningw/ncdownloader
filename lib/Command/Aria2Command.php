@@ -11,9 +11,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Aria2Command extends Base
 {
-    public function __construct()
+    private $dbconn;
+    public function __construct(\OCP\IDBConnection $connection)
     {
-        $this->dbconn = new DbHelper();
+        $this->dbconn = new DbHelper($connection);
         parent::__construct();
     }
     protected function configure()

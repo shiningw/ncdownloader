@@ -148,7 +148,7 @@ class Helper
         if (is_array($msg)) {
             $msg = implode(",", $msg);
         }
-        $logger = \OC::$server->getLogger();
+        $logger = self::getLogger();
         $logger->error($msg, ['app' => 'ncdownloader']);
     }
 
@@ -419,7 +419,7 @@ class Helper
 
     public static function getUser(): ?IUser
     {
-        return \OC::$server->getUserSession()->getUser();
+        return \OC::$server->get(\OCP\IUserSession::class)->getUser();
     }
 
     public static function getUID(): string
