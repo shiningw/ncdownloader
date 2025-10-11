@@ -253,7 +253,7 @@ class Helper
     {
         $units = array(
             '1 year|years' => 31536000,
-            '1 monthmonths' => 2592000,
+            '1 month|months' => 2592000,
             '1 week|weeks' => 604800,
             '1 day|days' => 86400,
             '1 hour|hours' => 3600,
