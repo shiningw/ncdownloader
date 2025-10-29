@@ -28,6 +28,9 @@ Also, if you don't want to use the builtin versions, you can always force the ap
 NPM 7.0+ and node 14.0.0+ are required to build front-end scripts
 
 ```bash
+#install npm dependencies
+npm install
+
 #start to build
 npm run build
 

@@ -26,6 +26,9 @@ sudo chmod a+rx /usr/local/bin/youtube-dl
 #### 生成前端代码
 需要安装NPM 7.0+ and node 14.0.0+
 ```bash
+#install npm dependencies
+npm install
+
 #start to build
 npm run build
 
