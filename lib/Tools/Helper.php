@@ -453,11 +453,16 @@ class Helper
 
     public static function getYtdlConfig($uid = null): array
     {
+        $settings = self::newSettings($uid);
         $config = [
             'binary' => self::getAdminSettings("ncd_yt_binary"),
             'downloadDir' => Helper::getRealDownloadDir(),
-            'settings' => self::newSettings()->getYtdl(),
+            'settings' => $settings->getYtdl(),
         ];
+        $proxy = $settings->get("ncd_download_proxy");
+        if ($proxy) {
+            $config['settings']['proxy'] = $proxy;
+        }
         return $config;
     }
 
@@ -475,6 +480,10 @@ class Helper
         $options['seed_ratio'] = $settings->get("ncd_seed_ratio");
         if (is_array($customSettings = $settings->getAria2())) {
             $options = array_merge($customSettings, $options);
+        }
+        $proxy = $settings->get("ncd_download_proxy");
+        if ($proxy) {
+            $options['all-proxy'] = $proxy;
         }
         $token = Helper::getAdminSettings("ncd_aria2_rpc_token");
         $rpcHost = Helper::getAdminSettings("ncd_aria2_rpc_host");

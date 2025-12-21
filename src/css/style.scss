@@ -3,6 +3,10 @@
 @import 'helpers';
 @import 'navigation';
 
+#app-navigation-toggle {
+    display: none;
+}
+
 #ncdownloader-settings-collapsible-container {
     padding-left: 4%;
 }
@@ -195,5 +199,50 @@
 
     #ncdownloader-settings-form input[type=text] {
         width: 135px;
+    }
+}
+
+@media only screen and (max-width: 1020px) {
+    #app-content,
+    #app-content-wrapper {
+        flex       : 1 1 auto;
+        margin-left: 0;
+    }
+
+    #app-content {
+        padding   : var(--body-padding, 16px);
+        box-sizing: border-box;
+    }
+
+    #app-content-wrapper {
+        padding        : var(--body-padding, 16px);
+        box-sizing     : border-box;
+    }
+}
+@media only screen and (max-width: 600px) {
+    #app-navigation-toggle {
+        display: block;
+    }
+    #app-navigation {
+        display: none;
+    }
+    #app-navigation.opened {
+        display: block;
+    }
+    #app-ncdownloader-wrapper {
+        flex-direction: column;
+    }
+    #app-navigation:not(.vue) {
+        width: 100%;
+    }
+    #app-content-wrapper {
+        flex-direction: column;
+    }
+    #ncdownloader-form-wrapper .form-input-wrapper {
+        flex-direction: column;
+        row-gap: 5px;
+    }
+    #ncdownloader-settings-form input[type=text] {
+        width: 100%;
     }
 }

@@ -99,3 +99,11 @@
     }
   }
 }
+
+@media only screen and (max-width: 600px) {
+  #ncdownloader-table-wrapper {
+    .table-cell:first-child {
+      width: 100px;
+    }
+  }
+}

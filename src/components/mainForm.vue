@@ -277,5 +277,19 @@ export default {
       }
     }
   }
+  @media only screen and (max-width: 600px) {
+    #nc-vue-unified-form {
+      height: auto;
+      .options-group,
+      .action-group > div {
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+      }
+      .options-group > .option-buttons {
+        width: 100%;
+      }
+    }
+  }
 }
 </style>

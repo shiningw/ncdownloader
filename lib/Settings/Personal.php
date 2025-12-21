@@ -60,23 +60,44 @@ class Personal implements ISettings
 				"disallow_aria2_settings" => Helper::getAdminSettings("disallow_aria2_settings"),
 				"is_admin" => $isAdmin,
 			],
-			"options" => [
-				[
-					"label" => "Downloads Folder ",
-					"id" => "ncd_downloader_dir",
-					"value" => Helper::getDownloadDir(),
-					"placeholder" => Helper::getDownloadDir() ?? "/downloads",
-					"path"    => $path,
-				],
-				[
-					"label" => "Torrents Folder",
-					"id" => "ncd_torrents_dir",
-					"value" => $this->settings->get("ncd_torrents_dir"),
-					"placeholder" => $this->settings->get("ncd_torrents_dir") ?? "/torrents",
-					"path" => $path,
-				]
-			]
-		];
+                        "options" => [
+                                [
+                                        "label" => "Downloads Folder ",
+                                        "id" => "ncd_downloader_dir",
+                                        "value" => Helper::getDownloadDir(),
+                                        "placeholder" => Helper::getDownloadDir() ?? "/downloads",
+                                        "path"    => $path,
+                                ],
+                                [
+                                        "label" => "Torrents Folder",
+                                        "id" => "ncd_torrents_dir",
+                                        "value" => $this->settings->get("ncd_torrents_dir"),
+                                        "placeholder" => $this->settings->get("ncd_torrents_dir") ?? "/torrents",
+                                        "path" => $path,
+                                ],
+                                [
+                                        "label" => "VPN start command",
+                                        "id" => "ncd_vpn_start",
+                                        "value" => $this->settings->get("ncd_vpn_start"),
+                                        "placeholder" => "/usr/bin/wg-quick up wg0",
+                                        "path" => $path,
+                                ],
+                                [
+                                        "label" => "VPN stop command",
+                                        "id" => "ncd_vpn_stop",
+                                        "value" => $this->settings->get("ncd_vpn_stop"),
+                                        "placeholder" => "/usr/bin/wg-quick down wg0",
+                                        "path" => $path,
+                                ],
+                                [
+                                        "label" => "Download Proxy",
+                                        "id" => "ncd_download_proxy",
+                                        "value" => $this->settings->get("ncd_download_proxy"),
+                                        "placeholder" => "socks5://127.0.0.1:1080",
+                                        "path" => $path,
+                                ]
+                        ]
+                ];
 
 		//\OC_Util::addScript($this->appName, 'common');
 		//\OC_Util::addScript($this->appName, 'settings/personal');

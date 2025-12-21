@@ -47,4 +47,11 @@ export default {
     }
   }
 }
+@media only screen and (max-width: 600px) {
+  #text-input-link {
+    input {
+      font-size: smaller;
+    }
+  }
+}
 </style>

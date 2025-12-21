@@ -75,6 +75,12 @@ window.addEventListener('DOMContentLoaded', function () {
             callback(parent, oldHtml, data);
         }).send();
     })
+    eventHandler.add('click', '#app-navigation-toggle', function () {
+        const nav = document.getElementById('app-navigation')
+        if (nav) {
+            nav.classList.toggle('opened')
+        }
+    })
     eventHandler.add("click", "#app-navigation", "#search-download", helper.showDownload);
     delegate('#app-ncdownloader-wrapper',
         { target: '[data-tippy-content]' }

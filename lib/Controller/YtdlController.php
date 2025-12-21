@@ -188,7 +188,15 @@ class YtdlController extends Controller
         }
         $this->aria2->setFileName($filename);
 
+        $vpnStart = Helper::getSettings('ncd_vpn_start');
+        $vpnStop = Helper::getSettings('ncd_vpn_stop');
+        if ($vpnStart) {
+            @exec($vpnStart);
+        }
         $result = $this->aria2->download($url);
+        if ($vpnStop) {
+            @exec($vpnStop);
+        }
         if (!$result) {
             return ['error' => 'failed to download the file for some reason!'];
         }
