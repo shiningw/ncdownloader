@@ -8,6 +8,7 @@ use OCA\NCDownloader\Aria2\Options as aria2Options;
 use OCA\NCDownloader\Db\Settings;
 use OCP\IUser;
 use OC\Files\Filesystem;
+use OC_Util;
 use Psr\Log\LoggerInterface;
 use OCA\NCDownloader\Aria2\Aria2;
 use OCA\NCDownloader\Ytdl\Ytdl;
@@ -147,6 +148,8 @@ class Helper
         if (is_array($msg)) {
             $msg = implode(",", $msg);
         }
+        $logger = \OC::$server->get(LoggerInterface::class);
+//        $logger = \OC::$server->getLogger();
         $logger = self::getLogger();
         $logger->error($msg, ['app' => 'ncdownloader']);
     }
@@ -159,19 +162,7 @@ class Helper
     {
         if (!isset($filter)) {
             $filter = array(
-                'status',
-                'followedBy',
-                'totalLength',
-                'errorMessage',
-                'dir',
-                'uploadLength',
-                'completedLength',
-                'downloadSpeed',
-                'files',
-                'numSeeders',
-                'connections',
-                'gid',
-                'following',
+                'status', 'followedBy', 'totalLength', 'errorMessage', 'dir', 'uploadLength', 'completedLength', 'downloadSpeed', 'files', 'numSeeders', 'connections', 'gid', 'following',
             );
         }
         $value = array_filter($data, function ($k) use ($filter) {
@@ -236,7 +227,8 @@ class Helper
         if ($memcache->hasKey($program)) {
             return $memcache->get($program);
         }
-        $dataPath = \OC::$server->get(\OCP\IConfig::class)->getSystemValue('datadirectory');
+
+        $dataPath = \OC::$server->getSystemConfig()->getValue('datadirectory');
         $paths = ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/opt/bin', $dataPath . "/bin"];
         $result = $default;
         $exeSniffer = new ExecutableFinder();
@@ -253,7 +245,7 @@ class Helper
     {
         $units = array(
             '1 year|years' => 31536000,
-            '1 monthmonths' => 2592000,
+            '1 month|months' => 2592000,
             '1 week|weeks' => 604800,
             '1 day|days' => 86400,
             '1 hour|hours' => 3600,
@@ -403,15 +395,16 @@ class Helper
 
     public static function getDataDir(): string
     {
-        return \OC::$server->get(\OCP\IConfig::class)->getSystemValue('datadirectory');
+        return \OC::$server->getSystemConfig()->getValue('datadirectory');
     }
 
     public static function getLocalFolder(string $path): string
     {
         if (self::getUID()) {
-            \OC_Util::setupFS();
+            OC_Util::setupFS();
             //get the real path of the file in the filesystem
-            return \OC\Files\Filesystem::getLocalFile($path);
+//            return \OC\Files\Filesystem::getLocalFile($path);
+              return \OCA\NCDownloader\Tools\File::getLocalFile($path);
         }
         return "";
     }
@@ -429,6 +422,7 @@ class Helper
 
     public static function getUser(): ?IUser
     {
+//        return \OC::$server->getUserSession()->getUser();
         return \OC::$server->get(\OCP\IUserSession::class)->getUser();
     }
 
@@ -498,7 +492,7 @@ class Helper
 
     public static function getAppPath(): string
     {
-        return \OC::$server->get(\OCP\App\IAppManager::class)->getAppPath('ncdownloader');
+        return \OC::$server->getAppManager()->getAppPath('ncdownloader');
     }
     public static function folderUpdated(string $dir): bool
     {

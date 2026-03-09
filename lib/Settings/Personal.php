@@ -10,8 +10,6 @@ use OCP\Settings\ISettings;
 use OCA\NCDownloader\Db\Settings;
 use OCA\NCDownloader\Tools\Helper;
 
-use OCP\IUserManager;
-
 class Personal implements ISettings
 {
 
@@ -21,22 +19,18 @@ class Personal implements ISettings
 	private $timeFactory;
 	/** @var IConfig */
 	private $config;
-	/** @var IUserManager */
-	private $userManager;
 	private $uid;
 	private $settings;
 
 	public function __construct(
 		IDBConnection $connection,
 		ITimeFactory $timeFactory,
-		IConfig $config,
-		IUserManager $userManager
+		IConfig $config
 	) {
 		$this->connection = $connection;
 		$this->timeFactory = $timeFactory;
 		$this->config = $config;
-		$this->userManager = $userManager;
-		$this->uid = \OC::$server->get(\OCP\IUserSession::class)->getUser()->getUID();
+		$this->uid = \OC::$server->getUserSession()->getUser()->getUID();
 		$this->settings = new Settings($this->uid);
 	}
 
@@ -46,10 +40,7 @@ class Personal implements ISettings
 	public function getForm()
 	{
 		$path = '/apps/ncdownloader/personal/save';
-		$user = $this->userManager->get($this->uid);
-		$groupManager = \OC::$server->get(\OCP\IGroupManager::class);
-		$isAdmin = ($user !== null) ? $groupManager->isInGroup($user->getUID(), 'admin') : false;
-				$parameters = [
+		$parameters = [
 			"settings" => [
 				"ncd_downloader_dir" => Helper::getDownloadDir(),
 				"ncd_torrents_dir" => $this->settings->get("ncd_torrents_dir"),
@@ -58,7 +49,7 @@ class Personal implements ISettings
 				'ncd_seed_time' => $this->settings->get("ncd_seed_time"),
 				"path" => $path,
 				"disallow_aria2_settings" => Helper::getAdminSettings("disallow_aria2_settings"),
-				"is_admin" => $isAdmin,
+				"is_admin" => \OC_User::isAdminUser($this->uid),
 			],
 			"options" => [
 				[

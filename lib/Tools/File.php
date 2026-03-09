@@ -2,6 +2,10 @@
 
 namespace OCA\NCDownloader\Tools;
 
+use OC\Files\Filesystem;
+use OCP\Files\IRootFolder;
+use OCP\IUserSession;
+
 class File
 {
 
@@ -61,4 +65,32 @@ class File
     {
         return pathinfo($file, PATHINFO_FILENAME);
     }
+
+    /**
+     * Get the real local path of a virtual Nextcloud file
+     * @param string $path Virtual path relative to the user's files folder (e.g. "/Downloads/file.txt")
+     * @return string Real path on disk, or empty string if not found
+     */
+    public static function getLocalFile(string $path): string
+    {
+        $user = \OC::$server->getUserSession()->getUser();
+        if (!$user) {
+            return '';
+        }
+        $uid = $user->getUID();
+        $userFolder = \OC::$server->getRootFolder()->getUserFolder($uid);
+        // $path should start from inside the user's files directory
+        // Ensure it's relative
+        $relativePath = ltrim($path, '/');
+        $node = $userFolder->get($relativePath);
+        if ($node instanceof \OCP\Files\File) {
+            return $node->getStorage()->getLocalFile($node->getInternalPath());
+        } elseif ($node instanceof \OCP\Files\Folder) {
+            // For a folder, getLocalFile doesn't apply, but we might need its path
+            // For consistency, return the folder's local path (if supported by storage)
+            return $node->getStorage()->getLocalFile($node->getInternalPath());
+        }
+        return '';
+    }
+
 }

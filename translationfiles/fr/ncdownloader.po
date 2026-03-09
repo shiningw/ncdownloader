@@ -1,0 +1,251 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Nextcloud package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Nextcloud 3.14159\n"
+"Report-Msgid-Bugs-To: translations\\@example.com\n"
+"POT-Creation-Date: 2022-02-27 19:08+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: /var/www/html/nxcloud/apps/ncdownloader/lib/Controller/Aria2Controller.php:104
+#: /var/www/html/nxcloud/apps/ncdownloader/lib/Controller/Aria2Controller.php:107
+msgid "DONE!"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/lib/Controller/Aria2Controller.php:110
+msgid "FAILED!"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/lib/Controller/MainController.php:82
+msgid "Aria2c is not running!"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/lib/Controller/YtdlController.php:100
+msgid "failed to get any url!"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/lib/Controller/YtdlController.php:199
+msgid "Youtube-dl NOT installed!"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/lib/Settings/AdminSection.php:33
+#: /var/www/html/nxcloud/apps/ncdownloader/lib/Settings/PersonalSection.php:33
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:13
+msgid "NCDownloader Settings"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/specialAppInfoFakeDummyForL10nScript.php:2
+msgid "NCDownloader"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/specialAppInfoFakeDummyForL10nScript.php:3
+msgid "Aria2 and ytdl web gui for nextcloud"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/specialAppInfoFakeDummyForL10nScript.php:4
+msgid ""
+"Search for torrents within the app from mutiple BT sites;\n"
+"Control Aria2 and manage download tasks from the web;\n"
+"download videos from 700+ video sites(ytdl,youku,vimo,dailymotion,twitter,"
+"facebook and the likes"
+msgstr ""
+
+#. TRANSLATORS src/App.vue:22
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:2
+msgid "Something must have gone wrong!"
+msgstr ""
+
+#. TRANSLATORS src/App.vue:30
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:4
+msgid "Downloading\" + \" "
+msgstr ""
+
+#. TRANSLATORS src/App.vue:81
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:6
+msgid "Please enter valid keyword!"
+msgstr ""
+
+#. TRANSLATORS src/components/mainForm.vue:65
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:8
+msgid "Paste your http/magnet link here"
+msgstr ""
+
+#. TRANSLATORS src/components/mainForm.vue:66
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:10
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:16
+msgid "Search Torrents"
+msgstr ""
+
+#. TRANSLATORS src/components/mainForm.vue:88
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:12
+msgid "Paste your video link here"
+msgstr ""
+
+#. TRANSLATORS src/components/mainForm.vue:107
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:14
+msgid "Search Music"
+msgstr ""
+
+#. TRANSLATORS src/components/searchInput.vue:30
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:18
+msgid "Enter keyword to search"
+msgstr ""
+
+#. TRANSLATORS src/settingsBar.vue:36
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:20
+msgid "Personal Settings"
+msgstr ""
+
+#. TRANSLATORS src/settingsBar.vue:40
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:22
+msgid "Admin Settings"
+msgstr ""
+
+#. TRANSLATORS src/settingsBar.vue:47
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:24
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:107
+msgid "Settings"
+msgstr ""
+
+#. TRANSLATORS src/settingsBar.vue:48
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:26
+msgid "Hide Errors"
+msgstr ""
+
+#. TRANSLATORS src/settingsBar.vue:50
+#: /var/www/html/nxcloud/apps/ncdownloader/specialVueFakeDummyForL10nScript.js:28
+msgid "enable this to hide errors"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/src/index.js:68
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:20
+msgid "Start Aria2"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/src/index.js:71
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:20
+msgid "Stop Aria2"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/src/lib/msg.ts:9
+msgid "Saving …"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/src/settings.js:132
+msgid "Select a directory"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/src/table.js:37
+msgid "No items"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:13
+msgid "Download & Search"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:19
+msgid "on"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:19
+msgid "off"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:25
+msgid "aria2c is installed but not executable"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:29
+msgid "aria2c is not installed!"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:37
+msgid "Active Downloads"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:50
+msgid "Waiting Downloads"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:63
+msgid "Complete Downloads"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:76
+msgid "Failed Downloads"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/Navigation.php:89
+msgid "Youtube-dl Downloads"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Admin.php:12
+msgid "Aria2 RPC Token"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Admin.php:17
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Admin.php:26
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Admin.php:35
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:21
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:30
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:44
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:54
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:74
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:89
+msgid "Save"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Admin.php:21
+msgid "Youtube-dl Binary Path"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Admin.php:30
+msgid "Aria2 Binary Path"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:17
+msgid "Downloads Folder"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:25
+msgid "Torrents Folder"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:36
+msgid "BT Sharing settings"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:40
+msgid "Seed ratio"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:49
+msgid "Seed Time in minutes"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:62
+msgid "Advanced Settings"
+msgstr "高级设置"
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:66
+msgid "Custom Aria2 Settings"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:71
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:85
+msgid "Add Options"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/ncdownloader/templates/settings/Personal.php:80
+msgid "Custom Youtube-dl Settings"
+msgstr ""

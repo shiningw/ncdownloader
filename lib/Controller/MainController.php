@@ -15,6 +15,7 @@ use OCP\AppFramework\Http\TemplateResponse;
 //use OCP\Files\IRootFolder;
 use OCP\IL10N;
 use OCP\IRequest;
+use OC_Util;
 use OCP\Util;
 
 class MainController extends Controller
@@ -46,7 +47,7 @@ class MainController extends Controller
         //$this->rootFolder = $rootFolder;
         $this->aria2 = $aria2;
         $this->aria2->init();
-        $this->urlGenerator = \OC::$server->get(\OCP\IURLGenerator::class);
+        $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->dbconn = new DbHelper();
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
         $this->ytdl = $ytdl;
@@ -63,8 +64,8 @@ class MainController extends Controller
     {
         // $str = \OC::$server->getDatabaseConnection()->getInner()->getPrefix();
         //$config = \OC::$server->getAppConfig();
-        Util::addScript($this->appName, 'app');
-        Util::addStyle($this->appName, 'app');
+        Util::addInitScript($this->appName, 'app');
+        OC_Util::addStyle($this->appName, 'app');
 
         $params = $this->buildParams();
         $response = new TemplateResponse($this->appName, 'Index', $params);

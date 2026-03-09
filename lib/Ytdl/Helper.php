@@ -19,7 +19,7 @@ class Helper
     {
         $this->dbconn = new DbHelper();
         $this->tablename = $this->dbconn->queryBuilder->getTableName("ncdownloader_info");
-        $this->user = \OC::$server->get(\OCP\IUserSession::class)->getUser()->getUID();
+        $this->user = \OC::$server->getUserSession()->getUser()->getUID();
     }
 
     public static function create()
@@ -30,7 +30,7 @@ class Helper
     public function getDownloadInfo(string $output): ?array
     {
         $rules = '#\[(?<module>(download|ExtractAudio|VideoConvertor|Merger|ffmpeg))\]((\s+|\s+Converting.*;\s+)Destination:\s+|\s+Merging formats into\s+\")' .
-            '(?<filename>.*\.(?<ext>(mp4|mp3|aac|webm|m4a|ogg|3gp|mkv|wav|flv)))#i';
+            '(?<filename>.*\.(?<ext>(mp4|mp3|aac|webm|m4a|ogg|3gp|mkv|wav|flv|opus)))#i';
 
         if (preg_match($rules, $output, $matches)) {
             return $matches;

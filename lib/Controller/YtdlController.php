@@ -16,7 +16,7 @@ class YtdlController extends Controller
 {
     //@config OC\AppConfig
     private $l10n;
-    private $audio_extensions = array("mp3", "m4a", "vorbis");
+    private $audio_extensions = array("mp3", "m4a", "vorbis", "opus");
     private $video_extensions = array("mp4", "webm", "mkv");
     private $uid;
     private $downloadDir;
@@ -32,7 +32,7 @@ class YtdlController extends Controller
         parent::__construct($appName, $request);
         $this->appName = $appName;
         $this->uid = $UserId;
-        $this->urlGenerator = \OC::$server->get(\OCP\IURLGenerator::class);
+        $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->l10n = $IL10N;
         $this->downloadDir = Helper::getDownloadDir();
         $this->dbconn = new DbHelper();

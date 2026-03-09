@@ -71,10 +71,11 @@ class Ytdl
     public function audioMode()
     {
         if (Helper::ffmpegInstalled()) {
-            $this->addOption('--prefer-ffmpeg');
+            // $this->addOption('--prefer-ffmpeg'); // (Deprecated)
             // $this->addOption('--add-metadata');
             // $this->setOption('--metadata-from-title', "%(artist)s-%(title).64s");
             $this->addOption('--extract-audio');
+            $this->addOption('-x');
         } else {
             $this->audioFormat = "m4a";
         }

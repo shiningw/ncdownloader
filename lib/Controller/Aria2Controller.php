@@ -11,6 +11,7 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\Files\IRootFolder;
 use OCP\IL10N;
 use OCP\IRequest;
+use OC_Util;
 use \OC\Files\Filesystem;
 
 class Aria2Controller extends Controller
@@ -33,9 +34,9 @@ class Aria2Controller extends Controller
         $this->uid = $UserId;
         $this->l10n = $IL10N;
         $this->rootFolder = $rootFolder;
-        $this->urlGenerator = \OC::$server->get(\OCP\IURLGenerator::class);
+        $this->urlGenerator = \OC::$server->getURLGenerator();
         $this->downloadDir = Helper::getDownloadDir();
-        \OC_Util::setupFS();
+        OC_Util::setupFS();
         //$this->config = \OC::$server->getAppConfig();
         $this->aria2 = $aria2;
         $this->aria2->init();
@@ -206,7 +207,7 @@ class Aria2Controller extends Controller
             $folderLink = $this->urlGenerator->linkToRoute('files.view.index', $params);
             //$peers = ($this->getPeers($info['gid']));
             $completed = Helper::formatBytes($value['completedLength']);
-            $percentage = $value['completedLength'] ? 100 * ($value['completedLength'] / $value['totalLength']) : 0;
+            $percentage = $value['completedLength'] && $value['totalLength'] != 0 ? 100 * ($value['completedLength'] / $value['totalLength']) : 0;
             $completed = Helper::formatBytes($value['completedLength']);
 
             $total = Helper::formatBytes($value['totalLength']);
