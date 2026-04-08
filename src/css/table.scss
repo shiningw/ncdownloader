@@ -65,6 +65,71 @@
     border-bottom: 0;
   }
 
+  .ncdownloader-table-pagination,
+  .ncdownloader-table-summary {
+    width          : 100%;
+    display        : flex;
+    align-items    : center;
+    justify-content: space-between;
+    padding        : 10px 12px;
+    border-top     : 1px solid var(--color-border, #dadada);
+    background     : var(--color-main-background, #fafafa);
+    color          : var(--color-main-text, #222);
+    font-size      : 13px;
+  }
+
+  .pagination-controls {
+    display    : flex;
+    align-items: center;
+    gap        : 8px;
+  }
+
+  .pagination-per-page {
+    display    : inline-flex;
+    align-items: center;
+    gap        : 6px;
+    margin-left: 4px;
+    color      : var(--color-main-text, #222);
+  }
+
+  .pagination-select {
+    min-height   : 28px;
+    border       : 1px solid var(--color-border, #c4c4c4);
+    border-radius: 4px;
+    background   : var(--color-main-background, #fff);
+    color        : var(--color-main-text, #222);
+    padding      : 2px 6px;
+  }
+
+  .pagination-button {
+    border       : 1px solid var(--color-border, #c4c4c4);
+    border-radius: 4px;
+    background   : var(--color-main-background, #fff);
+    color        : var(--color-main-text, #222);
+    padding      : 4px 10px;
+    font-size    : 12px;
+    cursor       : pointer;
+  }
+
+  .pagination-button:hover:not(:disabled) {
+    border-color: var(--color-primary-element, #1e67b2);
+    color       : var(--color-primary-element, #1e67b2);
+  }
+
+  .pagination-button:disabled {
+    opacity: 0.5;
+    cursor : not-allowed;
+  }
+
+  .pagination-page {
+    min-width : 86px;
+    text-align: center;
+  }
+
+  .pagination-summary {
+    color: var(--color-text-maxcontrast, var(--color-main-text, #222));
+  }
+
 }
 
 @media only screen and (max-width: 1024px) {
@@ -88,6 +153,27 @@
       flex: 1 1 0;
     }
   }
+
+  .ncdownloader-table-pagination {
+    position      : sticky;
+    bottom        : 0;
+    z-index       : 2;
+    box-shadow    : 0 -1px 0 rgba(0, 0, 0, .05);
+  }
+
+  .ncdownloader-table-summary {
+    position      : sticky;
+    bottom        : 0;
+    z-index       : 2;
+  }
+
+  .pagination-controls {
+    justify-content: flex-end;
+  }
+
+  .pagination-button {
+    min-height: 32px;
+  }
   #ncdownloader-table-wrapper.ytdl-downloads {
 
     #table-cell-speed,
@@ -96,6 +182,28 @@
       overflow     : hidden;
       text-overflow: ellipsis;
       width        : 58px;
+    }
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  #ncdownloader-table-wrapper {
+    .ncdownloader-table-pagination,
+    .ncdownloader-table-summary {
+      flex-flow: column nowrap;
+      gap      : 8px;
+      align-items: flex-start;
+    }
+
+    .pagination-controls {
+      width          : 100%;
+      justify-content: space-between;
+      flex-wrap      : wrap;
+    }
+
+    .pagination-page {
+      min-width: auto;
+      flex     : 1;
     }
   }
 }

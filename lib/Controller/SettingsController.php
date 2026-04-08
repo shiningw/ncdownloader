@@ -6,6 +6,8 @@ use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Db\Settings;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\IGroupManager;
 use OCP\IRequest;
 
 class SettingsController extends Controller
@@ -17,19 +19,19 @@ class SettingsController extends Controller
     private $config;
     private $uid;
     private $settings;
-    public function __construct($AppName, IRequest $Request, $uid) //, IL10N $L10N)
+    private $groupManager;
+    public function __construct($AppName, IRequest $Request, $uid, IGroupManager $groupManager) //, IL10N $L10N)
 
     {
         parent::__construct($AppName, $Request);
         $this->uid = $uid;
+        $this->groupManager = $groupManager;
         //$this->L10N = $L10N;
         $this->settings = new Settings($uid);
         //$this->config = \OC::$server->getAppConfig();
     }
 
-    /**
-     * @NoAdminRequired
-     */
+    #[NoAdminRequired]
     public function getSettings()
     {
         $name = $this->request->getParam("name");
@@ -38,9 +40,7 @@ class SettingsController extends Controller
         return new JSONResponse(Helper::getSettings($name, $default, $type));
     }
 
-    /**
-     * @NoAdminRequired
-     */
+    #[NoAdminRequired]
     public function saveCustom()
     {
         $params = $this->request->getParams();
@@ -50,9 +50,7 @@ class SettingsController extends Controller
         return new JSONResponse($resp);
     }
 
-    /**
-     * @NoAdminRequired
-     */
+    #[NoAdminRequired]
     public function getCustomAria2()
     {
         $data = json_decode($this->settings->get("custom_aria2_settings"));
@@ -90,13 +88,11 @@ class SettingsController extends Controller
     {
         return new JSONResponse(Helper::getSettings("global_aria2_config", "", $this->settings::TYPE['SYSTEM']));
     }
-    /**
-     * @NoAdminRequired
-     */
+    #[NoAdminRequired]
     public function saveCustomAria2()
     {
         $noAria2Settings = (bool) Helper::getAdminSettings("disallow_aria2_settings");
-        if ($noAria2Settings && !\OC_User::isAdminUser($this->uid)) {
+        if ($noAria2Settings && !$this->groupManager->isAdmin($this->uid)) {
             $resp = ["error" => "forbidden", "status" => false];
             return new JSONResponse($resp);
         }
@@ -105,9 +101,7 @@ class SettingsController extends Controller
         $resp = $this->settings->save("custom_aria2_settings", json_encode($data));
         return new JSONResponse($resp);
     }
-    /**
-     * @NoAdminRequired
-     */
+    #[NoAdminRequired]
     public function deleteCustomAria2()
     {
         $saved = json_decode($this->settings->get("custom_aria2_settings"), 1);
@@ -120,17 +114,13 @@ class SettingsController extends Controller
         return new JSONResponse($resp);
     }
 
-    /**
-     * @NoAdminRequired
-     */
+    #[NoAdminRequired]
     public function getYtdl()
     {
         $data = json_decode($this->settings->get("custom_ytdl_settings"));
         return new JSONResponse($data);
     }
-    /**
-     * @NoAdminRequired
-     */
+    #[NoAdminRequired]
     public function saveYtdl()
     {
         $params = $this->request->getParams();
@@ -140,9 +130,7 @@ class SettingsController extends Controller
         $resp = $this->settings->save("custom_ytdl_settings", json_encode($data));
         return new JSONResponse($resp);
     }
-    /**
-     * @NoAdminRequired
-     */
+    #[NoAdminRequired]
     public function deleteYtdl()
     {
         $saved = json_decode($this->settings->get("custom_ytdl_settings"), 1);

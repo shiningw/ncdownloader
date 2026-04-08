@@ -42,6 +42,36 @@ class Aria2
 
     private $content;
     private $torrentsDir;
+
+    private function resolveBinaryPath($binary): ?string
+    {
+        if (!empty($binary)) {
+            // User setting might be an absolute path or just a command name.
+            if (@is_file($binary)) {
+                return $binary;
+            }
+
+            if ($resolved = Helper::findBinaryPath($binary)) {
+                return $resolved;
+            }
+
+            if (basename((string) $binary) === 'aria2') {
+                if ($resolved = Helper::findBinaryPath('aria2c')) {
+                    return $resolved;
+                }
+            }
+        }
+
+        return Helper::findBinaryPath('aria2c', __DIR__ . "/../../bin/aria2c");
+    }
+
+    private function ensureBinaryPath(): void
+    {
+        if (empty($this->bin) || !@is_file($this->bin)) {
+            $this->bin = $this->resolveBinaryPath($this->bin);
+        }
+    }
+
     public function __construct($options = array())
     {
         $options += [
@@ -63,11 +93,7 @@ class Aria2
         ];
         //turn keys in $options into variables
         extract($options);
-        if (!empty($binary)) {
-            $this->bin = $binary;
-        } else {
-            $this->bin = Helper::findBinaryPath('aria2c', __DIR__ . "/../../bin/aria2c");
-        }
+        $this->bin = $this->resolveBinaryPath($binary ?? null);
         if ($this->isInstalled() && !$this->isExecutable()) {
             chmod($this->bin, 0744);
         }
@@ -370,6 +396,7 @@ class Aria2
 
     public function start($bin = null)
     {
+        $this->ensureBinaryPath();
         //aria2c refuses to start with no errors when input-file is set but missing
         if (!file_exists($this->sessionFile)) {
             file_put_contents($this->sessionFile, '');
@@ -395,10 +422,12 @@ class Aria2
     }
     public function isInstalled()
     {
+        $this->ensureBinaryPath();
         return @is_file($this->bin);
     }
     public function isExecutable()
     {
+        $this->ensureBinaryPath();
         return @is_executable($this->bin);
     }
 
@@ -410,6 +439,7 @@ class Aria2
 
     public function getBin()
     {
+        $this->ensureBinaryPath();
         return $this->bin;
     }
     public function version()

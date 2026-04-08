@@ -9,6 +9,9 @@ use \OCP\IL10N;
 use OCA\NCDownloader\Controller\MainController as Main;
 use OCA\NCDownloader\Controller\YtdlController as YTD;
 use OCA\NCDownloader\Controller\SearchController as Search;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\CORS;
 
 class ApiController extends API
 {
@@ -27,11 +30,9 @@ class ApiController extends API
         parent::__construct($appName, $request);
     }
 
-    /**
-     * @CORS
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     */
+    #[CORS]
+    #[NoAdminRequired]
+    #[NoCSRFRequired]
     public function download(string $url, string $type = "aria2", array $options = []): JSONResponse
     {
         if ($type == "aria2") {
@@ -45,11 +46,9 @@ class ApiController extends API
         return new JSONResponse(["error" => "Invalid download type"]);
     }
 
-    /**
-     * @CORS
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     */
+    #[CORS]
+    #[NoAdminRequired]
+    #[NoCSRFRequired]
     public function search(string $keyword, string $site = "TPB"): JSONResponse
     {
         return $this->search->execute($keyword, $site);

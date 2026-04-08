@@ -4,6 +4,7 @@ namespace OCA\NCDownloader\AppInfo;
 
 use OCA\NCDownloader\Aria2\Aria2;
 use OCA\NCDownloader\Http\Client;
+use OCA\NCDownloader\Middleware\ActionLogMiddleware;
 use OCA\NCDownloader\Tools\Helper;
 use OCA\NCDownloader\Db\Settings;
 use OCA\NCDownloader\Ytdl\Ytdl;
@@ -22,6 +23,8 @@ class Application extends App implements IBootstrap
     }
     public function register(IRegistrationContext $context): void
     {
+        $context->registerMiddleware(ActionLogMiddleware::class);
+
         $context->registerService(Client::class, function () {
             $options = [
                 'ipv4' => true,
@@ -41,31 +44,33 @@ class Application extends App implements IBootstrap
                 return $className::create($crawler, $client);
             });
         }
-    }
-
-    public function boot(IBootContext $c): void
-    {
-        $user = Helper::getUser();
-        $uid = ($user) ? $user->getUID() : '';
-        //$settings = new Settings($uid);
-        //$userFolder = Helper::getUserFolder($uid);
-        $context = $c->getAppContainer();
-
-        $context->registerService(Aria2::class, function (ContainerInterface $c) use ($uid) {
+        
+        // Register services that depend on user context
+        $context->registerService(Aria2::class, function (ContainerInterface $c) {
+            $uid = Helper::getUID();
             $config = Helper::getAria2Config($uid);
             return new Aria2($config);
         });
-        $context->registerService(Ytdl::class, function (ContainerInterface $c) use ($uid) {
+        
+        $context->registerService(Ytdl::class, function (ContainerInterface $c) {
+            $uid = Helper::getUID();
             $config = Helper::getYtdlConfig($uid);
             return new Ytdl($config);
         });
 
-        $context->registerService(Settings::class, function (ContainerInterface $c) use ($uid) {
+        $context->registerService(Settings::class, function (ContainerInterface $c) {
+            $uid = Helper::getUID();
             return new Settings($uid);
         });
-        $context->registerService('uid', function (ContainerInterface $c) use ($uid) {
-            return $uid;
+        
+        $context->registerService('uid', function (ContainerInterface $c) {
+            return Helper::getUID();
         });
-        //$context->injectFn([$this, 'registerSearchProviders']);
+    }
+
+    public function boot(IBootContext $c): void
+    {
+        // Boot method can be empty or used for other initialization
+        // Service registration should happen in register() method
     }
 }

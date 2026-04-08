@@ -6,3 +6,9 @@ test.php
 js/app*
 exclude
 bin
+
+# Local backup/temp artifacts
+*.0
+*.bak
+*.orig
+*~

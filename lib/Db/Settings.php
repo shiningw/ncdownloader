@@ -2,6 +2,8 @@
 
 namespace OCA\NCDownloader\Db;
 
+use OCP\IConfig;
+
 class Settings
 {
     //@config OC\AppConfig
@@ -10,6 +12,8 @@ class Settings
     //@OC\SystemConfig
     private $sysConfig;
 
+    //@OCP\IConfig
+    private $config;
     private $user;
     private $appName;
     //type of settings (system = 1 or app =2)
@@ -18,13 +22,10 @@ class Settings
     public const TYPE = ['SYSTEM' => 1, 'USER' => 2, 'APP' => 3];
     public function __construct($user = null)
     {
-        $this->appConfig = \OC::$server->get(\OCP\IConfig::class);
-        $this->sysConfig = \OC::$server->get(\OCP\IConfig::class);
+        $this->config = \OC::$server->get(IConfig::class);
         $this->appName = 'ncdownloader';
         $this->type = self::TYPE['USER'];
         $this->user = $user;
-        //$this->connAdapter = \OC::$server->getDatabaseConnection();
-        //$this->conn = $this->connAdapter->getInner();
     }
     public static function create($user = null)
     {
@@ -42,16 +43,16 @@ class Settings
     public function get($key, $default = null)
     {
         if ($this->type == self::TYPE['USER'] && isset($this->user)) {
-            return $this->appConfig->getUserValue($this->user, $this->appName, $key, $default);
+            return $this->config->getUserValue($this->user, $this->appName, $key, $default);
         } else if ($this->type == self::TYPE['SYSTEM']) {
-            return $this->appConfig->getSystemValue($key, $default);
+            return $this->config->getSystemValue($key, $default);
         } else {
-            return $this->appConfig->getAppValue($this->appName, $key, $default);
+            return $this->config->getAppValue($this->appName, $key, $default);
         }
     }
     public function getAria2()
     {
-        $settings = $this->appConfig->getUserValue($this->user, $this->appName, "custom_aria2_settings", '');
+        $settings = $this->config->getUserValue($this->user, $this->appName, "custom_aria2_settings", '');
         return json_decode($settings, 1);
     }
 
@@ -74,11 +75,11 @@ class Settings
     {
         try {
             if ($this->type == self::TYPE['USER'] && isset($this->user)) {
-                $this->appConfig->setUserValue($this->user, $this->appName, $key, $value);
+                $this->config->setUserValue($this->user, $this->appName, $key, $value);
             } else if ($this->type == self::TYPE['SYSTEM']) {
-                $this->appConfig->setSystemValue($key, $value);
+                $this->config->setSystemValue($key, $value);
             } else {
-                $this->appConfig->setAppValue($this->appName, $key, $value);
+                $this->config->setAppValue($this->appName, $key, $value);
             }
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];
@@ -91,21 +92,21 @@ class Settings
         $keys = $this->getAllKeys();
         $value = [];
         foreach ($keys as $key) {
-            $value[$key] = $this->appConfig->getAppValue($this->appName, $key);
+            $value[$key] = $this->config->getAppValue($this->appName, $key);
         }
         return $value;
     }
     public function getAllKeys()
     {
-        return $this->appConfig->getAppKeys($this->appName);
+        return $this->config->getAppKeys($this->appName);
     }
 
     public function getAllUserSettings()
     {
-        $keys = $this->appConfig->getUserKeys($this->user, $this->appName);
+        $keys = $this->config->getUserKeys($this->user, $this->appName);
         $value = [];
         foreach ($keys as $key) {
-            $value[$key] = $this->appConfig->getUserValue($this->user, $this->appName, $key);
+            $value[$key] = $this->config->getUserValue($this->user, $this->appName, $key);
         }
         return $value;
     }

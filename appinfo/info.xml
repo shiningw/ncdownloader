@@ -4,9 +4,9 @@
     <name>NCDownloader</name>
     <summary>Aria2 and youtube-dl web gui for nextcloud</summary>
     <description>
-Search for torrents within the app from mutiple BT sites;
+Search for torrents within the app from multiple BT sites;
 Control Aria2 and manage download tasks from the web;
-download videos from 700+ video sites(youtube,youku,vimo,dailymotion,twitter,facebook and the likes
+Download videos from 700+ video sites (youtube,youku,vimo,dailymotion,twitter,facebook and the likes).
     </description>
     <version>1.0.23</version>
     <licence>agpl</licence>
@@ -19,8 +19,8 @@ download videos from 700+ video sites(youtube,youku,vimo,dailymotion,twitter,fac
     <screenshot>https://user-images.githubusercontent.com/3911975/142445020-27ec389a-5437-4d28-acc0-5e757fd6897d.png</screenshot>
     <repository>https://github.com/shiningw/ncdownloader</repository>
     <dependencies>
-        <php min-version="7.3" max-version="8.3" />
-        <nextcloud min-version="20" max-version="31"/>
+        <php min-version="8.1" max-version="8.4" />
+        <nextcloud min-version="28" max-version="32"/>
     </dependencies>
     <navigations>
         <navigation>

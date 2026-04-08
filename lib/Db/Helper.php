@@ -15,11 +15,6 @@ class Helper
         $this->conn = \OC::$server->get(\OCP\IDBConnection::class);
         $this->queryBuilder = $this->conn->getQueryBuilder();
         $this->prefixedTable = $this->queryBuilder->getTableName($this->table);
-        //$container = \OC::$server->query(\OCP\IServerContainer::class);
-        //ToolsHelper::debug(get_class($container->query(\OCP\RichObjectStrings\IValidator::class)));
-        //$this->conn = \OC::$server->query(Connection::class);//working only with 22
-        //$this->connAdapter = \OC::$server->getDatabaseConnection();
-        //$this->conn = $this->connAdapter->getInner();
     }
 
     public function insert($insert)
@@ -32,38 +27,44 @@ class Helper
     public function getAll()
     {
         //OC\DB\QueryBuilder\QueryBuilder
-        $queryBuilder = $this->queryBuilder
+        $result = $this->queryBuilder
             ->select('filename', 'type', 'gid', 'timestamp', 'status')
             ->from($this->table)
-            ->execute();
-        return $queryBuilder->fetchAll();
+            ->executeQuery();
+        $rows = $result->fetchAll();
+        $result->closeCursor();
+        return $rows;
     }
 
     public function getByUid($uid)
     {
-        $queryBuilder = $this->queryBuilder
+        $result = $this->queryBuilder
             ->select('*')
             ->from($this->table)
             ->where('uid = :uid')
             ->setParameter('uid', $uid)
-            ->execute();
-        return $queryBuilder->fetchAll();
+            ->executeQuery();
+        $rows = $result->fetchAll();
+        $result->closeCursor();
+        return $rows;
     }
 
     public function getUidByGid($gid)
     {
-        $queryBuilder = $this->queryBuilder
+        $result = $this->queryBuilder
             ->select('uid')
             ->from($this->table)
             ->where('gid = :gid')
             ->setParameter('gid', $gid)
-            ->execute();
-        return $queryBuilder->fetchColumn();
+            ->executeQuery();
+        $value = $result->fetchOne();
+        $result->closeCursor();
+        return $value;
     }
 
     public function getYtdlByUid($uid)
     {
-        $qb = $this->queryBuilder
+        $result = $this->queryBuilder
             ->select('*')
             ->from($this->table)
             ->where('uid = :uid')
@@ -71,19 +72,23 @@ class Helper
             ->setParameter('uid', $uid)
             ->setParameter('type', ToolsHelper::DOWNLOADTYPE['YOUTUBE-DL'])
             ->orderBy('id', 'DESC')
-            ->execute();
-        return $qb->fetchAll();
+            ->executeQuery();
+        $rows = $result->fetchAll();
+        $result->closeCursor();
+        return $rows;
     }
 
     public function getByGid($gid)
     {
-        $queryBuilder = $this->queryBuilder
+        $result = $this->queryBuilder
             ->select('*')
             ->from($this->table)
             ->where('gid = :gid')
             ->setParameter('gid', $gid)
-            ->execute();
-        return $queryBuilder->fetch();
+            ->executeQuery();
+        $row = $result->fetch();
+        $result->closeCursor();
+        return $row;
     }
 
     public function save(array $keys, $values = array(), $conditions = array())
@@ -97,7 +102,7 @@ class Helper
             ->delete($this->table)
             ->where('gid = :gid')
             ->setParameter('gid', $gid);
-        return $qb->execute();
+        return $qb->executeStatement();
     }
     public function executeUpdate($sql, $values)
     {
@@ -111,7 +116,7 @@ class Helper
             ->set("status", $query->createNamedParameter($status))
             ->where('gid = :gid')
             ->setParameter('gid', $gid);
-        return $query->execute();
+        return $query->executeStatement();
         //$sql = sprintf("UPDATE %s set status = ? WHERE gid = ?", $this->prefixedTable);
         //$this->execute($sql, [$status, $gid]);
     }
@@ -125,7 +130,7 @@ class Helper
             ->andWhere('filename = :filename')
             ->setParameter('gid', $gid)
             ->setParameter('filename', 'unknown');
-        return $query->execute();
+        return $query->executeStatement();
     }
 
     public function getDBType(): string

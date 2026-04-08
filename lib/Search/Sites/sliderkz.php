@@ -19,13 +19,7 @@ class sliderkz extends searchBase implements searchInterface
 
     public function search(string $keyword): tableData
     {
-        $this->query = ['q' => trim($keyword)];
-        $this->searchUrl = $this->baseUrl;
-        $this->getItems()->setTableTitles(["Title", "Duration", "Actions"])->addActionLinks();
-        if ($this->hasErrors()) {
-            return tableData::create()->setError($this->getErrors());
-        }
-        return tableData::create($this->getTableTitles(), $this->getRows());
+        return tableData::create()->setError('Music search provider is currently unavailable.');
     }
 
     public function getItems()
@@ -65,7 +59,7 @@ class sliderkz extends searchBase implements searchInterface
             if (isset($resp['audios'])) {
                 return array_values($resp["audios"])[0];
             }
-        } catch (ExceptionInterface $e) {
+        } catch (\Throwable $e) {
             $this->errors[] = $e->getMessage();
         }
 

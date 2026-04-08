@@ -34,7 +34,7 @@ class Ytdl
         if (!empty($binary)) {
             $this->bin = $binary;
         } else {
-            $this->bin = __DIR__ . "/../../bin/yt-dlp"; //Helper::findBinaryPath('ytdl', __DIR__ . "/../../bin/yt-dlp");
+            $this->bin = Helper::findBinaryPath('yt-dlp', __DIR__ . "/../../bin/yt-dlp");
         }
         if ($this->isInstalled() && !$this->isExecutable()) {
             chmod($this->bin, 0744);
@@ -71,10 +71,11 @@ class Ytdl
     public function audioMode()
     {
         if (Helper::ffmpegInstalled()) {
-            $this->addOption('--prefer-ffmpeg');
+            // $this->addOption('--prefer-ffmpeg'); // (Deprecated)
             // $this->addOption('--add-metadata');
             // $this->setOption('--metadata-from-title', "%(artist)s-%(title).64s");
             $this->addOption('--extract-audio');
+            $this->addOption('-x');
         } else {
             $this->audioFormat = "m4a";
         }

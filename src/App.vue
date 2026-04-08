@@ -42,6 +42,10 @@ export default {
   data() {
     return {
       display: { download: true, search: false },
+      lastSearchFormData: null,
+      lastSearchVm: null,
+      pagingBusy: false,
+      lastPagingRequestAt: 0,
       uris: {
         ytd_url: helper.generateUrl("/apps/ncdownloader/ytdl/new"),
         aria2_url: helper.generateUrl("/apps/ncdownloader/new"),
@@ -52,6 +56,70 @@ export default {
   },
   created() {},
   methods: {
+    executeSearch(formData, vm) {
+      this.pagingBusy = true;
+      this.lastPagingRequestAt = Date.now();
+      let payload = {
+        keyword: formData["text-input-value"],
+        site: formData["select-value-search"],
+        page: formData.page || 1,
+        perPage: formData.perPage || 20,
+      };
+      helper.httpClient(this.uris.search_url)
+        .setData(payload)
+        .setErrorHandler(() => {
+          this.pagingBusy = false;
+          helper.resetSearch(vm);
+          helper.error(t("ncdownloader", "Search request failed. Please try again."));
+        })
+        .setHandler((data) => {
+          vm.$data.loading = 0;
+          if (data && data.title) {
+            const tableInst = contentTable.getInstance(
+              data.title,
+              data.row,
+              data.meta || {},
+              (page, perPage) => this.loadSearchPage(page, perPage)
+            );
+            tableInst.actionLink = false;
+            tableInst.rowClass = "table-row-search";
+            if (!Array.isArray(data.row) || data.row.length === 0) {
+              tableInst.noData();
+            } else {
+              tableInst.create();
+            }
+          }
+          if (data.error) {
+            helper.resetSearch(vm);
+            helper.error(data.error);
+          }
+          if (!data || (!data.title && !data.error)) {
+            helper.resetSearch(vm);
+            helper.error(t("ncdownloader", "No response data from search provider."));
+          }
+          this.pagingBusy = false;
+        })
+        .send();
+    },
+    loadSearchPage(page, perPage = null) {
+      if (!this.lastSearchFormData || !this.lastSearchVm) {
+        return;
+      }
+      if (this.pagingBusy) {
+        return;
+      }
+      if ((Date.now() - this.lastPagingRequestAt) < 800) {
+        return;
+      }
+      const formData = {
+        ...this.lastSearchFormData,
+        page,
+      };
+      if (perPage) {
+        formData.perPage = perPage;
+      }
+      this.executeSearch(formData, this.lastSearchVm);
+    },
     download(event) {
       let element = event.target;
       let formWrapper = element.closest("form");
@@ -101,28 +169,13 @@ export default {
       helper.disablePolling();
       contentTable.getInstance().loading();
 
-      let url = formWrapper.getAttribute("action");
-      formData['keyword'] = formData["text-input-value"]
-      formData['site'] = formData["select-value-search"]
-      delete formData["text-input-value"]
-      delete formData['select-value-search']
-      
-      helper.httpClient(url)
-        .setData(formData)
-        .setHandler(function (data) {
-          if (data && data.title) {
-            vm.$data.loading = 0;
-            const tableInst = contentTable.getInstance(data.title, data.row);
-            tableInst.actionLink = false;
-            tableInst.rowClass = "table-row-search";
-            tableInst.create();
-          }
-          if (data.error) {
-            helper.resetSearch(vm);
-            helper.error(data.error);
-          }
-        })
-        .send();
+      this.lastSearchFormData = {
+        "text-input-value": formData["text-input-value"],
+        "select-value-search": formData["select-value-search"],
+        perPage: 20,
+      };
+      this.lastSearchVm = vm;
+      this.executeSearch(this.lastSearchFormData, vm);
     },
     uploadFile(event, vm) {
       let element = event.target;

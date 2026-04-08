@@ -5,6 +5,7 @@ class tableData
 {
     protected $row, $title = [];
     private $error = null;
+    private $meta = [];
 
     public function __construct(array $titles = [], $rows = [])
     {
@@ -32,8 +33,18 @@ class tableData
         return isset($this->error);
     }
 
+    public function setMeta(array $meta)
+    {
+        $this->meta = $meta;
+        return $this;
+    }
+
     public function getData(): array
     {
-        return ["title" => $this->title, "row" => $this->row];
+        $result = ["title" => $this->title, "row" => $this->row];
+        if (!empty($this->meta)) {
+            $result["meta"] = $this->meta;
+        }
+        return $result;
     }
 }

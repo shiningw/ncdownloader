@@ -8,6 +8,7 @@ use OCA\NCDownloader\Aria2\Options as aria2Options;
 use OCA\NCDownloader\Db\Settings;
 use OCP\IUser;
 use OC\Files\Filesystem;
+use OC_Util;
 use Psr\Log\LoggerInterface;
 use OCA\NCDownloader\Aria2\Aria2;
 use OCA\NCDownloader\Ytdl\Ytdl;
@@ -147,6 +148,8 @@ class Helper
         if (is_array($msg)) {
             $msg = implode(",", $msg);
         }
+        $logger = \OC::$server->get(LoggerInterface::class);
+//        $logger = \OC::$server->getLogger();
         $logger = self::getLogger();
         $logger->error($msg, ['app' => 'ncdownloader']);
     }
@@ -159,19 +162,7 @@ class Helper
     {
         if (!isset($filter)) {
             $filter = array(
-                'status',
-                'followedBy',
-                'totalLength',
-                'errorMessage',
-                'dir',
-                'uploadLength',
-                'completedLength',
-                'downloadSpeed',
-                'files',
-                'numSeeders',
-                'connections',
-                'gid',
-                'following',
+                'status', 'followedBy', 'totalLength', 'errorMessage', 'dir', 'uploadLength', 'completedLength', 'downloadSpeed', 'files', 'numSeeders', 'connections', 'gid', 'following',
             );
         }
         $value = array_filter($data, function ($k) use ($filter) {
@@ -195,7 +186,6 @@ class Helper
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
@@ -216,7 +206,7 @@ class Helper
         if (!function_exists($function_name)) {
             return false;
         }
-        $ini = \OC::$server->getIniWrapper();
+        $ini = \OC::$server->get(\OC\IniGetWrapper::class);
         $disabled = explode(',', $ini->get('disable_functions') ?: '');
         $disabled = array_map('trim', $disabled);
         if (in_array($function_name, $disabled)) {
@@ -232,10 +222,11 @@ class Helper
 
     public static function findBinaryPath($program, $default = null)
     {
-        $memcache = \OC::$server->getMemCacheFactory()->createDistributed('findBinaryPath');
+        $memcache = \OC::$server->get(\OCP\ICacheFactory::class)->createDistributed('findBinaryPath');
         if ($memcache->hasKey($program)) {
             return $memcache->get($program);
         }
+
         $dataPath = \OC::$server->get(\OCP\IConfig::class)->getSystemValue('datadirectory');
         $paths = ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/opt/bin', $dataPath . "/bin"];
         $result = $default;
@@ -253,7 +244,7 @@ class Helper
     {
         $units = array(
             '1 year|years' => 31536000,
-            '1 monthmonths' => 2592000,
+            '1 month|months' => 2592000,
             '1 week|weeks' => 604800,
             '1 day|days' => 86400,
             '1 hour|hours' => 3600,
@@ -331,7 +322,10 @@ class Helper
     }
     public static function sanitize($string)
     {
-        return filter_var($string, FILTER_SANITIZE_STRING);
+        if (!is_string($string)) {
+            return $string;
+        }
+        return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     public static function doSignal($pid, $signal): bool
@@ -382,7 +376,7 @@ class Helper
     public static function getSearchSites(): array
     {
         $key = 'searchSites';
-        $memcache = \OC::$server->getMemCacheFactory()->createDistributed($key);
+        $memcache = \OC::$server->get(\OCP\ICacheFactory::class)->createDistributed($key);
         if ($memcache->hasKey($key)) {
             $sites = $memcache->get($key);
         } else {
@@ -409,9 +403,15 @@ class Helper
     public static function getLocalFolder(string $path): string
     {
         if (self::getUID()) {
-            \OC_Util::setupFS();
-            //get the real path of the file in the filesystem
-            return \OC\Files\Filesystem::getLocalFile($path);
+            OC_Util::setupFS();
+            // Resolve through the active filesystem view (NC33-compatible).
+            $view = Filesystem::getView();
+            if ($view) {
+                $localPath = $view->getLocalFile($path);
+                if (is_string($localPath)) {
+                    return $localPath;
+                }
+            }
         }
         return "";
     }
@@ -429,6 +429,7 @@ class Helper
 
     public static function getUser(): ?IUser
     {
+//        return \OC::$server->getUserSession()->getUser();
         return \OC::$server->get(\OCP\IUserSession::class)->getUser();
     }
 
@@ -536,15 +537,15 @@ class Helper
     }
     public static function query($key)
     {
-        return self::isLegacyVersion() ? \OC::$server->query($key) : \OC::$server->get($key);
+        return \OC::$server->get($key);
     }
     public static function getLogger()
     {
-        return (version_compare(implode(".", self::getVersion()), '24.0.0') < 0) ? \OC::$server->getLogger() : \OC::$server->get(LoggerInterface::class);
+        return \OC::$server->get(LoggerInterface::class);
     }
     public static function getDatabaseConnection()
     {
-        return self::isLegacyVersion() ? \OC::$server->getDatabaseConnection() : \OC::$server->get(\OCP\IDBConnection::class);
+        return \OC::$server->get(\OCP\IDBConnection::class);
     }
     public static function getAdminSettings($key): string
     {
@@ -603,6 +604,13 @@ class Helper
                 "id" => "ncd_aria2_binary",
                 "value" => $data['ncd_aria2_binary'] ?? "",
                 "placeholder" => $data['ncd_aria2_binary'] ?? "/usr/bin/aria2c",
+                "path" => $data['path'],
+            ],
+            [
+                "label" => "BitSearch URL",
+                "id" => "ncd_bitsearch_url",
+                "value" => $data['ncd_bitsearch_url'] ?? "",
+                "placeholder" => $data['ncd_bitsearch_url'] ?? "https://bitsearch.to/search",
                 "path" => $data['path'],
             ]
         ];

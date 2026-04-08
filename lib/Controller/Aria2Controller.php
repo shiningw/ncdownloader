@@ -8,6 +8,7 @@ use OCA\NCDownloader\Tools\folderScan;
 use OCA\NCDownloader\Tools\Helper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\Files\IRootFolder;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -43,9 +44,8 @@ class Aria2Controller extends Controller
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
        
     }
-    /**
-     * @NoAdminRequired
-     */
+    
+    #[NoAdminRequired]
     public function Action($path)
     {
         $path = strtolower(trim($path));
@@ -130,9 +130,8 @@ class Aria2Controller extends Controller
             'path' => $this->urlGenerator->linkToRoute('ncdownloader.Aria2.Action', ['path' => $path]),
         );
     }
-    /**
-     * @NoAdminRequired
-     */
+    
+    #[NoAdminRequired]
     public function getStatus($path)
     {
         //$path = $this->request->getRequestUri();
@@ -206,7 +205,7 @@ class Aria2Controller extends Controller
             $folderLink = $this->urlGenerator->linkToRoute('files.view.index', $params);
             //$peers = ($this->getPeers($info['gid']));
             $completed = Helper::formatBytes($value['completedLength']);
-            $percentage = $value['completedLength'] ? 100 * ($value['completedLength'] / $value['totalLength']) : 0;
+            $percentage = $value['completedLength'] && $value['totalLength'] != 0 ? 100 * ($value['completedLength'] / $value['totalLength']) : 0;
             $completed = Helper::formatBytes($value['completedLength']);
 
             $total = Helper::formatBytes($value['totalLength']);

@@ -12,7 +12,9 @@ use OCA\NCDownloader\Ytdl\Ytdl;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
-//use OCP\Files\IRootFolder;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IRequest;
 use OCP\Util;
@@ -35,8 +37,9 @@ class MainController extends Controller
     private $counters;
     private $ytdl;
     private $accessDenied;
+    private $groupManager;
 
-    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Ytdl $ytdl)
+    public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, Aria2 $aria2, Ytdl $ytdl, IGroupManager $groupManager)
     {
 
         parent::__construct($appName, $request);
@@ -46,24 +49,24 @@ class MainController extends Controller
         //$this->rootFolder = $rootFolder;
         $this->aria2 = $aria2;
         $this->aria2->init();
+        $this->groupManager = $groupManager;
         $this->urlGenerator = \OC::$server->get(\OCP\IURLGenerator::class);
         $this->dbconn = new DbHelper();
         $this->counters = new Counters($aria2, $this->dbconn, $UserId);
         $this->ytdl = $ytdl;
-        $this->isAdmin = \OC_User::isAdminUser($this->uid);
+        $this->isAdmin = $this->groupManager->isAdmin($this->uid);
         $this->hideError = Helper::getSettings("ncd_hide_errors", false);
         $this->disable_bt_nonadmin = Helper::getAdminSettings("ncd_disable_bt");
         $this->accessDenied = $this->l10n->t("Sorry,only admin users can download files via BT!");
     }
-    /**
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     */
+    
+    #[NoAdminRequired]
+    #[NoCSRFRequired]
     public function Index()
     {
         // $str = \OC::$server->getDatabaseConnection()->getInner()->getPrefix();
         //$config = \OC::$server->getAppConfig();
-        Util::addScript($this->appName, 'app');
+        Util::addInitScript($this->appName, 'app');
         Util::addStyle($this->appName, 'app');
 
         $params = $this->buildParams();
@@ -90,6 +93,10 @@ class MainController extends Controller
         $sites = [];
         foreach (Helper::getSearchSites() as $site) {
             $label = $site['class']::getLabel();
+            if (strtolower($label) === 'music') {
+                // SliderKZ endpoint is no longer stable/reachable.
+                continue;
+            }
             $sites[] = ['name' => $site['name'], 'label' => strtoupper($label)];
         }
         $params['search_sites'] = json_encode($sites);
@@ -133,9 +140,8 @@ class MainController extends Controller
         ]);
         return $params;
     }
-    /**
-     * @NoAdminRequired
-     */
+    
+    #[NoAdminRequired]
     public function Download(string $url)
     {
         $dlDir = $this->aria2->getDownloadDir();
@@ -177,9 +183,8 @@ class MainController extends Controller
         $resp = ['message' => $filename, 'result' => $result, 'file' => $filename];
         return $resp;
     }
-    /**
-     * @NoAdminRequired
-     */
+    
+    #[NoAdminRequired]
     public function Upload()
     {
         if ($this->disable_bt_nonadmin && !$this->isAdmin) {
@@ -209,18 +214,15 @@ class MainController extends Controller
         return new JSONResponse($resp);
     }
 
-    /**
-     * @NoAdminRequired
-     */
+    #[NoAdminRequired]
     public function scanFolder()
     {
         $force = $this->request->getParam('force') ?? false;
         $resp = $force ? folderScan::create()->scan() : folderScan::sync();
         return new JSONResponse($resp);
     }
-    /**
-     * @NoAdminRequired
-     */
+    
+    #[NoAdminRequired]
     public function getCounters(): JSONResponse
     {
         $counter = $this->counters->getCounters();

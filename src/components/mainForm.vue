@@ -35,6 +35,7 @@
                 <option id="m4a" value="m4a">m4a</option>
                 <option id="mp3" value="mp3">mp3</option>
                 <option id="vorbis" value="vorbis">vorbis</option>
+                <option id="opus" value="opus">opus</option>
               </optgroup>
             </select>
           </div>
