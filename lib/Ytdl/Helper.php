@@ -1,12 +1,15 @@
 <?php
-namespace OCA\NCDownloader\Ytdl;
+namespace OCA\Vapor\Ytdl;
 
-use OCA\NCDownloader\Db\Helper as DbHelper;
-use OCA\NCDownloader\Tools\Helper as ToolsHelper;
+use OCA\Vapor\Db\Helper as DbHelper;
+use OCA\Vapor\Tools\Helper as ToolsHelper;
 
 class Helper
 {
     public $file = null;
+    // BEGIN STEVE EDITS
+    public $alreadyDownloaded = false;
+    // END STEVE EDITS
     protected $pid = 0;
     protected $dbconn;
     protected $tablename;
@@ -18,8 +21,11 @@ class Helper
     public function __construct()
     {
         $this->dbconn = new DbHelper();
-        $this->tablename = $this->dbconn->queryBuilder->getTableName("ncdownloader_info");
+        $this->tablename = $this->dbconn->queryBuilder->getTableName("vapor_info");
+	// $this->user = \OC::$server->getUserSession()->getUser()->getUID();
+	// BEGIN STEVE EDITS
         $this->user = \OC::$server->get(\OCP\IUserSession::class)->getUser()->getUID();
+        // END STEVE EDITS
     }
 
     public static function create()
@@ -30,7 +36,7 @@ class Helper
     public function getDownloadInfo(string $output): ?array
     {
         $rules = '#\[(?<module>(download|ExtractAudio|VideoConvertor|Merger|ffmpeg))\]((\s+|\s+Converting.*;\s+)Destination:\s+|\s+Merging formats into\s+\")' .
-            '(?<filename>.*\.(?<ext>(mp4|mp3|aac|webm|m4a|ogg|3gp|mkv|wav|flv)))#i';
+            '(?<filename>.*\.(?<ext>(mp4|mp3|aac|webm|m4a|ogg|3gp|mkv|wav|flv|opus)))#i';
 
         if (preg_match($rules, $output, $matches)) {
             return $matches;
@@ -89,6 +95,14 @@ class Helper
     }
     public function run(string $buffer, array $extra)
     {
+        // BEGIN STEVE EDITS
+        if (stripos($buffer, 'has already been downloaded') !== false) {
+            $this->alreadyDownloaded = true;
+            if (preg_match('#\[download\]\s+(?<filename>.*)\s+has already been downloaded#i', $buffer, $m)) {
+                $this->file = basename($m['filename']);
+            }
+        }
+        // END STEVE EDITS	    
         $info = $this->getSiteInfo($buffer);
         if (isset($info["id"])) {
             $this->gid = ToolsHelper::generateGID($info["id"]);

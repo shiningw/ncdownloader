@@ -10,7 +10,7 @@ import App from './App';
 import tippy, { delegate } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import settingsBar from './settingsBar';
-const basePath = "/apps/ncdownloader";
+const basePath = "/apps/vapor";
 
 
 window.addEventListener('DOMContentLoaded', function () {
@@ -18,7 +18,7 @@ window.addEventListener('DOMContentLoaded', function () {
     helper.showErrors('[data-error-message]');
     updatePage.run();
     buttonActions.run();
-    let container = 'ncdownloader-form-wrapper';
+    let container = 'vapor-form-wrapper';
     const dataContainerID = "app-settings-data";
     let app = createApp(App);
     let bar = createApp(settingsBar);
@@ -65,10 +65,10 @@ window.addEventListener('DOMContentLoaded', function () {
             }
             if (aria2 === 'on') {
                 element.setAttribute("data-aria2", "off");
-                element.textContent = t("ncdownloader", "Start Aria2");
+                element.textContent = t("vapor", "Start Aria2");
             } else {
                 element.setAttribute("data-aria2", "on");
-                element.textContent = t("ncdownloader", "Stop Aria2");
+                element.textContent = t("vapor", "Stop Aria2");
             }
         }
         helper.httpClient(url).setHandler(function (data) {
@@ -76,7 +76,13 @@ window.addEventListener('DOMContentLoaded', function () {
         }).send();
     })
     eventHandler.add("click", "#app-navigation", "#search-download", helper.showDownload);
-    delegate('#app-ncdownloader-wrapper',
+    // BEGIN STEVE EDITS
+    eventHandler.add("click", "#app-settings-header", "button", function() {
+    const content = document.getElementById("app-settings-content");
+    content.style.display = content.style.display === "none" || content.style.display === "" ? "block" : "none";
+});
+    // END STEVE EDITS
+    delegate('#app-vapor-wrapper',
         { target: '[data-tippy-content]' }
     );
 });

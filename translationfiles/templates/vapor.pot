@@ -1,0 +1,345 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Vapor package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Vapor 1.0.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-15 00:43+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: /var/www/html/nextcloud/apps/vapor/lib/Controller/Aria2Controller.php:104
+#: /var/www/html/nextcloud/apps/vapor/lib/Controller/Aria2Controller.php:107
+#: lib/Controller/Aria2Controller.php:116
+#: lib/Controller/Aria2Controller.php:119
+msgid "DONE!"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/lib/Controller/Aria2Controller.php:110
+#: lib/Controller/Aria2Controller.php:122
+msgid "FAILED!"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/lib/Controller/MainController.php:82
+msgid "Aria2c is not running!"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/lib/Controller/YtdlController.php:100
+#: lib/Controller/YtdlController.php:119
+msgid "failed to get any url!"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/lib/Controller/YtdlController.php:199
+#: lib/Controller/YtdlController.php:226
+msgid "Youtube-dl NOT installed!"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/lib/Settings/AdminSection.php:33
+#: /var/www/html/nextcloud/apps/vapor/lib/Settings/PersonalSection.php:33
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:13
+#: lib/Settings/PersonalSection.php:33 lib/Settings/AdminSection.php:33
+msgid "Vapor Settings"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/specialAppInfoFakeDummyForL10nScript.php:2
+msgid "Vapor"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/specialAppInfoFakeDummyForL10nScript.php:3
+msgid "Aria2 and ytdl web gui for nextcloud"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/specialAppInfoFakeDummyForL10nScript.php:4
+msgid ""
+"Search for torrents within the app from mutiple BT sites;\n"
+"Control Aria2 and manage download tasks from the web;\n"
+"download videos from 700+ video "
+"sites(ytdl,youku,vimo,dailymotion,twitter,facebook and the likes"
+msgstr ""
+
+#. TRANSLATORS src/App.vue:22
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:2
+msgid "Something must have gone wrong!"
+msgstr ""
+
+#. TRANSLATORS src/App.vue:30
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:4
+msgid "Downloading\" + \" "
+msgstr ""
+
+#. TRANSLATORS src/App.vue:81
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:6
+msgid "Please enter valid keyword!"
+msgstr ""
+
+#. TRANSLATORS src/components/mainForm.vue:65
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:8
+msgid "Paste your http/magnet link here"
+msgstr ""
+
+#. TRANSLATORS src/components/mainForm.vue:66
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:10
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:16
+msgid "Search Torrents"
+msgstr ""
+
+#. TRANSLATORS src/components/mainForm.vue:88
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:12
+msgid "Paste your video link here"
+msgstr ""
+
+#. TRANSLATORS src/components/mainForm.vue:107
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:14
+msgid "Search Music"
+msgstr ""
+
+#. TRANSLATORS src/components/searchInput.vue:30
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:18
+msgid "Enter keyword to search"
+msgstr ""
+
+#. TRANSLATORS src/settingsBar.vue:36
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:20
+msgid "Personal Settings"
+msgstr ""
+
+#. TRANSLATORS src/settingsBar.vue:40
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:22
+msgid "Admin Settings"
+msgstr ""
+
+#. TRANSLATORS src/settingsBar.vue:47
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:24
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:107
+#: templates/Navigation.php:66
+msgid "Settings"
+msgstr ""
+
+#. TRANSLATORS src/settingsBar.vue:48
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:26
+msgid "Hide Errors"
+msgstr ""
+
+#. TRANSLATORS src/settingsBar.vue:50
+#: /var/www/html/nextcloud/apps/vapor/specialVueFakeDummyForL10nScript.js:28
+msgid "enable this to hide errors"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/src/index.js:68
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:20
+#: templates/Navigation.php:28
+msgid "Start Aria2"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/src/index.js:71
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:20
+#: templates/Navigation.php:28
+msgid "Stop Aria2"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/src/lib/msg.ts:9
+msgid "Saving …"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/src/settings.js:132
+msgid "Select a directory"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/src/table.js:37 js/appSettings.js:2
+#: js/app.js:2 js/appSettings.js:2001 js/app.js:1979
+msgid "No items"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:13
+#: templates/Navigation.php:20
+msgid "Download & Search"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:19
+#: templates/Navigation.php:27
+msgid "on"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:19
+#: templates/Navigation.php:27
+msgid "off"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:25
+#: templates/Navigation.php:33
+msgid "aria2c is installed but not executable"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:29
+#: templates/Navigation.php:37
+msgid "aria2c is not installed!"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:37
+msgid "Active Downloads"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:50
+msgid "Waiting Downloads"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:63
+msgid "Complete Downloads"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:76
+msgid "Failed Downloads"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/Navigation.php:89
+msgid "Youtube-dl Downloads"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Admin.php:12
+#: lib/Tools/Helper.php:638
+msgid "Aria2 RPC Token"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Admin.php:17
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Admin.php:26
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Admin.php:35
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:21
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:30
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:44
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:54
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:74
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:89
+msgid "Save"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Admin.php:21
+msgid "Youtube-dl Binary Path"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Admin.php:30
+msgid "Aria2 Binary Path"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:17
+msgid "Downloads Folder"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:25
+msgid "Torrents Folder"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:36
+msgid "BT Sharing settings"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:40
+msgid "Seed ratio"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:49
+msgid "Seed Time in minutes"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:62
+msgid "Advanced Settings"
+msgstr "高级设置"
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:66
+msgid "Custom Aria2 Settings"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:71
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:85
+msgid "Add Options"
+msgstr ""
+
+#: /var/www/html/nextcloud/apps/vapor/templates/settings/Personal.php:80
+msgid "Custom Youtube-dl Settings"
+msgstr ""
+
+#: lib/Controller/MainController.php:63
+msgid "Sorry,only admin users can download files via BT!"
+msgstr ""
+
+#: js/appSettings.js:2 js/appSettings.js:814 js/appSettings.js:815
+#: js/appSettings.js:816 js/appSettings.js:817 js/appSettings.js:818
+msgid "object"
+msgstr ""
+
+#: js/appSettings.js:2 js/app.js:2 js/appSettings.js:2105 js/app.js:2083
+msgid "Redownload"
+msgstr ""
+
+#: js/appSettings.js:2 js/appSettings.js:8935
+msgid "__VUE_INSTANCE_SETTERS__"
+msgstr ""
+
+#: js/appSettings.js:2 js/appSettings.js:8936
+msgid "__VUE_SSR_SETTERS__"
+msgstr ""
+
+#: js/app.js:2 js/app.js:8029
+msgid "Download task started!"
+msgstr ""
+
+#: src/index.js:68 src/index.js:71 src/utils/helper.js:271
+#: src/utils/helper.js:291
+msgid "vapor"
+msgstr ""
+
+#: /var/www/html/nxcloud/apps/vapor/lib/Ytdl/Ytdl.php:327 lib/Ytdl/Ytdl.php:331
+msgid "No update available"
+msgstr ""
+
+#: lib/Tools/Helper.php:624
+msgid "Aria2 RPC Host"
+msgstr ""
+
+#: lib/Tools/Helper.php:631
+msgid "Aria2 RPC Port"
+msgstr ""
+
+#: lib/Tools/Helper.php:645
+msgid "Yt-dlp binary"
+msgstr ""
+
+#: lib/Tools/Helper.php:652
+msgid "Aria2c binary"
+msgstr ""
+
+#: lib/Controller/SettingsController.php:177 lib/Db/Settings.php:100
+msgid "Saved!"
+msgstr ""
+
+#: lib/Search/Sites/searchBase.php:21
+msgid "title"
+msgstr ""
+
+#: lib/Search/Sites/searchBase.php:22
+msgid "seeders"
+msgstr ""
+
+#: lib/Search/Sites/searchBase.php:23
+msgid "info"
+msgstr ""
+
+#: lib/Search/Sites/searchBase.php:24
+msgid "actions"
+msgstr ""
+
+#: lib/Settings/Personal.php:70
+msgid "Downloads Folder : "
+msgstr ""
+
+#: lib/Settings/Personal.php:77
+msgid "Torrents Folder : "
+msgstr ""

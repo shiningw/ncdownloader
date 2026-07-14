@@ -1,8 +1,8 @@
 <?php
 
-namespace OCA\NCDownloader\Search\Sites;
+namespace OCA\Vapor\Search\Sites;
 
-use OCA\NCDownloader\Tools\tableData;
+use OCA\Vapor\Tools\tableData;
 
 //The Piratebay
 class TPB extends searchBase implements searchInterface

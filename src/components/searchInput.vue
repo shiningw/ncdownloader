@@ -27,7 +27,7 @@ import { translate as t } from "@nextcloud/l10n";
 export default {
   data() {
     return {
-      placeholder: t("ncdownloader", "Enter keyword to search"),
+      placeholder: t("vapor", "Enter keyword to search"),
       selected: "TPB",
     };
   },

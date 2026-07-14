@@ -1,17 +1,21 @@
 <?php
 
-namespace OCA\NCDownloader\Tools;
+namespace OCA\Vapor\Tools;
 
 use Exception;
-use OCA\NCDownloader\Search\Sites\searchInterface;
-use OCA\NCDownloader\Aria2\Options as aria2Options;
-use OCA\NCDownloader\Db\Settings;
+use OCA\Vapor\Search\Sites\searchInterface;
+use OCA\Vapor\Aria2\Options as aria2Options;
+use OCA\Vapor\Db\Settings;
 use OCP\IUser;
-use OC\Files\Filesystem;
+//  BEGIN STEVE EDITS
+// use OC\Files\Filesystem;
+//  END STEVE EDITS
+use OC_Util;
 use Psr\Log\LoggerInterface;
-use OCA\NCDownloader\Aria2\Aria2;
-use OCA\NCDownloader\Ytdl\Ytdl;
-use OCA\NCDownloader\Http\Client;
+use OCA\Vapor\Aria2\Aria2;
+use OCA\Vapor\Ytdl\Ytdl;
+use OCA\Vapor\Http\Client;
+use OCP\IL10N;
 
 require __DIR__ . "/../../vendor/autoload.php";
 
@@ -147,8 +151,10 @@ class Helper
         if (is_array($msg)) {
             $msg = implode(",", $msg);
         }
+        $logger = \OC::$server->get(LoggerInterface::class);
+//        $logger = \OC::$server->getLogger();
         $logger = self::getLogger();
-        $logger->error($msg, ['app' => 'ncdownloader']);
+        $logger->error($msg, ['app' => 'vapor']);
     }
 
     public static function log($msg, $file = "/tmp/nc.log")
@@ -159,19 +165,7 @@ class Helper
     {
         if (!isset($filter)) {
             $filter = array(
-                'status',
-                'followedBy',
-                'totalLength',
-                'errorMessage',
-                'dir',
-                'uploadLength',
-                'completedLength',
-                'downloadSpeed',
-                'files',
-                'numSeeders',
-                'connections',
-                'gid',
-                'following',
+                'status', 'followedBy', 'totalLength', 'errorMessage', 'dir', 'uploadLength', 'completedLength', 'downloadSpeed', 'files', 'numSeeders', 'connections', 'gid', 'following',
             );
         }
         $value = array_filter($data, function ($k) use ($filter) {
@@ -216,7 +210,10 @@ class Helper
         if (!function_exists($function_name)) {
             return false;
         }
-        $ini = \OC::$server->getIniWrapper();
+	// $ini = \OC::$server->getIniWrapper();
+	// BEGIN STEVE EDITS
+        $ini = \OC::$server->get(\OCP\IniGetWrapper::class);
+        // END STEVE EDITS
         $disabled = explode(',', $ini->get('disable_functions') ?: '');
         $disabled = array_map('trim', $disabled);
         if (in_array($function_name, $disabled)) {
@@ -232,11 +229,18 @@ class Helper
 
     public static function findBinaryPath($program, $default = null)
     {
-        $memcache = \OC::$server->getMemCacheFactory()->createDistributed('findBinaryPath');
+	// $memcache = \OC::$server->getMemCacheFactory()->createDistributed('findBinaryPath');
+	// BEGIN STEVE EDITS
+        $memcache = \OC::$server->get(\OCP\ICacheFactory::class)->createDistributed('findBinaryPath');
+        // END STEVE EDITS
         if ($memcache->hasKey($program)) {
             return $memcache->get($program);
         }
+
+	// $dataPath = \OC::$server->getSystemConfig()->getValue('datadirectory');
+	// BEGIN STEVE EDITS
         $dataPath = \OC::$server->get(\OCP\IConfig::class)->getSystemValue('datadirectory');
+        // END STEVE EDITS
         $paths = ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/opt/bin', $dataPath . "/bin"];
         $result = $default;
         $exeSniffer = new ExecutableFinder();
@@ -253,7 +257,7 @@ class Helper
     {
         $units = array(
             '1 year|years' => 31536000,
-            '1 monthmonths' => 2592000,
+            '1 month|months' => 2592000,
             '1 week|weeks' => 604800,
             '1 day|days' => 86400,
             '1 hour|hours' => 3600,
@@ -305,12 +309,20 @@ class Helper
     // the relative home folder of a nextcloud user,e.g. /admin/files
     public static function getUserFolder($uid = null): string
     {
-        if (!empty($rootFolder = Filesystem::getRoot())) {
-            return $rootFolder;
-        } else if (isset($uid)) {
-            return "/" . $uid . "/files";
-        }
-        return '';
+	    // BEGIN STEVE CODE
+	    // if (!empty($rootFolder = Filesystem::getRoot())) {
+            //    return $rootFolder;
+            // } else if (isset($uid)) {
+            //    return "/" . $uid . "/files";
+            // }
+            //    return '';
+	    //
+    	if (isset($uid)) {
+        	return "/" . $uid . "/files";
+    	}
+    	$uid = self::getUID();
+    	return $uid ? "/" . $uid . "/files" : '';
+	    // END STEVE CODE
     }
 
     public static function generateGID($str = null)
@@ -370,7 +382,7 @@ class Helper
         $sites = [];
         foreach ($files as $file) {
             $basename = File::getBasename($file);
-            $namespace = 'OCA\\NCDownloader\\Search\\Sites\\';
+            $namespace = 'OCA\\Vapor\\Search\\Sites\\';
             $className = $namespace . $basename;
             if (in_array(searchInterface::class, class_implements($className))) {
                 $sites[] = ['class' => $className, 'name' => $basename];
@@ -382,7 +394,10 @@ class Helper
     public static function getSearchSites(): array
     {
         $key = 'searchSites';
-        $memcache = \OC::$server->getMemCacheFactory()->createDistributed($key);
+	//$memcache = \OC::$server->getMemCacheFactory()->createDistributed($key);
+	// BEGIN STEVE EDITS
+        $memcache = \OC::$server->get(\OCP\ICacheFactory::class)->createDistributed($key);
+        // END STEVE EDITS
         if ($memcache->hasKey($key)) {
             $sites = $memcache->get($key);
         } else {
@@ -398,24 +413,54 @@ class Helper
 
     public static function getMountPoints(): ?array
     {
-        return Filesystem::getMountPoints("/");
+	//BEGIN STEVE CODE    
+	//return Filesystem::getMountPoints("/");
+	//
+	try {
+        	$mountManager = \OC::$server->get(\OCP\Files\IMountManager::class);
+        	return $mountManager->findIn('/');
+        } catch (\Exception $e) {
+        	return [];
+        }
+	//END STEVE CODE
     }
 
     public static function getDataDir(): string
     {
+	// return \OC::$server->getSystemConfig()->getValue('datadirectory');
+	// BEGIN STEVE EDITS
         return \OC::$server->get(\OCP\IConfig::class)->getSystemValue('datadirectory');
+        // END STEVE EDITS
     }
+//  BEGIN STEVE EDITS
+//    public static function getLocalFolder(string $path): string
+//    {
+//        if (self::getUID()) {
+//            OC_Util::setupFS();
+//            //get the real path of the file in the filesystem
+//            return \OC\Files\Filesystem::getLocalFile($path);
+//        }
+//        return "";
+//    }
 
-    public static function getLocalFolder(string $path): string
-    {
-        if (self::getUID()) {
-            \OC_Util::setupFS();
-            //get the real path of the file in the filesystem
-            return \OC\Files\Filesystem::getLocalFile($path);
+public static function getLocalFolder(string $path): string
+{
+    $uid = self::getUID();
+    if ($uid) {
+        try {
+            $rootFolder = \OC::$server->get(\OCP\Files\IRootFolder::class);
+            $userFolder = $rootFolder->getUserFolder($uid);
+            $node = $userFolder->get($path);
+            $localPath = $node->getStorage()->getLocalFile($node->getInternalPath());
+            return $localPath !== null ? $localPath : "";
+        } catch (\OCP\Files\NotFoundException $e) {
+            return "";
         }
-        return "";
     }
+    return "";
+}
 
+//  END STEVE EDITS
     public static function getRealDownloadDir(): string
     {
         $dlDir = self::getDownloadDir();
@@ -429,6 +474,7 @@ class Helper
 
     public static function getUser(): ?IUser
     {
+//        return \OC::$server->getUserSession()->getUser();
         return \OC::$server->get(\OCP\IUserSession::class)->getUser();
     }
 
@@ -484,7 +530,7 @@ class Helper
             'dir' => $realDownloadDir,
             'torrentsDir' => $torrentsDir,
             'confDir' => $aria2Dir,
-            'token' =>  $token ? $token : "ncdownloader123",
+            'token' =>  $token ? $token : "vapor123",
             'settings' => $options,
             'rpcHost' => $rpcHost ? $rpcHost : "127.0.0.1",
             'rpcPort' => $rpcPort ? $rpcPort : "6800",
@@ -498,7 +544,10 @@ class Helper
 
     public static function getAppPath(): string
     {
-        return \OC::$server->get(\OCP\App\IAppManager::class)->getAppPath('ncdownloader');
+	// return \OC::$server->getAppManager()->getAppPath('vapor');
+	// BEGIN STEVE EDITS
+        return \OC::$server->get(\OCP\App\IAppManager::class)->getAppPath('vapor');
+        // END STEVE EDITS
     }
     public static function folderUpdated(string $dir): bool
     {
@@ -569,37 +618,38 @@ class Helper
 
     public static function getAdminOptions($data)
     {
+        $l10n = \OC::$server->getL10N('vapor');
         $options = [
             [
-                "label" => "Aria2 RPC Host",
+                "label" => $l10n->t("Aria2 RPC Host"),
                 "id" => "ncd_aria2_rpc_host",
                 "value" => $data['ncd_aria2_rpc_host'] ?? "",
                 "placeholder" => $data['ncd_aria2_rpc_host'] ?? "127.0.0.1",
                 "path" => $data['path'],
             ],
             [
-                "label" => "Aria2 RPC Port",
+                "label" => $l10n->t("Aria2 RPC Port"),
                 "id" => "ncd_aria2_rpc_port",
                 "value" => $data['ncd_aria2_rpc_port'] ?? "",
                 "placeholder" => $data['ncd_aria2_rpc_port'] ?? 6800,
                 "path" => $data['path'],
             ],
             [
-                "label" => "Aria2 RPC Token",
+                "label" => $l10n->t("Aria2 RPC Token"),
                 "id" => "ncd_aria2_rpc_token",
                 "value" => $data['ncd_aria2_rpc_token'] ?? "",
-                "placeholder" => $data['ncd_aria2_rpc_token'] ?? "ncdownloader123",
+                "placeholder" => $data['ncd_aria2_rpc_token'] ?? "vapor123",
                 "path" => $data['path'],
             ],
             [
-                "label" => "Youtube-dl binary",
+                "label" => $l10n->t("Yt-dlp binary"),
                 "id" => "ncd_yt_binary",
                 "value" => $data['ncd_yt_binary'] ?? "",
-                "placeholder" => $data['ncd_yt_binary'] ?? "/usr/bin/youtube-dl",
+                "placeholder" => $data['ncd_yt_binary'] ?? "/usr/bin/yt-dlp",
                 "path" => $data['path'],
             ],
             [
-                "label" => "Aria2c binary",
+                "label" => $l10n->t("Aria2c binary"),
                 "id" => "ncd_aria2_binary",
                 "value" => $data['ncd_aria2_binary'] ?? "",
                 "placeholder" => $data['ncd_aria2_binary'] ?? "/usr/bin/aria2c",

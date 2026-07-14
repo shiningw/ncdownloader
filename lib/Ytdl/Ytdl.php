@@ -1,10 +1,13 @@
 <?php
 
-namespace OCA\NCDownloader\Ytdl;
+namespace OCA\Vapor\Ytdl;
 
-use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Ytdl\Helper as YtdHelper;
+use OCA\Vapor\Tools\Helper;
+use OCA\Vapor\Ytdl\Helper as YtdHelper;
 use Symfony\Component\Process\Process;
+use OCP\Files\IRootFolder;
+use OCP\IUserSession;
+use OCP\IL10N;
 
 class Ytdl
 {
@@ -22,9 +25,11 @@ class Ytdl
     private $bin;
     private $cmd;
     public $helper;
+    private $l10n;
 
-    public function __construct(array $options)
+    public function __construct(array $options, IL10N $l10n)
     {
+        $this->l10n = $l10n;
         $options += ['downloadDir' => '/tmp/downloads', 'settings' => []];
         $this->init($options);
     }
@@ -54,7 +59,7 @@ class Ytdl
         }
         $this->setEnv('LANG', $lang);
         $this->addOption("--no-mtime");
-        $this->addOption('--ignore-errors');
+	$this->addOption('--ignore-errors');
 
         if (($index = $this->hasOption('--output')) !== false) {
             $this->outTpl = $this->options[$index + 1];
@@ -71,10 +76,11 @@ class Ytdl
     public function audioMode()
     {
         if (Helper::ffmpegInstalled()) {
-            $this->addOption('--prefer-ffmpeg');
+            // $this->addOption('--prefer-ffmpeg'); // (Deprecated)
             // $this->addOption('--add-metadata');
             // $this->setOption('--metadata-from-title', "%(artist)s-%(title).64s");
             $this->addOption('--extract-audio');
+            $this->addOption('-x');
         } else {
             $this->audioFormat = "m4a";
         }
@@ -161,8 +167,44 @@ class Ytdl
                 $this->onOutput($buffer, $data);
             }
         });
+        
         if ($process->isSuccessful()) {
             $this->helper->updateStatus(Helper::STATUS['COMPLETE']);
+        
+            // === Save in Nextcloud immediatly ===
+            if ($this->helper->file) {
+                try {
+                    $user = \OC::$server->get(IUserSession::class)->getUser();
+                    if ($user) {
+                        $userId = $user->getUID();
+                        $rootFolder = \OC::$server->get(IRootFolder::class);
+                        $userFolder = $rootFolder->getUserFolder($userId);
+                        // relative path files for user 
+                        // $this->dbDlPath is by example "/Downloads"
+                        $relativePath = ($this->dbDlPath ? ltrim($this->dbDlPath, '/') . '/' : '') . $this->helper->file;
+                        $storage = $userFolder->getStorage();
+                        $scanner = $storage->getScanner();
+                        // Scan only this file
+                        $scanner->scan('files/' . $relativePath, true);
+                    }
+                } catch (\Exception $e) {
+                    // In case of error (missing file, permissions), dont stop
+                    \OC::$server->get(\Psr\Log\LoggerInterface::class)->error(
+                        'Vapor: Failed to scan newly downloaded file: ' . $e->getMessage(),
+                        ['app' => 'vapor']
+                    );
+                }
+            }
+            // =========================================================
+        
+            // BEGIN STEVE EDITS
+            if ($this->helper->alreadyDownloaded) {
+                return [
+                    'duplicate' => true,
+                    'message' => sprintf('You already downloaded "%s". To get it again, use the Redownload button next to it in your download history.', $this->helper->file ?: 'this item'),
+                ];
+            }
+            // END STEVE EDITS		
             return ['message' => $this->helper->file ?? $process->getErrorOutput()];
         }
         return ['error' => $process->getErrorOutput()];
@@ -232,7 +274,7 @@ class Ytdl
     }
     public function isInstalled()
     {
-        return @is_file($this->bin);
+        return @file_exists($this->bin);
     }
     public function isExecutable()
     {
@@ -263,13 +305,13 @@ class Ytdl
 
     public function installUrl()
     {
-        return "https://github.com/shiningw/ncdownloader-bin/raw/master/yt-dlp";
+        return "https://github.com/shiningw/vapor-bin/raw/master/yt-dlp";
     }
 
     public function version()
     {
         $process = new Process([$this->bin, '--version']);
-        $process->run();
+	$process->run();
         if ($process->isSuccessful()) {
             //remove any new line
             return trim($process->getOutput());
@@ -285,7 +327,8 @@ class Ytdl
                 return ['status' => true, 'message' => $tagName];
             }
         }
-        return ['status' => false, 'message' => 'No update available'];
+//        return ['status' => false, 'message' => 'No update available'];
+        return ['status' => false, 'message' => $this->l10n->t("No update available")];
     }
     public function update()
     {

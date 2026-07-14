@@ -1,9 +1,9 @@
 <?php
 
-namespace OCA\NCDownloader\Tools;
+namespace OCA\Vapor\Tools;
 
-use OCA\NCDownloader\Aria2\Aria2;
-use OCA\NCDownloader\Db\Helper as DbHelper;
+use OCA\Vapor\Aria2\Aria2;
+use OCA\Vapor\Db\Helper as DbHelper;
 
 class Counters
 {

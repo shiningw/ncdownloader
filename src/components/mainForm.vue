@@ -35,6 +35,7 @@
                 <option id="m4a" value="m4a">m4a</option>
                 <option id="mp3" value="mp3">mp3</option>
                 <option id="vorbis" value="vorbis">vorbis</option>
+                <option id="opus" value="opus">opus</option>
               </optgroup>
             </select>
           </div>
@@ -74,8 +75,8 @@ export default {
       inputType: "download",
       checkboxes: false,
       downloadType: "aria2",
-      placeholder: t("ncdownloader", "Paste your http/magnet link here"),
-      searchLabel: t("ncdownloader", "Search Torrents"),
+      placeholder: t("vapor", "Paste your http/magnet link here"),
+      searchLabel: t("vapor", "Search Torrents"),
       searchOptions: this.search_sites ? this.search_sites : this.noOptions(),
       selectedExt: "defaultext",
     };
@@ -101,7 +102,7 @@ export default {
       if (type === "aria2") {
         this.path = this.uris.aria2_url;
       } else if (type === "ytdl") {
-        this.placeholder = t("ncdownloader", "Paste your video link here");
+        this.placeholder = t("vapor", "Paste your video link here");
         this.path = this.uris.ytd_url;
       } else {
         this.path = this.uris.search_url;
@@ -120,9 +121,9 @@ export default {
     },
     optionCallback(option) {
       if (option.label.toLowerCase() == "music") {
-        this.searchLabel = t("ncdownloader", "Search Music");
+        this.searchLabel = t("vapor", "Search Music");
       } else {
-        this.searchLabel = t("ncdownloader", "Search Torrents");
+        this.searchLabel = t("vapor", "Search Torrents");
       }
     },
     noOptions() {

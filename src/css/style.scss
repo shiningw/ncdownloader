@@ -3,11 +3,11 @@
 @import 'helpers';
 @import 'navigation';
 
-#ncdownloader-settings-collapsible-container {
+#vapor-settings-collapsible-container {
     padding-left: 4%;
 }
 
-#app-ncdownloader-wrapper {
+#app-vapor-wrapper {
     width: 100%;
     display: flex;
 
@@ -50,7 +50,7 @@
     .icon-clipboard {
         background-image: url('../../img/clippy.svg');
     }
-    #ncdownloader-form-wrapper {
+    #vapor-form-wrapper {
         margin-left: 2px;
 
         .form-input-wrapper {
@@ -87,16 +87,16 @@
         padding      : 0 8px;
     }
 
-    #ncdownloader-form-wrapper input[type=text] {
+    #vapor-form-wrapper input[type=text] {
         padding: 0px 5px;
         flex   : auto;
     }
 
-    #ncdownloader-table-data .table-cell {
+    #vapor-table-data .table-cell {
         padding-left: 4px;
     }
 
-    #ncdownloader-action-links-container {
+    #vapor-action-links-container {
         position: relative;
 
         .action-link-item a:hover {
@@ -125,17 +125,17 @@
         display        : block;
     }
 
-    .ncdownloader-body-wrapper,
-    #ncdownloader-form-wrapper,
-    #ncdownloader-table-content {
+    .vapor-body-wrapper,
+    #vapor-form-wrapper,
+    #vapor-table-content {
         width: 100%;
     }
 
-    .ncdownloader-body-wrapper {
+    .vapor-body-wrapper {
         padding-top: 0.3em;
     }
 
-    #app-content-wrapper #ncdownloader-table-content .table-cell {
+    #app-content-wrapper #vapor-table-content .table-cell {
         border-bottom: 1px solid #9d9595;
         border-left  : 1px solid #eee;
 
@@ -181,19 +181,27 @@
 
 }
 
-#ncdownloader-settings-form input[type=text] {
+#vapor-settings-form input[type=text] {
     width: 160px;
 }
 
 @media only screen and (min-width: 800px) {}
 
 @media only screen and (max-width: 1024px) {
-    #ncdownloader-body-wrapper {
+    #vapor-body-wrapper {
         position  : relative;
         margin-top: 2em;
     }
 
-    #ncdownloader-settings-form input[type=text] {
+    #vapor-settings-form input[type=text] {
         width: 135px;
     }
+}
+
+/* Counter and link padding overrides for sidebar */
+#app-vapor-wrapper #app-navigation:not(.vue) .app-navigation-entry-utils-counter {
+    padding: 0 1px;
+}
+#app-vapor-wrapper > #app-navigation:not(.vue) > ul > li > a {
+    padding: 0 12px 0 34px;
 }

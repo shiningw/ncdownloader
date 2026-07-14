@@ -2,14 +2,14 @@
 @import "spinner";
 @import "helpers";
 
-.ncdownloader-personal-settings,
-.ncdownloader-admin-settings {
+.vapor-personal-settings,
+.vapor-admin-settings {
     position: relative;
     display: flex;
     flex-direction: column;
     margin-left: 1em;
 
-    #ncdownloader-message-banner {
+    #vapor-message-banner {
         position: fixed;
         top: 50px;
         text-align: center;
@@ -24,14 +24,14 @@
         background-color: #dff0d8;
     }
 
-    #ncdownloader-message-banner.success,
+    #vapor-message-banner.success,
     .message-banner.success {
         color: #799479;
         background-color: #dff0d8;
         border-color: #d6e9c6;
     }
 
-    #ncdownloader-message-banner.error,
+    #vapor-message-banner.error,
     .message-banner.error {
         color: #a94442;
         background-color: #f2dede;

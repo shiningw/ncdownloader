@@ -1,8 +1,8 @@
 <?php
 
-namespace OCA\NCDownloader\Search\Sites;
+namespace OCA\Vapor\Search\Sites;
 
-use OCA\NCDownloader\Tools\tableData;
+use OCA\Vapor\Tools\tableData;
 
 //bitsearch.to
 class bitSearch extends searchBase implements searchInterface

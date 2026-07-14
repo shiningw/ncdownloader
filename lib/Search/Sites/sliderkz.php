@@ -1,9 +1,9 @@
 <?php
 
-namespace OCA\NCDownloader\Search\Sites;
+namespace OCA\Vapor\Search\Sites;
 
-use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Tools\tableData;
+use OCA\Vapor\Tools\Helper;
+use OCA\Vapor\Tools\tableData;
 
 //slider.kz
 class sliderkz extends searchBase implements searchInterface

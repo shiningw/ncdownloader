@@ -51,8 +51,8 @@ const buttonHandler = (event, type) => {
 }
 export default {
     run: function () {
-        eventHandler.add("click", "#ncdownloader-table-wrapper", ".table-cell-action-item .button-container button", e => buttonHandler(e, ''));
-        eventHandler.add("click", "#ncdownloader-table-wrapper", ".table-row button.icon-clipboard", function (e) {
+        eventHandler.add("click", "#vapor-table-wrapper", ".table-cell-action-item .button-container button", e => buttonHandler(e, ''));
+        eventHandler.add("click", "#vapor-table-wrapper", ".table-row button.icon-clipboard", function (e) {
             let element = e.target;
             const clippy = new Clipboard(element);
             clippy.Copy();

@@ -1,8 +1,8 @@
 <?php
-script("ncdownloader", 'appSettings');
-style("ncdownloader", 'appSettings');
+script("vapor", 'appSettings');
+style("vapor", 'appSettings');
 extract($_);
 
 ?>
-<div class="ncdownloader-personal-settings" id="ncdownloader-personal-settings" data-settings='<?php print json_encode($settings); ?>' data-options='<?php print json_encode($options); ?>'>
+<div class="vapor-personal-settings" id="vapor-personal-settings" data-settings='<?php print json_encode($settings); ?>' data-options='<?php print json_encode($options); ?>'>
 </div>

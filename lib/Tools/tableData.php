@@ -1,5 +1,5 @@
 <?php
-namespace OCA\NCDownloader\Tools;
+namespace OCA\Vapor\Tools;
 
 class tableData
 {

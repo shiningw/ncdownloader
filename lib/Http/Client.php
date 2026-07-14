@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\NCDownloader\Http;
+namespace OCA\Vapor\Http;
 
 //require __DIR__ . "/../../vendor/autoload.php";
 use Symfony\Component\HttpClient\HttpClient;
@@ -34,16 +34,14 @@ final class Client
 
     private function configure(array $options): array
     {
-
-        extract($options);
         $settings = $this->defaultOptions();
-        $settings['extra']['curl'] = $curl ?? [];
-        $settings['headers'] = $headers ?? [];
+        $settings['extra']['curl'] = $options['curl'] ?? [];
+        $settings['headers'] = $options['headers'] ?? [];
 
-        if ($ipv4 || $force_ipv4) {
+        if (!empty($options['ipv4']) || !empty($options['force_ipv4'])) {
             $settings['extra']['curl'] = [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4];
         }
-        $settings['headers']['User-Agent'] = $useragent ?? $this->defaultUserAgent();
+        $settings['headers']['User-Agent'] = $options['useragent'] ?? $this->defaultUserAgent();
 
         return $settings;
     }

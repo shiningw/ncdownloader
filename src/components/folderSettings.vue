@@ -21,7 +21,7 @@ export default {
           return;
         }
         let data = { ncd_downloader_dir: path };
-        let url = helper.generateUrl("/apps/ncdownloader/personal/save");
+        let url = helper.generateUrl("/apps/vapor/personal/save");
         helper
           .httpClient(url)
           .setData(data)

@@ -1,19 +1,22 @@
 <?php
-namespace OCA\NCDownloader\Db;
-use OCA\NCDownloader\Tools\Helper as ToolsHelper;
+namespace OCA\Vapor\Db;
+use OCA\Vapor\Tools\Helper as ToolsHelper;
 
 class Helper
 {
     //@var OC\DB\ConnectionAdapter
     private $conn;
-    private $table = "ncdownloader_info";
+    private $table = "vapor_info";
     private $prefixedTable;
     public $queryBuilder;
 
     public function __construct()
     {
+        // $this->conn = \OC::$server->getDatabaseConnection();
+	// BEGIN STEVE EDITS
         $this->conn = \OC::$server->get(\OCP\IDBConnection::class);
-        $this->queryBuilder = $this->conn->getQueryBuilder();
+        // END STEVE EDITS    
+	$this->queryBuilder = $this->conn->getQueryBuilder();
         $this->prefixedTable = $this->queryBuilder->getTableName($this->table);
         //$container = \OC::$server->query(\OCP\IServerContainer::class);
         //ToolsHelper::debug(get_class($container->query(\OCP\RichObjectStrings\IValidator::class)));
@@ -35,7 +38,7 @@ class Helper
         $queryBuilder = $this->queryBuilder
             ->select('filename', 'type', 'gid', 'timestamp', 'status')
             ->from($this->table)
-            ->execute();
+            ->executeQuery();
         return $queryBuilder->fetchAll();
     }
 
@@ -46,7 +49,7 @@ class Helper
             ->from($this->table)
             ->where('uid = :uid')
             ->setParameter('uid', $uid)
-            ->execute();
+            ->executeQuery();
         return $queryBuilder->fetchAll();
     }
 
@@ -57,8 +60,8 @@ class Helper
             ->from($this->table)
             ->where('gid = :gid')
             ->setParameter('gid', $gid)
-            ->execute();
-        return $queryBuilder->fetchColumn();
+            ->executeQuery();
+        return $queryBuilder->fetchOne();
     }
 
     public function getYtdlByUid($uid)
@@ -71,7 +74,7 @@ class Helper
             ->setParameter('uid', $uid)
             ->setParameter('type', ToolsHelper::DOWNLOADTYPE['YOUTUBE-DL'])
             ->orderBy('id', 'DESC')
-            ->execute();
+            ->executeQuery();
         return $qb->fetchAll();
     }
 
@@ -82,8 +85,8 @@ class Helper
             ->from($this->table)
             ->where('gid = :gid')
             ->setParameter('gid', $gid)
-            ->execute();
-        return $queryBuilder->fetch();
+            ->executeQuery();
+        return $queryBuilder->fetchAssociative();
     }
 
     public function save(array $keys, $values = array(), $conditions = array())
@@ -97,7 +100,7 @@ class Helper
             ->delete($this->table)
             ->where('gid = :gid')
             ->setParameter('gid', $gid);
-        return $qb->execute();
+        return $qb->executeStatement();
     }
     public function executeUpdate($sql, $values)
     {
@@ -111,7 +114,7 @@ class Helper
             ->set("status", $query->createNamedParameter($status))
             ->where('gid = :gid')
             ->setParameter('gid', $gid);
-        return $query->execute();
+        return $query->executeStatement();
         //$sql = sprintf("UPDATE %s set status = ? WHERE gid = ?", $this->prefixedTable);
         //$this->execute($sql, [$status, $gid]);
     }
@@ -125,12 +128,15 @@ class Helper
             ->andWhere('filename = :filename')
             ->setParameter('gid', $gid)
             ->setParameter('filename', 'unknown');
-        return $query->execute();
+        return $query->executeStatement();
     }
 
     public function getDBType(): string
     {
-        return \OC::$server->get(\OCP\IConfig::class)->getSystemValue('dbtype', "mysql");
+	    // return \OC::$server->getConfig()->getSystemValue('dbtype', "mysql");
+	    // BEGIN STEVE EDITS
+            return \OC::$server->get(\OCP\IConfig::class)->getSystemValue('dbtype', "mysql");
+            // END STEVE EDITS
     }
 
     public function getExtra($data)

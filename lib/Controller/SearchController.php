@@ -1,12 +1,12 @@
 <?php
 
-namespace OCA\NCDownloader\Controller;
+namespace OCA\Vapor\Controller;
 
-use OCA\NCDownloader\Search\siteSearch;
+use OCA\Vapor\Search\siteSearch;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCA\NCDownloader\Tools\Helper;
+use OCA\Vapor\Tools\Helper;
 
 class SearchController extends Controller
 {
@@ -23,7 +23,10 @@ class SearchController extends Controller
         parent::__construct($appName, $request);
         $this->appName = $appName;
         $this->uid = $UserId;
+	// $this->urlGenerator = \OC::$server->getURLGenerator();
+	// BEGIN STEVE EDITS
         $this->urlGenerator = \OC::$server->get(\OCP\IURLGenerator::class);
+        // END STEVE EDITS
         $this->search = new siteSearch();
     }
     /**

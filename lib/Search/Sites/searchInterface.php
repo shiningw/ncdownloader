@@ -1,7 +1,7 @@
 <?php
 
-namespace OCA\NCDownloader\Search\Sites;
-use OCA\NCDownloader\Tools\tableData;
+namespace OCA\Vapor\Search\Sites;
+use OCA\Vapor\Tools\tableData;
 
 interface searchInterface
 {

@@ -1,17 +1,24 @@
 <?php
-namespace OCA\NCDownloader\Controller;
+namespace OCA\Vapor\Controller;
 
-use OCA\NCDownloader\Aria2\Aria2;
-use OCA\NCDownloader\Tools\Counters;
-use OCA\NCDownloader\Db\Helper as DbHelper;
-use OCA\NCDownloader\Tools\folderScan;
-use OCA\NCDownloader\Tools\Helper;
+use OCA\Vapor\Aria2\Aria2;
+use OCA\Vapor\Tools\Counters;
+use OCA\Vapor\Db\Helper as DbHelper;
+use OCA\Vapor\Tools\folderScan;
+use OCA\Vapor\Tools\Helper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\Files\IRootFolder;
 use OCP\IL10N;
 use OCP\IRequest;
-use \OC\Files\Filesystem;
+use OC_Util;
+// BEGIN STEVE EDITS
+
+//use \OC\Files\Filesystem;
+
+//use \OSP\Files\IRootFolder;
+
+// END STEVE EDITS
 
 class Aria2Controller extends Controller
 {
@@ -27,15 +34,20 @@ class Aria2Controller extends Controller
     private $rootFolder;
     private $downloadDir;
     private $urlGenerator;
+    private $userFolder;
     public function __construct($appName, IRequest $request, $UserId, IL10N $IL10N, IRootFolder $rootFolder, Aria2 $aria2)
     {
         parent::__construct($appName, $request);
         $this->uid = $UserId;
         $this->l10n = $IL10N;
-        $this->rootFolder = $rootFolder;
+	$this->rootFolder = $rootFolder;
+	$this->userFolder = $rootFolder->getUserFolder($UserId);
+	// $this->urlGenerator = \OC::$server->getURLGenerator();
+	// BEGIN STEVE EDITS
         $this->urlGenerator = \OC::$server->get(\OCP\IURLGenerator::class);
+        // END STEVE EDITS
         $this->downloadDir = Helper::getDownloadDir();
-        \OC_Util::setupFS();
+        OC_Util::setupFS();
         //$this->config = \OC::$server->getAppConfig();
         $this->aria2 = $aria2;
         $this->aria2->init();
@@ -127,7 +139,7 @@ class Aria2Controller extends Controller
     {
         return array(
             'name' => $name,
-            'path' => $this->urlGenerator->linkToRoute('ncdownloader.Aria2.Action', ['path' => $path]),
+            'path' => $this->urlGenerator->linkToRoute('vapor.Aria2.Action', ['path' => $path]),
         );
     }
     /**
@@ -157,6 +169,32 @@ class Aria2Controller extends Controller
         if (isset($resp['error'])) {
             return new JSONResponse($resp);
         }
+
+        // === Automatic scan for completed downloads when user views the list ===
+        if (strtolower($path) === 'complete' && !empty($resp) && !isset($resp['error'])) {
+            foreach ($resp as $item) {
+                $filename = null;
+                if (isset($item['files'][0]['path'])) {
+                    $filename = basename($item['files'][0]['path']);
+                }
+                if (!$filename) {
+                    continue;
+                }
+                $dlDir = Helper::getDownloadDir(); // e.g., "/Downloads"
+                $relativePath = ltrim($dlDir, '/') . '/' . $filename;
+                try {
+                    if (!$this->userFolder->nodeExists($relativePath)) {
+                        $storage = $this->userFolder->getStorage();
+                        $scanner = $storage->getScanner();
+                        $scanner->scan('files/' . $relativePath, true);
+                    }
+                } catch (\Exception $e) {
+                    // Ignore silently; the file might not be fully written yet
+                }
+            }
+        }
+        // ================================================================
+
         $data = $this->transformResp($resp);
         $data['counter'] = $counter;
         return new JSONResponse($data);
@@ -195,18 +233,33 @@ class Aria2Controller extends Controller
             // $dir = $this->rootFolder->nodeExists($file) ? $this->downloadDir . "/" . $filename : $this->downloadDir;
             $dlDir = $extra['path'] ?? $this->downloadDir;
             $file = $dlDir. "/" . $filename;
-            $params = ['dir' => $dlDir];
-            $fileInfo = Filesystem::getFileInfo($file);
-            if ($fileInfo) {
-                $fileType = $fileInfo->getType();
-                if ($fileType === "dir") {
-                    $params = ['dir' => $file];
-                }
-            }
+	    $params = ['dir' => $dlDir];
+	    
+// BEGIN STEVE EDITS
+
+            //$fileInfo = Filesystem::getFileInfo($file);
+          //  if ($fileInfo) {
+        //        $fileType = $fileInfo->getType();
+      //          if ($fileType === "dir") {
+    //                $params = ['dir' => $file];
+  //              }
+//	    }
+
+try {
+    $node = $this->userFolder->get($file);
+    if ($node->getType() === \OCP\Files\FileInfo::TYPE_FOLDER) {
+        $params = ['dir' => $file];
+    }
+} catch (\OCP\Files\NotFoundException $e) {
+    // file not found, leave $params as-is
+}
+
+ // END STEVE EDITS
+
             $folderLink = $this->urlGenerator->linkToRoute('files.view.index', $params);
             //$peers = ($this->getPeers($info['gid']));
             $completed = Helper::formatBytes($value['completedLength']);
-            $percentage = $value['completedLength'] ? 100 * ($value['completedLength'] / $value['totalLength']) : 0;
+            $percentage = $value['completedLength'] && $value['totalLength'] != 0 ? 100 * ($value['completedLength'] / $value['totalLength']) : 0;
             $completed = Helper::formatBytes($value['completedLength']);
 
             $total = Helper::formatBytes($value['totalLength']);

@@ -33,7 +33,7 @@ const helper = {
     polling(delay = 1500, path) {
         Polling.create().setDelay(delay).run(helper.refresh, path);
     },
-    scanFolder(forceScan = false, path = "/apps/ncdownloader/scanfolder") {
+    scanFolder(forceScan = false, path = "/apps/vapor/scanfolder") {
         let url = helper.generateUrl(path);
         return new Promise((resolve) => {
             helper.httpClient(url).setData({ "force": forceScan }).setHandler(function (data) {
@@ -45,10 +45,10 @@ const helper = {
         Polling.create().setDelay(delay).run(helper.scanFolder);
     },
     pollingYtdl(delay = 1500) {
-        Polling.create().setDelay(delay).run(helper.refresh, "/apps/ncdownloader/ytdl/get");
+        Polling.create().setDelay(delay).run(helper.refresh, "/apps/vapor/ytdl/get");
     },
     refresh(path) {
-        path = path || "/apps/ncdownloader/status/active";
+        path = path || "/apps/vapor/status/active";
         let url = helper.generateUrl(path);
         helper.httpClient(url).setHandler(function (data) {
             if (data && data.row) {
@@ -149,7 +149,7 @@ const helper = {
         }
     },
     getCounters() {
-        let url = helper.generateUrl("apps/ncdownloader/counters");
+        let url = helper.generateUrl("apps/vapor/counters");
         helper.httpClient(url).setMethod("GET").setHandler(function (data) {
             if (data["counter"])
                 helper.updateCounter(data["counter"]);
@@ -268,7 +268,7 @@ const helper = {
         }
     },
     t: function (str) {
-        return t("ncdownloader", str);
+        return t("vapor", str);
     },
     resetSearch: function (vm) {
         vm.$data.loading = 0;
@@ -278,17 +278,17 @@ const helper = {
         window.location.href = url;
     },
     getContentTableType() {
-        let container = document.getElementById("ncdownloader-table-wrapper");
+        let container = document.getElementById("vapor-table-wrapper");
         return container.getAttribute("type");
     },
     setContentTableType(name) {
-        let container = document.getElementById("ncdownloader-table-wrapper");
+        let container = document.getElementById("vapor-table-wrapper");
         container.setAttribute("type", name);
         container.className = "table " + name;
     },
     filepicker(cb, currentPath) {
         OC.dialogs.filepicker(
-            t('ncdownloader', 'Select a directory'),
+            t('vapor', 'Select a directory'),
             cb,
             false,
             'httpd/unix-directory',
@@ -298,7 +298,7 @@ const helper = {
         );
     },
     getSettings(key, defaultValue = null, type = 2) {
-        let url = helper.generateUrl("/apps/ncdownloader/getsettings");
+        let url = helper.generateUrl("/apps/vapor/getsettings");
         return new Promise(resolve => {
             helper.httpClient(url).setData({ name: key, type: type, default: defaultValue }).setHandler(data => {
                 resolve(data)

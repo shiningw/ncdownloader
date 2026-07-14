@@ -35,7 +35,7 @@ before_install:
     # install core
     - cd ../
     - git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b $CORE_BRANCH nextcloud
-    - mv "$TRAVIS_BUILD_DIR" nextcloud/apps/ncdownloader
+    - mv "$TRAVIS_BUILD_DIR" nextcloud/apps/vapor
 
 before_script:
     - if [[ "$DB" == 'pgsql' ]]; then createuser -U travis -s oc_autotest; fi
@@ -45,9 +45,9 @@ before_script:
     - cd nextcloud
     - mkdir data
     - ./occ maintenance:install --database-name oc_autotest --database-user oc_autotest --admin-user admin --admin-pass admin --database $DB --database-pass=''
-    - ./occ app:enable ncdownloader
+    - ./occ app:enable vapor
     - php -S localhost:8080 &
-    - cd apps/ncdownloader
+    - cd apps/vapor
 
 script:
     - make test

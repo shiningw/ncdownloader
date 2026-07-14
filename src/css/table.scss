@@ -1,4 +1,4 @@
-#ncdownloader-table-wrapper {
+#vapor-table-wrapper {
   display           : flex;
   flex-flow         : column nowrap;
   width             : 100%;
@@ -68,8 +68,8 @@
 }
 
 @media only screen and (max-width: 1024px) {
-  #ncdownloader-table-wrapper {
-    #ncdownloader-form-wrapper {
+  #vapor-table-wrapper {
+    #vapor-form-wrapper {
       position  : relative;
       margin-top: 2em;
     }
@@ -88,7 +88,7 @@
       flex: 1 1 0;
     }
   }
-  #ncdownloader-table-wrapper.ytdl-downloads {
+  #vapor-table-wrapper.ytdl-downloads {
 
     #table-cell-speed,
     .table-heading-speed {

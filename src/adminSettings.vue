@@ -9,7 +9,7 @@
     </toggleButton>
   </div>
   <customOptions name="admin-aria2-settings" @mounted="render" title="Global Aria2 Settings"
-    path="/apps/ncdownloader/admin/aria2/save" :validOptions="validOptions">
+    path="/apps/vapor/admin/aria2/save" :validOptions="validOptions">
     <template #save>Save Settings</template>
   </customOptions>
   <systemInfo :aria2Version="aria2Version" :ytdVersion="ytdVersion" />
@@ -44,7 +44,7 @@ export default {
     toggle(name, value) {
       let data = {};
       data[name] = value ? 1 : 0;
-      let path = "/apps/ncdownloader/admin/save";
+      let path = "/apps/vapor/admin/save";
       const url = helper.generateUrl(path);
       helper
         .httpClient(url)
@@ -58,7 +58,7 @@ export default {
     },
     render(event, $vm) {
       helper
-        .httpClient(helper.generateUrl("/apps/ncdownloader/admin/aria2/get"))
+        .httpClient(helper.generateUrl("/apps/vapor/admin/aria2/get"))
         .setMethod("GET")
         .setHandler((data) => {
           if (!data) {

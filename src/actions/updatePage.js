@@ -27,7 +27,7 @@ export default {
             }
         };
         eventHandler.add("click", ".download-queue a", event => clickHandler(event));
-        eventHandler.add("click", "#ncdownloader-table-wrapper", ".download-file-folder", function (event) {
+        eventHandler.add("click", "#vapor-table-wrapper", ".download-file-folder", function (event) {
             event.stopPropagation();
             event.preventDefault();
             let ele = event.target;

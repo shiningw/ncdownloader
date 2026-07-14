@@ -1,11 +1,11 @@
 <?php
 
-namespace OCA\NCDownloader\Aria2;
+namespace OCA\Vapor\Aria2;
 
 //use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
-use OCA\NCDownloader\Tools\Helper;
+use OCA\Vapor\Tools\Helper;
 
 class Aria2
 {
@@ -49,7 +49,7 @@ class Aria2
             'rpcPort' => 6800,
             'dir' => '/tmp/Downloads',
             'torrentsDir' => '/tmp/Torrents',
-            'token' => 'ncdownloader123',
+            'token' => 'vapor123',
             'confDir' => '/tmp/aria2',
             //settings for each aria2 downloads
             'settings' => [],
@@ -58,8 +58,8 @@ class Aria2
         ];
         //set the hooks if no user-defined equivalents
         $options["aria2Conf"] += [
-            'on-download-complete' => $_SERVER['DOCUMENT_ROOT'] . "/apps/ncdownloader/hooks/completeHook.sh",
-            'on-download-start' => $_SERVER['DOCUMENT_ROOT'] . "/apps/ncdownloader/hooks/startHook.sh",
+            'on-download-complete' => $_SERVER['DOCUMENT_ROOT'] . "/apps/vapor/hooks/completeHook.sh",
+            'on-download-start' => $_SERVER['DOCUMENT_ROOT'] . "/apps/vapor/hooks/startHook.sh",
         ];
         //turn keys in $options into variables
         extract($options);
@@ -194,7 +194,7 @@ class Aria2
         $this->init();
         $defaults = array(
             'jsonrpc' => '2.0',
-            'id' => 'ncdownloader',
+            'id' => 'vapor',
             'method' => 'aria2.addUri',
             'params' => null,
         );
@@ -419,7 +419,7 @@ class Aria2
     }
     public function install()
     {
-        $url = "https://github.com/shiningw/ncdownloader-bin/raw/master/aria2c";
+        $url = "https://github.com/shiningw/vapor-bin/raw/master/aria2c";
         Helper::Download($url, $this->bin);
     }
 }

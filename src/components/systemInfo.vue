@@ -23,10 +23,10 @@
 <script>
 import helper from "../utils/helper";
 import actionButton from "./actionButton";
-const ARIA2_CHECK_URL = "/apps/ncdownloader/aria2/release/check";
-const ARIA2_UPDATE_URL = "/apps/ncdownloader/aria2/release/update";
-const YTD_CHECK_URL = "/apps/ncdownloader/ytdl/release/check";
-const YTD_UPDATE_URL = "/apps/ncdownloader/ytdl/release/update";
+const ARIA2_CHECK_URL = "/apps/vapor/aria2/release/check";
+const ARIA2_UPDATE_URL = "/apps/vapor/aria2/release/update";
+const YTD_CHECK_URL = "/apps/vapor/ytdl/release/check";
+const YTD_UPDATE_URL = "/apps/vapor/ytdl/release/update";
 
 export default {
     name: "systemInfo",

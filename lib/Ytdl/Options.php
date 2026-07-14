@@ -1,5 +1,5 @@
 <?php
-namespace OCA\NCDownloader\Ytdl;
+namespace OCA\Vapor\Ytdl;
 
 class Options
 {

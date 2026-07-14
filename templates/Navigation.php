@@ -1,11 +1,11 @@
 <?php
 extract($_);
 $downloadsList = [
-    ["name" => "active", "label" => "Active Downloads", "id" => "active-downloads", "path" => "/apps/ncdownloader/status/active"],
-    ["name" => "waiting", "label" => "Waiting Downloads", "id" => "waiting-downloads", "path" => "/apps/ncdownloader/status/waiting"],
-    ["name" => "fail", "label" => "Failed Downloads", "id" => "failed-downloads", "path" => "/apps/ncdownloader/status/fail"],
-    ["name" => "complete", "label" => "Complete Downloads", "id" => "complete-downloads", "path" => "/apps/ncdownloader/status/complete"],
-    ["name" => "ytdl", "label" => "Youtube-dl Downloads", "id" => "ytdl-downloads", "path" => "/apps/ncdownloader/ytdl/get"],
+    ["name" => "active", "label" => "Active Downloads", "id" => "active-downloads", "path" => "/apps/vapor/status/active"],
+    ["name" => "waiting", "label" => "Waiting Downloads", "id" => "waiting-downloads", "path" => "/apps/vapor/status/waiting"],
+    ["name" => "fail", "label" => "Failed Downloads", "id" => "failed-downloads", "path" => "/apps/vapor/status/fail"],
+    ["name" => "complete", "label" => "Complete Downloads", "id" => "complete-downloads", "path" => "/apps/vapor/status/complete"],
+    ["name" => "ytdl", "label" => "Youtube-dl Downloads", "id" => "ytdl-downloads", "path" => "/apps/vapor/ytdl/get"],
 ];
 ?>
 <div id="app-navigation">
