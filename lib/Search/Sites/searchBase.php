@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\NCDownloader\Search\Sites;
+namespace OCA\Vapor\Search\Sites;
 
 abstract class searchBase
 {
@@ -11,12 +11,18 @@ abstract class searchBase
     protected $searchUrl;
     protected $crawler;
     protected $client;
-    protected $actionLinks = [["name" => 'download', 'path' => '/index.php/apps/ncdownloader/new'], ['name' => 'clipboard']];
+    protected $actionLinks = [["name" => 'download', 'path' => '/index.php/apps/vapor/new'], ['name' => 'clipboard']];
 
     public function getTableTitles(): array
     {
         if (empty($this->tableTitles)) {
-            return ['title', 'seeders', 'info', 'actions'];
+            $l10n = \OC::$server->getL10N('vapor');
+            return [
+                $l10n->t('title'),
+                $l10n->t('seeders'),
+                $l10n->t('info'),
+                $l10n->t('actions'),
+            ];
         }
         return $this->tableTitles;
     }
@@ -34,7 +40,7 @@ abstract class searchBase
         return $this;
     }
 
-    protected function addActionLinks(array $links = null)
+    protected function addActionLinks(?array $links = null)
     {
         $links = $links ?? $this->actionLinks;
         foreach ($this->rows as $key => &$value) {

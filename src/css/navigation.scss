@@ -75,7 +75,7 @@
 
 	width: $navigation-width;
 	z-index: 500;
-	overflow-y: auto;
+	overflow-y: hidden;
 	overflow-x: hidden;
 	background-color: var(--color-main-background-blur);
 	backdrop-filter: var(--filter-background-blur);

@@ -1,37 +1,84 @@
+# Vapor — 将网络凝聚于您的云端
+
 - [English](README.md)
 - [简体中文](README.zh-CN.md)
+- [Français](README.fr-FR.md)
 
-运行在nextcloud下的多功能下载工具（Aria2 and youtube-dl）
+Vapor 是一款 Nextcloud 应用，将功能完整的下载管理器直接集成到您的云端。它为 Aria2 和 yt-dlp 提供简洁的 Web 界面，让您可以将互联网上的内容直接下载到 Nextcloud 文件中。
 
-- 内置种子搜索工具，可以多个网站搜索，直接APP内下载
-- 无需手动配置Aria2，支持web界面配置和开启
-- 利用youtube-dl的强大功能，可从数百个网站下载音视频文件
-<img width="800" alt="nc2" src="https://user-images.githubusercontent.com/3911975/132008308-dec2a7ba-4387-441e-9ded-538d61fbccf0.png">
-<img width="800" alt="nc4" src="https://user-images.githubusercontent.com/3911975/142444998-54dd54a6-0c8e-4d49-8188-270964a99c50.png">
-<img width="800" alt="nc5" src="https://user-images.githubusercontent.com/3911975/142445020-27ec389a-5437-4d28-acc0-5e757fd6897d.png">
+应用链接 : https://apps.nextcloud.com/apps/vapor
 
-### 如何使用
+- 无需离开 Nextcloud，即可从多个 BT 站点搜索种子
+- 通过 Web 界面控制 Aria2 并管理所有下载任务
+- 借助 yt-dlp 的强大功能，从 700 多个网站下载音视频文件（YouTube、优酷、Dailymotion、Twitter、Facebook 等）
 
-最新版本已经自带aria2c和youtube-dl程序 (*在centos7 and ubuntu 20.04上测试过nextcloud的snap版本，可正常运行*)   
-但如果自带的程序无法在你的系统正常运行，那你就得自己安装youtube-dl和aria2c了
-#### 在ubuntu下安装aria2 and youtube-dl
+<img width="800" alt="Vapor 下载管理界面" src="screenshots/vaporFullApp.png">
+<img width="800" alt="Vapor 设置面板" src="screenshots/vaporSettingsRevealed.png">
+<img width="800" alt="Vapor 管理员设置" src="screenshots/vaporAdminSettings.png">
+<img width="800" alt="Vapor 个人设置" src="screenshots/vaporPersonalSettings.png">
+
+---
+
+## 系统要求
+
+- Nextcloud 32–34
+- PHP 8.3–8.5
+- Ubuntu 22.04, Debian 12-13 （或兼容的 Linux 发行版）
+- 具有 sudo 权限的命令行访问
+- 服务器上已安装 aria2
+
+---
+
+## 安装方法
+
+**1. 安装 aria2：**
 ```bash
 sudo apt install aria2
-sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl 4 -o /usr/local/bin/youtube-dl
-sudo chmod a+rx /usr/local/bin/youtube-dl
 ```
-本地安装的版本优先于自带的版本
-但是你可以通过在app内设置，强制使用特定版本的aria2或youtube-dl
 
-#### 生成前端代码
-需要安装NPM 7.0+ and node 14.0.0+
+**2. 通过 Nextcloud 应用商店启用应用**（搜索"Vapor"），或手动克隆：
 ```bash
-#start to build
-npm run build
-
-#installing php dependencies
-composer install
+cd /var/www/nextcloud/apps
+sudo git clone https://github.com/wolfravenous/vapor.git
+sudo chown -R www-data:www-data /var/www/nextcloud/apps/vapor
 ```
 
-#### Nextcloud App homepage
-https://apps.nextcloud.com/apps/ncdownloader
+**3. 下载 yt-dlp：**
+```bash
+sudo mkdir -p /var/www/nextcloud/apps/vapor/bin
+sudo wget -O /var/www/nextcloud/apps/vapor/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+sudo chmod 755 /var/www/nextcloud/apps/vapor/bin/yt-dlp
+sudo chown www-data:www-data /var/www/nextcloud/apps/vapor/bin/yt-dlp
+```
+
+**4. 启用应用：**
+```bash
+sudo -u www-data php8.3 /var/www/nextcloud/occ app:enable vapor
+```
+
+然后在您的 Nextcloud 实例中打开 Vapor 并配置相关设置。
+
+---
+
+## 手动更新 yt-dlp
+
+如果应用内的更新按钮无法正常工作，请手动更新：
+
+```bash
+sudo wget -O /var/www/nextcloud/apps/vapor/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+sudo chmod 755 /var/www/nextcloud/apps/vapor/bin/yt-dlp
+sudo chown www-data:www-data /var/www/nextcloud/apps/vapor/bin/yt-dlp
+```
+
+---
+
+## 致谢
+
+原始应用由 [jiaxinhuang (shiningw)](https://github.com/shiningw/ncdownloader) 开发。
+由 [wolfravenous](https://github.com/wolfravenous/vapor) 更名为 Vapor 并持续维护。
+
+---
+
+## 许可证
+
+GNU Affero 通用公共许可证 v3.0 或更高版本（AGPL-3.0-or-later）— 详情请参阅 [LICENSE](LICENSE)。

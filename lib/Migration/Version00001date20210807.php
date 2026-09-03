@@ -2,7 +2,7 @@
 
 declare (strict_types = 1);
 
-namespace OCA\NCDownloader\Migration;
+namespace OCA\Vapor\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;
@@ -35,8 +35,8 @@ class Version00001date20210807 extends SimpleMigrationStep
         /** @var ISchemaWrapper $schema */
         $schema = $schemaClosure();
 
-        if (!$schema->hasTable('ncdownloader_info')) {
-            $table = $schema->createTable('ncdownloader_info');
+        if (!$schema->hasTable('vapor_info')) {
+            $table = $schema->createTable('vapor_info');
             $table->addColumn('id', 'integer', [
                 'autoincrement' => true,
                 'notnull' => true,

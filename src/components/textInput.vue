@@ -28,10 +28,16 @@ export default {
     width: 100%;
     height: 100%;
     margin: 0px;
-    background-color: $bg-color;
+    background-color: var(--color-main-background, $bg-color);
+    color: var(--color-main-text, #181616);
     font-size: medium;
-    color: #181616;
     border-radius: 0em;
+    border: 1px solid var(--color-border, #ccc);
+    &:focus {
+      border-color: var(--color-primary-element, #0082c9);
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(0, 130, 201, 0.25);
+    }
   }
 }
 @media only screen and (max-width: 1024px) {
@@ -40,10 +46,13 @@ export default {
     & > input {
       width: 100%;
     }
-    & > input:focus {
-      border-color: #86b7fe;
-      outline: 0;
-      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+}
+@media only screen and (max-width: 600px) {
+  #text-input-link {
+    input {
+      font-size: smaller;
+      min-height: 44px;
     }
   }
 }

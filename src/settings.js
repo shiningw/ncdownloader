@@ -10,8 +10,8 @@ import personalSettings from './personalSettings';
 
 const customSettings = createApp(adminSettings)
 const pSettings = createApp(personalSettings)
-customSettings.mount('#ncdownloader-admin-settings')
-pSettings.mount('#ncdownloader-personal-settings')
+customSettings.mount('#vapor-admin-settings')
+pSettings.mount('#vapor-personal-settings')
 
 window.addEventListener('DOMContentLoaded', function () {
 

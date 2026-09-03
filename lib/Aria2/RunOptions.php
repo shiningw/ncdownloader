@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\NCDownloader\Aria2;
+namespace OCA\Vapor\Aria2;
 
 class RunOptions
 {
@@ -8,7 +8,7 @@ class RunOptions
         '--continue',
         '--daemon=true',
         '--enable-rpc=true',
-        '--rpc-secret=ncdownloader123',
+        '--rpc-secret=vapor123',
         '--listen-port=51413',
         '--rpc-listen-port=6800',
         '--follow-torrent=true',

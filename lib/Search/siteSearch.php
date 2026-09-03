@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\NCDownloader\Search;
+namespace OCA\Vapor\Search;
 
 require __DIR__ . "/../../vendor/autoload.php";
 
@@ -15,7 +15,7 @@ class siteSearch
     private $defaultSite = __NAMESPACE__ . '\Sites\TPB';
     public function __construct()
     {
-        $this->container = \OC::$server->get(IServerContainer::class);
+        $this->container = \OC::$server->query(IServerContainer::class);
         $this->site = __NAMESPACE__ . '\Sites\TPB';
     }
     public function go($keyword): array

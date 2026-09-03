@@ -1,24 +1,25 @@
 <?php
 
-namespace OCA\NCDownloader\AppInfo;
+namespace OCA\Vapor\AppInfo;
 
-use OCA\NCDownloader\Aria2\Aria2;
-use OCA\NCDownloader\Http\Client;
-use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Db\Settings;
-use OCA\NCDownloader\Ytdl\Ytdl;
+use OCA\Vapor\Aria2\Aria2;
+use OCA\Vapor\Http\Client;
+use OCA\Vapor\Tools\Helper;
+use OCA\Vapor\Db\Settings;
+use OCA\Vapor\Ytdl\Ytdl;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use Symfony\Component\DomCrawler\Crawler;
 use Psr\Container\ContainerInterface;
+use OCP\IL10N;
 
 class Application extends App implements IBootstrap
 {
     public function __construct(array $urlParams = array())
     {
-        parent::__construct('ncdownloader', $urlParams);
+        parent::__construct('vapor', $urlParams);
     }
     public function register(IRegistrationContext $context): void
     {
@@ -57,7 +58,8 @@ class Application extends App implements IBootstrap
         });
         $context->registerService(Ytdl::class, function (ContainerInterface $c) use ($uid) {
             $config = Helper::getYtdlConfig($uid);
-            return new Ytdl($config);
+            $l10n = $c->get(IL10N::class);
+            return new Ytdl($config, $l10n);
         });
 
         $context->registerService(Settings::class, function (ContainerInterface $c) use ($uid) {

@@ -6,12 +6,12 @@ type rowData = Array<Map>
 
 class contentTable {
     actionLink: boolean = true;
-    bodyClass: string = "ncdownloader-table-data";
+    bodyClass: string = "vapor-table-data";
     rowClass: string = "table-row";
     headingClass: string = "table-heading";
     cellClass: string = "table-cell";
     //this is the parent element the table is going to append to
-    tableContainer: string = 'ncdownloader-table-wrapper';
+    tableContainer: string = 'vapor-table-wrapper';
     numRow: number;
     table: HTMLElement;
     rows: rowData

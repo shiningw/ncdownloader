@@ -22,7 +22,7 @@ declare (strict_types = 1);
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-namespace OCA\NCDownloader\Migration;
+namespace OCA\Vapor\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;
@@ -52,7 +52,7 @@ class Version00002date20210912 extends SimpleMigrationStep
         /** @var ISchemaWrapper $schema */
         $schema = $schemaClosure();
 
-        $table = $schema->getTable('ncdownloader_info');
+        $table = $schema->getTable('vapor_info');
         if (!$table->hasColumn('speed')) {
             $table->addColumn('speed', 'string', [
                 'notnull' => true,
@@ -74,7 +74,10 @@ class Version00002date20210912 extends SimpleMigrationStep
                 'default' => '',
             ]);
         }
-        $table->addUniqueIndex(['gid'], 'gid_index');
+	//$table->addUniqueIndex(['gid'], 'gid_index');
+	// BEGIN STEVE EDITS
+        $table->addUniqueIndex(['gid'], 'vapor_gid_index');
+        // END STEVE EDITS
         return $schema;
     }
 

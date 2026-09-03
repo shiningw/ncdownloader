@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace OCA\NCDownloader\Tools;
+namespace OCA\Vapor\Tools;
 
 /**
  * Generic executable finder.
@@ -46,7 +46,7 @@ class ExecutableFinder
      *
      * @return string|null
      */
-    public function find(string $name, string $default = null, array $extraDirs = [])
+    public function find(?string $name, ?string $default = null, array $extraDirs = [])
     {
         if (ini_get('open_basedir')) {
             $searchPath = array_merge(explode(\PATH_SEPARATOR, ini_get('open_basedir')), $extraDirs);

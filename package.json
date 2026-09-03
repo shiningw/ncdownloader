@@ -1,5 +1,5 @@
 {
-	"name": "ncdownloader",
+	"name": "vapor",
 	"description": "Nextcloud Frontend for youtube-dl and Aria2",
 	"version": "1.0.0",
 	"author": "Jiaxin Huang <freefallbenson@gmail.com>",
@@ -8,18 +8,18 @@
 	],
 	"keywords": [
 		"nextcloud",
-		"ncdownloader",
+		"vapor",
 		"app",
 		"dev"
 	],
 	"bugs": {
-		"url": "https://github.com/shiningw/ncdownloader/issues"
+		"url": "https://github.com/shiningw/vapor/issues"
 	},
 	"repository": {
-		"url": "https://github.com/shiningw/ncdownloader",
+		"url": "https://github.com/shiningw/vapor",
 		"type": "git"
 	},
-	"homepage": "https://github.com/shiningw/ncdownloader",
+	"homepage": "https://github.com/shiningw/vapor",
 	"license": "agpl",
 	"private": true,
 	"scripts": {

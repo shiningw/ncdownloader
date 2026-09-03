@@ -1,6 +1,6 @@
 <template>
-  <section id="ncdownloader-settings-collapsible-container">
-    <div class="ncdownloader-settings-item" :data-tippy-content="errorTooltip">
+  <section id="vapor-settings-collapsible-container">
+    <div class="vapor-settings-item" :data-tippy-content="errorTooltip">
       <toggleButton
         :disabledText="errorText"
         :enabledText="errorText"
@@ -9,7 +9,7 @@
         name="ncd_hide_errors"
       ></toggleButton>
     </div>
-    <div class="ncdownloader-settings-item" :data-tippy-content="btTooltip">
+    <div class="vapor-settings-item" :data-tippy-content="btTooltip">
       <toggleButton
         v-if="isAdmin"
         disabledText="Disable BT for non-admin users"
@@ -19,12 +19,12 @@
         @changed="toggle"
       ></toggleButton>
     </div>
-    <div class="ncdownloader-settings-item">
+    <div class="vapor-settings-item">
       <a :href="personal.url" title="">
         <button>{{ personal.title }}</button>
       </a>
     </div>
-    <div class="ncdownloader-settings-item" v-if="isAdmin">
+    <div class="vapor-settings-item" v-if="isAdmin">
       <a :href="admin.url" :title="admin.title">
         <button>{{ admin.title }}</button>
       </a>
@@ -37,29 +37,29 @@ import toggleButton from "./components/toggleButton";
 import helper from "./utils/helper";
 import { translate as t, translatePlural as n } from "@nextcloud/l10n";
 import Http from "./lib/http";
-const basePath = "/apps/ncdownloader";
+const basePath = "/apps/vapor";
 
 export default {
   name: "settingsBar",
   inject: ["settings"],
   data() {
     let personal = {
-      title: t("ncdownloader", "Personal Settings"),
+      title: t("vapor", "Personal Settings"),
       url: this.settings.personal_url,
     };
     let admin = {
-      title: t("ncdownloader", "Admin Settings"),
+      title: t("vapor", "Admin Settings"),
       url: this.settings.admin_url,
     };
     return {
       personal: personal,
       admin: admin,
       isAdmin: this.settings.is_admin,
-      sectionName: t("ncdownloader", "Settings"),
-      errorText: t("ncdownloader", "Hide Errors"),
+      sectionName: t("vapor", "Settings"),
+      errorText: t("vapor", "Hide Errors"),
       toggleStatus: helper.str2Boolean(this.settings.ncd_hide_errors),
       btStatus: helper.str2Boolean(this.settings.ncd_disable_bt),
-      errorTooltip: t("ncdownloader", "Enable this to hide errors"),
+      errorTooltip: t("vapor", "Enable this to hide errors"),
       btTooltip: t("ncdownload", "Disable BT for non-admin users"),
     };
   },
@@ -74,7 +74,7 @@ export default {
         .setData(data)
         .setHandler((resp) => {
           if (resp["message"]) {
-            helper.message(t("ncdownloader", resp["message"]), 1000);
+            helper.message(t("vapor", resp["message"]), 1000);
           }
         })
         .send();
@@ -89,7 +89,7 @@ export default {
 
 <style lang="scss">
 @import "css/variables.scss";
-#ncdownloader-settings-collapsible-container {
+#vapor-settings-collapsible-container {
   display: flex;
   flex-flow: column wrap;
 }

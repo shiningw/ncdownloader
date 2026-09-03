@@ -1,12 +1,13 @@
 <?php
 
-namespace OCA\NCDownloader\Controller;
+namespace OCA\Vapor\Controller;
 
-use OCA\NCDownloader\Tools\Helper;
-use OCA\NCDownloader\Db\Settings;
+use OCA\Vapor\Tools\Helper;
+use OCA\Vapor\Db\Settings;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
+use OCP\IL10N;
 
 class SettingsController extends Controller
 {
@@ -17,12 +18,12 @@ class SettingsController extends Controller
     private $config;
     private $uid;
     private $settings;
-    public function __construct($AppName, IRequest $Request, $uid) //, IL10N $L10N)
-
+    private $l10n;
+    public function __construct($AppName, IRequest $Request, $uid, IL10N $l10n)
     {
         parent::__construct($AppName, $Request);
         $this->uid = $uid;
-        //$this->L10N = $L10N;
+        $this->l10n = $l10n;
         $this->settings = new Settings($uid);
         //$this->config = \OC::$server->getAppConfig();
     }
@@ -173,6 +174,6 @@ class SettingsController extends Controller
         } catch (\Exception $e) {
             return ['error' => $e->getMessage(), "status" => false];
         }
-        return ['message' => "Saved!", "status" => true];
+        return ['message' => $this->l10n->t("Saved!"), "status" => true];
     }
 }

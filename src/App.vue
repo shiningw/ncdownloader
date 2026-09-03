@@ -17,17 +17,26 @@ import { translate as t, translatePlural as n } from "@nextcloud/l10n";
 import Http from "./lib/http";
 import contentTable from "./lib/contentTable";
 
+
+
 const successCallback = (data, element) => {
   if (!data) {
-    helper.error(t("ncdownloader", "Something must have gone wrong!"));
+    helper.error(t("vapor", "Something must have gone wrong!"));
     return;
   }
   if (data.hasOwnProperty("error")) {
-    helper.error(t("ncdownloader", data.error));
+    helper.error(t("vapor", data.error));
+  } else if (data.hasOwnProperty("duplicate")) {
+    // BEGIN STEVE EDITS
+    helper._message(t("vapor", data.message), {
+      duration: 15000,
+      backgroundColor: "#1976d2",
+    });
+    // END STEVE EDITS
   } else if (data.hasOwnProperty("message")) {
-    helper.message(t("ncdownloader", data.message));
+    helper.message(t("vapor", data.message));
   } else if (data.hasOwnProperty("file")) {
-    helper.message(t("ncdownloader", "Downloading" + " " + data.file));
+    helper.message(t("vapor", "Downloading" + " " + data.file));
   }
 };
 
@@ -43,10 +52,10 @@ export default {
     return {
       display: { download: true, search: false },
       uris: {
-        ytd_url: helper.generateUrl("/apps/ncdownloader/ytdl/new"),
-        aria2_url: helper.generateUrl("/apps/ncdownloader/new"),
-        search_url: helper.generateUrl("/apps/ncdownloader/search"),
-        upload_url: helper.generateUrl("/apps/ncdownloader/upload"),
+        ytd_url: helper.generateUrl("/apps/vapor/ytdl/new"),
+        aria2_url: helper.generateUrl("/apps/vapor/new"),
+        search_url: helper.generateUrl("/apps/vapor/search"),
+        upload_url: helper.generateUrl("/apps/vapor/upload"),
       },
     };
   },
@@ -59,7 +68,7 @@ export default {
       let inputValue = formData["text-input-value"].trim();
       let message;
       if (!helper.isURL(inputValue) && !helper.isMagnetURI(inputValue)) {
-        helper.error(t("ncdownloader", inputValue + " is Invalid"));
+        helper.error(t("vapor", inputValue + " is Invalid"));
         return;
       }
       if (formData.type === "ytdl") {
@@ -94,7 +103,7 @@ export default {
       let formData = helper.getData(formWrapper);
       let inputValue = formData["text-input-value"];
       if (!inputValue || (inputValue && inputValue.length < 2)) {
-        helper.error(t("ncdownloader", "Please enter valid keyword!"));
+        helper.error(t("vapor", "Please enter valid keyword!"));
         vm.$data.loading = 0;
         return;
       }
@@ -151,13 +160,13 @@ export default {
 @import "css/variables.scss";
 
 #app-content-wrapper {
-  .ncdownloader-form-wrapper {
+  .vapor-form-wrapper {
     position: relative;
     width: 100%;
     top: 0;
     left: 0;
   }
-  .ncdownloader-form-wrapper.top-left {
+  .vapor-form-wrapper.top-left {
     width: 100%;
     top: 0;
     left: 0;
@@ -173,7 +182,7 @@ export default {
 
 @media only screen and (max-width: 1024px) {
   #app-content-wrapper {
-    #ncdownloader-form-wrapper {
+    #vapor-form-wrapper {
       position: relative;
       margin: 2px;
     }

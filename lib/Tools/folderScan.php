@@ -1,9 +1,10 @@
 <?php
 
-namespace OCA\NCDownloader\Tools;
+namespace OCA\Vapor\Tools;
 
-use OCA\NCDownloader\Tools\Helper;
-use OC\Files\Utils\Scanner;
+use OCA\Vapor\Tools\Helper;
+//use OC\Files\Utils\Scanner;
+use OCP\Files\IRootFolder;
 use \OCP\EventDispatcher\IEventDispatcher;
 
 class folderScan
@@ -51,19 +52,36 @@ class folderScan
     //force update
     public function scan()
     {
-        $this->logger = Helper::getLogger();
-        $this->scanner = new Scanner($this->user, Helper::getDatabaseConnection(), Helper::query(IEventDispatcher::class), $this->logger);
-        try {
-            $this->scanner->scan($this->path);
-            return ['status' => true, 'path' => $this->path];
-        } catch (\OCP\Files\ForbiddenException $e) {
-            $this->logger->warning("Make sure you're running the scan command only as the user the web server runs as");
-        } catch (\OCP\Files\NotFoundException $e) {
-            $this->logger->warning("Path for the scan command not found: " . $e->getMessage());
-        } catch (\Exception $e) {
-            $this->logger->warning("Exception during scan: " . $e->getMessage() . $e->getTraceAsString());
-        }
-        return ['status' => false, 'path' => $this->path];
+//        $this->logger = Helper::getLogger();
+//        $this->scanner = new Scanner($this->user, Helper::getDatabaseConnection(), Helper::query(IEventDispatcher::class), $this->logger);
+//        try {
+//            $this->scanner->scan($this->path);
+//            return ['status' => true, 'path' => $this->path];
+//        } catch (\OCP\Files\ForbiddenException $e) {
+//            $this->logger->warning("Make sure you're running the scan command only as the user the web server runs as");
+//        } catch (\OCP\Files\NotFoundException $e) {
+//            $this->logger->warning("Path for the scan command not found: " . $e->getMessage());
+//        } catch (\Exception $e) {
+//            $this->logger->warning("Exception during scan: " . $e->getMessage() . $e->getTraceAsString());
+//        }
+//        return ['status' => false, 'path' => $this->path];
+    $this->logger = Helper::getLogger();
+    try {
+        $rootFolder = \OC::$server->get(\OCP\Files\IRootFolder::class);
+        $userFolder = $rootFolder->getUserFolder($this->user);
+        // Touch the folder to trigger Nextcloud's internal cache invalidation
+        $parts = explode('/', ltrim($this->path, '/'), 3);
+        $relativePath = isset($parts[2]) ? '/' . $parts[2] : '/';
+        $node = $userFolder->get($relativePath);
+        $node->getStorage()->getCache()->correctFolderSize($node->getInternalPath());
+        return ['status' => true, 'path' => $this->path];
+    } catch (\OCP\Files\NotFoundException $e) {
+        $this->logger->warning("Path for scan not found: " . $e->getMessage());
+    } catch (\Exception $e) {
+        $this->logger->warning("Exception during scan: " . $e->getMessage());
+    }
+    return ['status' => false, 'path' => $this->path];
+
     }
 
     //update only folder is modified

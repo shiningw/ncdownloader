@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OCA\NCDownloader\Settings;
+namespace OCA\Vapor\Settings;
 
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -26,11 +26,11 @@ class PersonalSection implements IIconSection {
 	}
 
 	public function getID(): string {
-		return 'ncdownloader';
+		return 'vapor';
 	}
 
 	public function getName(): string {
-		return $this->l->t('NCDownloader Settings');
+		return $this->l->t('Vapor Settings');
 	}
 
 	public function getPriority(): int {

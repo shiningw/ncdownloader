@@ -1,39 +1,84 @@
+# Vapor — Condensing the Web into Your Cloud
+
 - [English](README.md)
 - [简体中文](README.zh-CN.md)
+- [Français](README.fr-FR.md)
 
-An easy-to-use web interface for Aria2 and youtube-dl
+Vapor is a Nextcloud app that brings a full-featured download manager directly into your cloud. It provides a clean web interface for Aria2 and yt-dlp, letting you pull content from across the internet straight into your Nextcloud files.
 
-- Search for torrents within the app from mutiple BT sites
-- Control Aria2 and manage download tasks from the web;
-- Harnessing the power of youtube-dl to download videos from 700+ video sites(youtube,youku,dailymotion,twitter,facebook and the likes;
-<img width="800" alt="nc2" src="https://user-images.githubusercontent.com/3911975/132008308-dec2a7ba-4387-441e-9ded-538d61fbccf0.png">
-<img width="800" alt="nc4" src="https://user-images.githubusercontent.com/3911975/142444998-54dd54a6-0c8e-4d49-8188-270964a99c50.png">
-<img width="800" alt="nc5" src="https://user-images.githubusercontent.com/3911975/142445020-27ec389a-5437-4d28-acc0-5e757fd6897d.png">
+Link to app : https://apps.nextcloud.com/apps/vapor
 
-### How to use
+- Search for torrents from multiple BT sites without leaving Nextcloud
+- Control Aria2 and manage all download tasks from the web
+- Download videos and audio from 700+ sites via yt-dlp (YouTube, Dailymotion, Twitter, Facebook and many more)
 
-NCDownloader has included both yt-dlp(faster version of youtube-dl) and aria2c and there is no need for manual installation under normal circumstances (*tested it successfully with snap version of nextcloud both in centos7 and ubuntu 20.04*)   
-But if for some reason,the builtin binaries don't work for you, then you will need to install them yourself
+<img width="800" alt="Vapor download manager interface" src="screenshots/vaporFullApp.png">
+<img width="800" alt="Vapor settings panel" src="screenshots/vaporSettingsRevealed.png">
+<img width="800" alt="Vapor admin settings" src="screenshots/vaporAdminSettings.png">
+<img width="800" alt="Vapor personal settings" src="screenshots/vaporPersonalSettings.png">
 
-#### installing aria2 and yt-dlp in ubuntu
+---
+
+## Requirements
+
+- Nextcloud 32–34
+- PHP 8.3–8.5
+- Ubuntu 22.04, Debian 12-13 (or compatible Linux distribution)
+- Command line access with sudo
+- aria2 installed on the server
+
+---
+
+## Installation
+
+**1. Install aria2:**
 ```bash
 sudo apt install aria2
-sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/download/2022.05.18/yt-dlp 4 -o /usr/local/bin/youtube-dl
-sudo chmod a+rx /usr/local/bin/youtube-dl
 ```
-Also, if you don't want to use the builtin versions, you can always force the app use a specific version by setting the binary path manually. In that case, the app will not try to find youtube-dl binary in your system, and the built-in ones will be ignored as well. 
 
-### How to build front-end code
+**2. Enable the app via the Nextcloud App Store** (search for "Vapor"), or clone manually:
+```bash
+cd /var/www/nextcloud/apps
+sudo git clone https://github.com/wolfravenous/vapor.git
+sudo chown -R www-data:www-data /var/www/nextcloud/apps/vapor
+```
 
-NPM 7.0+ and node 14.0.0+ are required to build front-end scripts
+**3. Download yt-dlp:**
+```bash
+sudo mkdir -p /var/www/nextcloud/apps/vapor/bin
+sudo wget -O /var/www/nextcloud/apps/vapor/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+sudo chmod 755 /var/www/nextcloud/apps/vapor/bin/yt-dlp
+sudo chown www-data:www-data /var/www/nextcloud/apps/vapor/bin/yt-dlp
+```
+
+**4. Enable the app:**
+```bash
+sudo -u www-data php8.3 /var/www/nextcloud/occ app:enable vapor
+```
+
+Then navigate to Vapor in your Nextcloud instance and configure your settings.
+
+---
+
+## Updating yt-dlp
+
+If the in-app update button doesn't work, update manually:
 
 ```bash
-#start to build
-npm run build
-
-#installing php dependencies
-composer install
+sudo wget -O /var/www/nextcloud/apps/vapor/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+sudo chmod 755 /var/www/nextcloud/apps/vapor/bin/yt-dlp
+sudo chown www-data:www-data /var/www/nextcloud/apps/vapor/bin/yt-dlp
 ```
 
-#### Nextcloud App homepage
-https://apps.nextcloud.com/apps/ncdownloader
+---
+
+## Credits
+
+Original app by [jiaxinhuang (shiningw)](https://github.com/shiningw/ncdownloader).
+Forked and maintained as Vapor by [wolfravenous](https://github.com/wolfravenous/vapor).
+
+---
+
+## License
+
+GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later) — see [LICENSE](LICENSE) for details.

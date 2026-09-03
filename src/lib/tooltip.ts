@@ -1,5 +1,5 @@
 class Tooltip {
-    id = "ncdownloader-tooltip";
+    id = "vapor-tooltip";
     messageNode: HTMLDivElement;
     style = {
         display: '',

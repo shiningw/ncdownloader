@@ -1,5 +1,5 @@
 <?php
-namespace OCA\NCDownloader\Aria2;
+namespace OCA\Vapor\Aria2;
 
 class Options
 {

@@ -3,6 +3,7 @@
 vendor
 build.sh
 test.php
-js/app*
+js/*.map
 exclude
 bin
+css/*.map

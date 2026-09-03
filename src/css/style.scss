@@ -3,13 +3,59 @@
 @import 'helpers';
 @import 'navigation';
 
-#ncdownloader-settings-collapsible-container {
+#vapor-settings-collapsible-container {
     padding-left: 4%;
 }
 
-#app-ncdownloader-wrapper {
+#app-vapor-wrapper {
     width: 100%;
     display: flex;
+    min-height: 100%;
+    border-radius: var(--border-radius-large, 12px);
+    overflow: hidden;
+
+    #app-content,
+    #app-content-wrapper,
+    .vapor-body-wrapper,
+    #vapor-form-wrapper,
+    #vapor-table-wrapper {
+        background: transparent;
+    }
+
+    #app-content {
+        background-color: rgba(255, 255, 255, 0.72);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    #app-navigation:not(.vue) {
+        border-right: 1px solid var(--color-border, #d8d8d8);
+
+        .app-navigation-new {
+            padding: calc(var(--default-grid-baseline) * 1.5);
+        }
+
+        .app-navigation-new button {
+            border-radius: var(--border-radius-element, 8px);
+            background-color: var(--color-main-background, #fff);
+            color: var(--color-main-text, #222);
+        }
+
+        > ul {
+            padding-top: calc(var(--default-grid-baseline) * 1.5);
+            gap: 2px;
+        }
+
+        .download-queue > a {
+            padding-left: 44px;
+            border-radius: var(--border-radius-element, 8px);
+        }
+
+        .download-queue .number {
+            background-color: var(--color-background-darker, #5f5853);
+            color: var(--color-main-text, #fff);
+        }
+    }
 
     .action-item {
         position: relative;
@@ -50,8 +96,8 @@
     .icon-clipboard {
         background-image: url('../../img/clippy.svg');
     }
-    #ncdownloader-form-wrapper {
-        margin-left: 2px;
+    #vapor-form-wrapper {
+        margin-left: 0;
 
         .form-input-wrapper {
             display  : flex;
@@ -87,16 +133,16 @@
         padding      : 0 8px;
     }
 
-    #ncdownloader-form-wrapper input[type=text] {
+    #vapor-form-wrapper input[type=text] {
         padding: 0px 5px;
         flex   : auto;
     }
 
-    #ncdownloader-table-data .table-cell {
+    #vapor-table-data .table-cell {
         padding-left: 4px;
     }
 
-    #ncdownloader-action-links-container {
+    #vapor-action-links-container {
         position: relative;
 
         .action-link-item a:hover {
@@ -125,17 +171,17 @@
         display        : block;
     }
 
-    .ncdownloader-body-wrapper,
-    #ncdownloader-form-wrapper,
-    #ncdownloader-table-content {
+    .vapor-body-wrapper,
+    #vapor-form-wrapper,
+    #vapor-table-content {
         width: 100%;
     }
 
-    .ncdownloader-body-wrapper {
+    .vapor-body-wrapper {
         padding-top: 0.3em;
     }
 
-    #app-content-wrapper #ncdownloader-table-content .table-cell {
+    #app-content-wrapper #vapor-table-content .table-cell {
         border-bottom: 1px solid #9d9595;
         border-left  : 1px solid #eee;
 
@@ -181,19 +227,64 @@
 
 }
 
-#ncdownloader-settings-form input[type=text] {
+#vapor-settings-form input[type=text] {
     width: 160px;
 }
 
 @media only screen and (min-width: 800px) {}
 
 @media only screen and (max-width: 1024px) {
-    #ncdownloader-body-wrapper {
+    #vapor-body-wrapper {
         position  : relative;
         margin-top: 2em;
     }
 
-    #ncdownloader-settings-form input[type=text] {
+    #vapor-settings-form input[type=text] {
         width: 135px;
+    }
+
+    // Nextcloud 34 keeps the legacy #app-navigation mobile CSS but no longer
+    // provides its old toggle behaviour. src/index.js controls this class.
+    body.vapor-navigation-open #app-navigation:not(.vue) {
+        transform: translateX(0);
+        z-index: 1040;
+        box-shadow: 8px 0 24px rgba(0, 0, 0, 0.18);
+    }
+}
+
+@media only screen and (max-width: 1020px) {
+    #app-content,
+    #app-content-wrapper {
+        flex: 1 1 auto;
+        margin-left: 0;
+    }
+
+    #app-content {
+        padding: var(--body-padding, 16px);
+        box-sizing: border-box;
+    }
+
+    #app-content-wrapper {
+        padding: var(--body-padding, 16px);
+        box-sizing: border-box;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    #app-vapor-wrapper {
+        flex-direction: column;
+    }
+
+    #app-content-wrapper {
+        flex-direction: column;
+    }
+
+    #vapor-form-wrapper .form-input-wrapper {
+        flex-direction: column;
+        row-gap: 5px;
+    }
+
+    #vapor-settings-form input[type=text] {
+        width: 100%;
     }
 }

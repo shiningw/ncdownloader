@@ -1,16 +1,19 @@
 <?php
 
-namespace OCA\NCDownloader\Settings;
+namespace OCA\Vapor\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IConfig;
 use OCP\IDBConnection;
+// BEGIN STEVE EDITS
+use OCP\IUserSession;
+// END STEVE EDITS
 use OCP\Settings\ISettings;
-use OCA\NCDownloader\Db\Settings;
-use OCA\NCDownloader\Tools\Helper;
+use OCA\Vapor\Db\Settings;
+use OCA\Vapor\Tools\Helper;
+use OCP\IL10N;
 
-use OCP\IUserManager;
 
 class Personal implements ISettings
 {
@@ -21,23 +24,28 @@ class Personal implements ISettings
 	private $timeFactory;
 	/** @var IConfig */
 	private $config;
-	/** @var IUserManager */
-	private $userManager;
 	private $uid;
 	private $settings;
+        private $l10n;
 
 	public function __construct(
 		IDBConnection $connection,
 		ITimeFactory $timeFactory,
 		IConfig $config,
-		IUserManager $userManager
+		// BEGIN STEVE EDITS
+		IUserSession $userSession,
+		// END STEVE EDITS
+                IL10N $l10n
 	) {
 		$this->connection = $connection;
 		$this->timeFactory = $timeFactory;
 		$this->config = $config;
-		$this->userManager = $userManager;
-		$this->uid = \OC::$server->get(\OCP\IUserSession::class)->getUser()->getUID();
+		//$this->uid = \OC::$server->getUserSession()->getUser()->getUID();
+		// BEGIN STEVE EDITS
+		$this->uid = $userSession->getUser()->getUID();
+		// END STEVE EDITS
 		$this->settings = new Settings($this->uid);
+                $this->l10n = $l10n;
 	}
 
 	/**
@@ -45,11 +53,8 @@ class Personal implements ISettings
 	 */
 	public function getForm()
 	{
-		$path = '/apps/ncdownloader/personal/save';
-		$user = $this->userManager->get($this->uid);
-		$groupManager = \OC::$server->get(\OCP\IGroupManager::class);
-		$isAdmin = ($user !== null) ? $groupManager->isInGroup($user->getUID(), 'admin') : false;
-				$parameters = [
+		$path = '/apps/vapor/personal/save';
+		$parameters = [
 			"settings" => [
 				"ncd_downloader_dir" => Helper::getDownloadDir(),
 				"ncd_torrents_dir" => $this->settings->get("ncd_torrents_dir"),
@@ -58,18 +63,18 @@ class Personal implements ISettings
 				'ncd_seed_time' => $this->settings->get("ncd_seed_time"),
 				"path" => $path,
 				"disallow_aria2_settings" => Helper::getAdminSettings("disallow_aria2_settings"),
-				"is_admin" => $isAdmin,
+				"is_admin" => \OC_User::isAdminUser($this->uid),
 			],
 			"options" => [
 				[
-					"label" => "Downloads Folder ",
+					"label" => $this->l10n->t("Downloads Folder : "),
 					"id" => "ncd_downloader_dir",
 					"value" => Helper::getDownloadDir(),
 					"placeholder" => Helper::getDownloadDir() ?? "/downloads",
 					"path"    => $path,
 				],
 				[
-					"label" => "Torrents Folder",
+					"label" => $this->l10n->t("Torrents Folder : "),
 					"id" => "ncd_torrents_dir",
 					"value" => $this->settings->get("ncd_torrents_dir"),
 					"placeholder" => $this->settings->get("ncd_torrents_dir") ?? "/torrents",
@@ -81,7 +86,7 @@ class Personal implements ISettings
 		//\OC_Util::addScript($this->appName, 'common');
 		//\OC_Util::addScript($this->appName, 'settings/personal');
 		//file_put_contents("/tmp/re.log",print_r($parameters,true));
-		return new TemplateResponse('ncdownloader', 'settings/Personal', $parameters, '');
+		return new TemplateResponse('vapor', 'settings/Personal', $parameters, '');
 	}
 
 	/**
@@ -89,7 +94,7 @@ class Personal implements ISettings
 	 */
 	public function getSection(): string
 	{
-		return 'ncdownloader';
+		return 'vapor';
 	}
 
 	/**
